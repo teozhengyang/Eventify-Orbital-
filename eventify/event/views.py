@@ -16,9 +16,10 @@ def index(request):
   month = calendar.Calendar().monthdatescalendar(currdate.year, currdate.month)
 
   return render(request, "event/index.html", {
-    "days": days
-    "eventday": 
+    "month": month,
+    "head": currdate.strftime("%B %Y")
   })
+
 
 
 def eventpage(request):
