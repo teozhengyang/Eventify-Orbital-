@@ -1,15 +1,17 @@
 {% extends "../base.html" %}
 
 {% block body %}
-    <h1>This be da main calendar page</h1>
+    <h1>{{ head }}</h1>
     <table>
-      <tr>
-        {% for day in days %}
-        <td name="cell">
-          <h1>{{ day }}</h1>
-          <a href="">Create event</a>
-        </td>
-        {% endfor %}
-      </tr>
+      {% for week in month %}
+        <tr name="week">
+          {% for date in week %}
+          <td name="day">
+            <h1>{{ date.day }}</h1>
+            <a href="{% url 'event:newevent'%}">Create event</a>
+          </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
     </table>>
 {% endblock %}
