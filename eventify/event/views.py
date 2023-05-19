@@ -2,7 +2,7 @@ from django import forms
 from django.shortcuts import render
 import calendar
 from datetime import datetime
-from .models import MainEvent, Activities
+from .models import Event, Activities
 
 
 class NewEventForm(forms.Form):
@@ -20,9 +20,9 @@ def index(request):
     "head": currdate.strftime("%B %Y")
   })
 
-
-
 def eventpage(request):
   return render(request, "event/newevent.html", {
     "form": NewEventForm()
   })
+  
+
