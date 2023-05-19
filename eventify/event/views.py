@@ -9,8 +9,8 @@ def index(request):
   days = list(range(1, num))
   
   return render(request, "event/index.html", {
-    "days": days
-    "eventday": 
+    "days": days,
+    "eventday": num 
   })
 
 def eventpage(request):
