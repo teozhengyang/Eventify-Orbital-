@@ -36,6 +36,6 @@ class Activities(models.Model):
     participants = models.ManyToManyField(User, related_name='participated_activities', blank=True)
     
     def __str__(self):
-        return f"{self.astart} to {self.aend}: {self.name}"
+        return f"{self.start} to {self.end}: {self.name}"
     
     

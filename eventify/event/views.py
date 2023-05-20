@@ -1,16 +1,26 @@
-from django import forms
 from django.shortcuts import render
+from rest_framework import viewsets
+from .serializers import EventSerializer
+from .models import Event
+
+from django import forms
 import calendar
 from datetime import datetime
-from .models import Event, Activities
+
+# View for event
+class EventView(viewsets.ModelViewSet):
+  queryset = Event.objects.all()
+  serializer_class = EventSerializer
 
 
+
+# Potentially temporary while we create frontend + backend
 class NewEventForm(forms.Form):
   event = forms.CharField(label="Event Name")
   start = forms.DateField(label="Start Date")
   end = forms.DateField(label="End Date")
 
-# Create your views here.
+
 def index(request):
   currdate = datetime.now()
   month = calendar.Calendar().monthdatescalendar(currdate.year, currdate.month)

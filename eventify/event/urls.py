@@ -1,9 +1,8 @@
-from django.urls import path
-from datetime import datetime
+from django.urls import path, include
 from . import views
 
 app_name = "event"
 urlpatterns = [
-  path("", views.index, name="index"),
-  path("event", views.eventpage, name="newevent")
+  path("main/", views.index, name="index"),
+  path("event/", views.eventpage, name="newevent"),
 ]
