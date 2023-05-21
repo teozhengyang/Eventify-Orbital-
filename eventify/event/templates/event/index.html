@@ -1,6 +1,10 @@
 {% extends "../base.html" %}
 
 {% block body %}
+  <div>
+    <h1> Welcome {{ user.username }}</h1>
+  </div>
+  <div>
     <h1>{{ head }}</h1>
     <table>
       {% for week in month %}
@@ -13,5 +17,6 @@
           {% endfor %}
         </tr>
       {% endfor %}
-    </table>>
+    </table>
+  </div>
 {% endblock %}
