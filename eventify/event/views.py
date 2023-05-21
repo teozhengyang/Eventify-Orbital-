@@ -13,7 +13,6 @@ class EventView(viewsets.ModelViewSet):
   serializer_class = EventSerializer
 
 
-
 # Potentially temporary while we create frontend + backend
 class NewEventForm(forms.Form):
   event = forms.CharField(label="Event Name")
