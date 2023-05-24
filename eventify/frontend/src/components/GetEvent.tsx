@@ -1,8 +1,12 @@
 import { useState } from "react";
-import "./App.css";
+import "/static/css/App.css";
 import axios from "axios";
 
-function App() {
+/**
+ * Temporary component to test GET request from backend, might be reused/replaced elsewhere
+ */
+
+export default function GetEvent() {
   const [data, setData] = useState("");
   const [request, setRequest] = useState("");
   /**
@@ -10,23 +14,18 @@ function App() {
    * For now using the entire link in .get() since setting up a proxy for relative path
    * seems to be slightly different in vite compared to CRA
    */
-  const getData = (submission) => {
+
+  const getData = async (submission) => {
     submission.preventDefault();
-    axios
-      .get("http://127.0.0.1:8000/api/events/")
-      .then((res) => {
-        console.log(res);
-        setData("");
-        res.data.forEach((event) => {
-          if (event.name == request) {
-            setData(event);
-          }
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    const response = await axios.get("/api/events/");
+    console.log(response);
+    setData("")
+    response.data.forEach((event) => {
+      if (event.name == request) {
+        setData(event);
+      }
+    });
+  }
 
   const events = (
     <div>
@@ -38,7 +37,7 @@ function App() {
 
   return (
     <>
-      <div className="App">
+      <div className="getTest">
         <form onSubmit={getData}>
           <label>
             Enter event name:
@@ -48,8 +47,9 @@ function App() {
         </form>
         {data && events}
       </div>
+      <div className="postTest">
+        
+      </div>
     </>
   );
 }
-
-export default App;
