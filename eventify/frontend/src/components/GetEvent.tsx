@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "/static/css/App.css";
 import axios from "axios";
-
 /**
  * Temporary component to test GET request from backend, might be reused/replaced elsewhere
  */
@@ -9,6 +8,7 @@ import axios from "axios";
 export default function GetEvent() {
   const [data, setData] = useState("");
   const [request, setRequest] = useState("");
+
   /**
    * Gets api data from django backend using Axios
    * For now using the entire link in .get() since setting up a proxy for relative path

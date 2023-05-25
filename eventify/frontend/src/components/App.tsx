@@ -1,8 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GetEvent from "./GetEvent";
-import Links from "./Links";
+import Header from "./Header";
 import Event from "./Event";
-import NoPage from "./NoPage";
+import NoPage from "./NoPage"
+import Login from "./Login";
+import Home from "./Home";
+import PrivateRoute from "../utils/PrivateRoute";
+import { AuthProvider } from "../context/AuthContext";
+import Profile from "./Profile";
 
 /**
  * Main page, might be used for main calendar view? or to simply route to different pages
@@ -12,13 +17,17 @@ import NoPage from "./NoPage";
 export default function App() {
   return (
     <BrowserRouter>
+    <AuthProvider>
+      <Header />
       <Routes>
-        <Route path="/" element={<Links />}>
-          <Route index element={<GetEvent />} />
-          <Route path="CreateEvent" element={<Event />} />
-          <Route path="*" element={<NoPage />} />
-        </Route>
+        <Route path="" element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path="login" element={<Login />} />
+        <Route path='SearchEvent' element={<GetEvent />} />
+        <Route path="CreateEvent" element={<Event />} />
+        <Route path="*" element={<NoPage />} />
+        <Route path="Profile" element={<Profile />} />
       </Routes>
+    </AuthProvider>
     </BrowserRouter>
   )
 }

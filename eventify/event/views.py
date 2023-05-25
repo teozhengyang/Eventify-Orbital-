@@ -1,14 +1,21 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import EventSerializer, UserSerializer
+from .serializers import EventSerializer, UserSerializer, ProfileSerializer
 from .models import Event, User
 from django import forms
 import calendar
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login
 from django.db import IntegrityError
+# jwt imports
+from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import NewTokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated
 
 # View for event
 class EventView(viewsets.ModelViewSet):
@@ -29,6 +36,8 @@ class NewEventForm(forms.Form):
 # Potentially temporary while we create frontend + backend
 class RegisterForm(forms.Form):
     username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
+    last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Last Name'}))
     email = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Email'}))
     password = forms.CharField( required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
     confirm_password = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
@@ -52,36 +61,6 @@ def index(request):
   # for user not logged in
   return HttpResponseRedirect(reverse("event:login"))
 
-# login view
-def login_user(request):
-    # when user submit login form
-    if request.method == "POST":
-        # access username and pw user has typed in
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            # attempt to sign user in
-            user = authenticate(request, username=username, password=password)
-            # check if authentication successful
-            if user is not None:
-                login(request, user)
-                return HttpResponseRedirect(reverse("event:index"))
-            else: 
-                return render(request, "event/error.html", {
-                    "message": "Invalid username and/or password"
-                })
-    # when user want to login
-    else:
-        return render(request, "event/login.html", {
-        "form": LoginForm,
-    })
-
-# logout view
-def logout_user(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("event:login"))
-
 # register view
 def register(request):
     # when user submit register form
@@ -91,6 +70,8 @@ def register(request):
         if form.is_valid():
             username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
             password = form.cleaned_data["password"]
             confirm_password = form.cleaned_data["confirm_password"]
             # ensure both pw matches
@@ -100,7 +81,7 @@ def register(request):
                 })
             # attempt to create new user
             try:
-                user = User.objects.create_user(username, email, password)
+                user = User.objects.create_user(username, email, password, first_name, last_name)
                 user.save()
             except IntegrityError:
                 return render(request, "event/error.html", {
@@ -120,5 +101,23 @@ def eventpage(request):
   return render(request, "event/newevent.html", {
     "form": NewEventForm()
   })
-  
-  
+
+@api_view(['GET'])
+def get_routes(request):
+    routes = [
+        '/token',
+        '/token/refresh'
+    ]
+    return Response(routes)
+
+class NewTokenObtainPairView(TokenObtainPairView):
+    serializer_class= NewTokenObtainPairSerializer
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    user = request.user
+    profile = user.profile
+    serializer = ProfileSerializer(profile, many=False)
+    return Response(serializer.data)
+            
