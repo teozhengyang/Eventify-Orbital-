@@ -16,6 +16,9 @@ export default function Headers() {
                         <Nav.Link href="/login">Login</Nav.Link>}  
                 </Nav>
                 <Nav>
+                    {!user ? <Nav.Link href="/Register">Register</Nav.Link> : null}
+                </Nav>
+                <Nav>
                     {user ? <Nav.Link href="/SearchEvent">Search Event</Nav.Link> : null}
                 </Nav>
                 <Nav>

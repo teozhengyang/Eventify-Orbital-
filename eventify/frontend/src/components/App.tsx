@@ -8,6 +8,7 @@ import Home from "./Home";
 import PrivateRoute from "../utils/PrivateRoute";
 import { AuthProvider } from "../context/AuthContext";
 import Profile from "./Profile";
+import Register from "./Register";
 
 /**
  * Main page, might be used for main calendar view? or to simply route to different pages
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="CreateEvent" element={<Event />} />
         <Route path="*" element={<NoPage />} />
         <Route path="Profile" element={<Profile />} />
+        <Route path="Register" element={<Register />} />
       </Routes>
     </AuthProvider>
     </BrowserRouter>
