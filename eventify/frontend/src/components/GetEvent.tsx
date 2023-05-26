@@ -1,20 +1,17 @@
 import { useState } from "react";
 import "/static/css/App.css";
 import axios from "axios";
+
 /**
  * Temporary component to test GET request from backend, might be reused/replaced elsewhere
  */
-
 export default function GetEvent() {
   const [data, setData] = useState("");
   const [request, setRequest] = useState("");
 
   /**
-   * Gets api data from django backend using Axios
-   * For now using the entire link in .get() since setting up a proxy for relative path
-   * seems to be slightly different in vite compared to CRA
+   * Gets api data from django backend using Axios, uses relative path set by proxy in vite.config.ts
    */
-
   const getData = async (submission) => {
     submission.preventDefault();
     const response = await axios.get("/api/events/");
