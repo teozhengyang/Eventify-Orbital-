@@ -3,7 +3,7 @@ import axios from "axios";
 
 /**
  * Temporary component to test POST request from frontend to backend
- * Might be used for actual event creation
+ * Might be used for actual event creation, will have to change time fields and user fields
  */
 
 export default function Event() {

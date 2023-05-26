@@ -1,0 +1,21 @@
+.header-display {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 50%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 50%;
+  max-width: 70%;
+}
+
+.nav-link {
+  flex: 1 1 30%;
+  padding-top: 1rem;
+}
+
+.title {
+  font-size: 40px;
+}

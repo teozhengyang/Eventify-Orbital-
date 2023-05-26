@@ -9,6 +9,7 @@ import PrivateRoute from "../utils/PrivateRoute";
 import { AuthProvider } from "../context/AuthContext";
 import Profile from "./Profile";
 
+
 /**
  * Main page, might be used for main calendar view? or to simply route to different pages
  * path="*" takes care of any undefined URLs

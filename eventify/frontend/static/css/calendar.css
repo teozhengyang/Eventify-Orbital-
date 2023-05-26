@@ -1,0 +1,35 @@
+.flex-container {
+  width: 100%;
+  height: calc(100% - 64px);
+  display: flex;
+  flex-direction: column;
+}
+
+
+.calendar-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.day-name {
+  flex: 1 1 0%;
+}
+
+.calendar-month {
+  display: flex;
+  flex-direction: column;
+  height: 800px;
+}
+
+.calendar-week {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 0%;
+}
+
+.calendar-day {
+  border: 1px solid;
+  text-align: center;
+  padding-top: 1rem;
+  flex: 1 1 0%;
+}
