@@ -9,4 +9,3 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Event)
 admin.site.register(models.Activities)
-admin.site.register(models.Profile)
