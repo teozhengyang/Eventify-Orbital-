@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 /**
@@ -12,6 +13,7 @@ export default function Event() {
   const [location, setLocation] = useState("");
   const [budget, setBudget] = useState("");
 
+  const navigate = useNavigate()
 
 
   let AddEventInfo = async () => {
@@ -24,7 +26,7 @@ export default function Event() {
     formField.append('location', location)
     formField.append('weather', "Sunny")
     formField.append('budget', budget)
-    formField.append('organizers', [1])
+    formField.append('organizers', [5])
     formField.append('participants', [3])
 
     await axios({
@@ -33,6 +35,7 @@ export default function Event() {
       data: formField
     }).then((response) => {
       console.log(response.data)
+      navigate('/')
     }).catch((error) => {
       console.log(error)
     })

@@ -10,7 +10,7 @@ export default function Headers() {
       <Navbar className="header" bg="dark" variant="dark">
         <Navbar.Brand className="title">Eventify</Navbar.Brand> 
         <Nav className="nav-link">
-          <Nav.Link href="/">Home</Nav.Link> 
+        {user ? <Nav.Link href="/">Home</Nav.Link> : <Nav.Link href="/Register">Register</Nav.Link>}
         </Nav>  
         <Nav className="nav-link">
           {user ? <Nav.Link onClick={logoutUser}>Log out</Nav.Link> : 

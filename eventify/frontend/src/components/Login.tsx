@@ -8,9 +8,15 @@ export default function Login() {
   return (
     <div>
       <form onSubmit={loginUser}>
-        <input type="text" name="username" placeholder="Enter username"/>
-        <input type="password" name="password" placeholder="enter password"/>
-        <input type="submit"/>
+        <div>
+          <input type="text" name="username" placeholder="Enter username"/>
+        </div>
+        <div>
+          <input type="password" name="password" placeholder="enter password"/>
+        </div>
+        <div>
+          <input type="submit"/>
+        </div>
       </form>
     </div>
   ) 

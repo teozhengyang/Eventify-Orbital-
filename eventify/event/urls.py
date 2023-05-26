@@ -9,12 +9,13 @@ urlpatterns = [
   path('token/refresh/', TokenRefreshView.as_view(), name ='token_refresh'),
   path('profile/', views.get_profile),
   path("main", views.index, name="index"),
+  path("register/", views.register, name="register"),
 ]
 
 '''
   # login, logout, register paths
   path("login/", views.login_user, name="login"),
-  path("register/", views.register, name="register"),
+  
   path("event/", views.eventpage, name="newevent"),
 '''
   

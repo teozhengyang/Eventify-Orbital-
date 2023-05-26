@@ -10,7 +10,6 @@ import { AuthProvider } from "../context/AuthContext";
 import Profile from "./Profile";
 import Register from "./Register";
 
-
 /**
  * Main page, might be used for main calendar view? or to simply route to different pages
  * path="*" takes care of any undefined URLs

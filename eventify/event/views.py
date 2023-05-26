@@ -8,7 +8,7 @@ from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import login
-from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 # jwt imports
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -63,6 +63,87 @@ def index(request):
 
 # register view
 def register(request):
+  if request.method == 'POST':
+        # Retrieve data from the request body
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            error_response = {
+                'error': 'Username already exists'
+            }
+            return JsonResponse(error_response, status=400)
+
+        # Check if the email is already registered
+        if User.objects.filter(email=email).exists():
+            error_response = {
+                'error': 'Email already registered'
+            }
+            return JsonResponse(error_response, status=400)
+
+        # Check if the passwords match
+        if password != password2:
+            error_response = {
+                'error': 'Passwords do not match'
+            }
+            return JsonResponse(error_response, status=400)
+
+        try:
+            # Create a new user
+            user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+
+            # Prepare the success response
+            success_response = {
+                'message': 'User registered successfully',
+                'userId': user.id
+            }
+
+            return JsonResponse(success_response)
+        except ValidationError as e:
+            error_response = {
+                'error': 'Failed to register user',
+                'message': str(e)
+            }
+            return JsonResponse(error_response, status=400)
+  else:
+        # Return an error response if the request method is not POST
+        error_response = {
+            'error': 'Invalid request method'
+        }
+        return JsonResponse(error_response, status=405)
+        
+def eventpage(request):
+  return render(request, "event/newevent.html", {
+    "form": NewEventForm()
+  })
+
+@api_view(['GET'])
+def get_routes(request):
+    routes = [
+        '/token',
+        '/token/refresh'
+    ]
+    return Response(routes)
+
+class NewTokenObtainPairView(TokenObtainPairView):
+    serializer_class= NewTokenObtainPairSerializer
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    user = request.user
+    profile = user.profile
+    serializer = ProfileSerializer(profile, many=False)
+    return Response(serializer.data)
+
+'''
+# register view
+def register(request):
     # when user submit register form
     if request.method == "POST":
         # access username, email, pw user has typed in
@@ -96,27 +177,4 @@ def register(request):
         return render(request, "event/register.html", {
         "form": RegisterForm,
     })
-        
-def eventpage(request):
-  return render(request, "event/newevent.html", {
-    "form": NewEventForm()
-  })
-
-@api_view(['GET'])
-def get_routes(request):
-    routes = [
-        '/token',
-        '/token/refresh'
-    ]
-    return Response(routes)
-
-class NewTokenObtainPairView(TokenObtainPairView):
-    serializer_class= NewTokenObtainPairSerializer
-    
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_profile(request):
-    user = request.user
-    profile = user.profile
-    serializer = ProfileSerializer(profile, many=False)
-    return Response(serializer.data)
+'''

@@ -32,9 +32,12 @@ export const AuthProvider = ({children}) => {
               navigate('/');
             } else {
               alert('Something went wrong while logging in the user!');
+              navigate('/login');
             }
           } catch (error) {
             console.error('Error logging in:', error);
+            alert('Something went wrong while logging in the user!');
+            navigate('/login');
           }
     }
 
