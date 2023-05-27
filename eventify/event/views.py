@@ -2,10 +2,6 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import EventSerializer, UserSerializer, ProfileSerializer
 from .models import Event, User, Profile
-from django import forms
-import calendar
-from datetime import datetime
-from django.http import HttpResponse
 # jwt imports
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -25,27 +21,7 @@ class EventView(viewsets.ModelViewSet):
 class UserView(viewsets.ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer
-
-# Potentially temporary while we create frontend + backend
-class NewEventForm(forms.Form):
-  event = forms.CharField(label="Event Name")
-  start = forms.DateField(label="Start Date")
-  end = forms.DateField(label="End Date")
-
-def index(request):
-  # when user is logged in
-  if request.user.is_authenticated:
-    user = User.objects.get(username=request.user.username)
-    currdate = datetime.now()
-    month = calendar.Calendar().monthdatescalendar(currdate.year, currdate.month)
-
-    return render(request, "event/index.html", {
-      "month": month,
-      "head": currdate.strftime("%B %Y")
-    })
-  # for user not logged in
-  return HttpResponse('not logged in')
-
+  
 # register view
 @csrf_exempt
 def register(request):
@@ -83,12 +59,7 @@ def register(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-        
-def eventpage(request):
-  return render(request, "event/newevent.html", {
-    "form": NewEventForm()
-  })
-
+      
 @api_view(['GET'])
 def get_routes(request):
     routes = [

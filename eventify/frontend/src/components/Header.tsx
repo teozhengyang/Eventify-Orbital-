@@ -7,6 +7,7 @@ export default function Headers() {
   const { user, logoutUser } = useContext(AuthContext)
   
   return (
+    
     <div className="header-display">
       <Navbar className="header" bg="dark" variant="dark">
         {user ? <Navbar.Brand className="title">Hello {user.username}</Navbar.Brand> : <Navbar.Brand className="title">Eventify</Navbar.Brand> }

@@ -1,0 +1,10 @@
+#register-form {
+    width: 50%;
+    margin-left : 25%;
+    margin-top: 15%;
+    align-items: left;
+}
+
+.form-item {
+    margin: 20px;
+}
