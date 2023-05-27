@@ -5,8 +5,17 @@ from . import models
 class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "username", "email", "budget", "first_name", "last_name")
 
+class EventAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.Event._meta.fields]    
+    
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.Event._meta.fields]
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "first_name", "last_name", "email")
+
 # Register your models here.
 admin.site.register(models.User, UserAdmin)
-admin.site.register(models.Event)
-admin.site.register(models.Activities)
-admin.site.register(models.Profile)
+admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.Activity, ActivityAdmin)
+admin.site.register(models.Profile, ProfileAdmin)

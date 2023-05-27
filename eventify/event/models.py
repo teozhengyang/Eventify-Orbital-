@@ -23,7 +23,7 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.name}"
     
-class Activities(models.Model):
+class Activity(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     start = models.DateTimeField(default=now)

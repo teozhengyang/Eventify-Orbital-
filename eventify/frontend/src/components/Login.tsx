@@ -1,8 +1,8 @@
-import axios from "axios"
 import { useContext } from "react"
 import AuthContext from "../context/AuthContext"
 
 export default function Login() {
+  
   const {loginUser} = useContext(AuthContext)
   
   return (

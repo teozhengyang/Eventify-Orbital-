@@ -27,7 +27,7 @@ export default function App() {
         <Route path="CreateEvent" element={<Event />} />
         <Route path="*" element={<NoPage />} />
         <Route path="Profile" element={<Profile />} />
-        <Route path="Register" element={<Register />} />
+        <Route path="register" element={<Register />} />
       </Routes>
     </AuthProvider>
     </BrowserRouter>

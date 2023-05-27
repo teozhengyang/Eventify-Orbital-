@@ -11,11 +11,3 @@ urlpatterns = [
   path("main", views.index, name="index"),
   path("register/", views.register, name="register"),
 ]
-
-'''
-  # login, logout, register paths
-  path("login/", views.login_user, name="login"),
-  
-  path("event/", views.eventpage, name="newevent"),
-'''
-  

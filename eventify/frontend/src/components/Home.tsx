@@ -7,7 +7,7 @@ export default function Home() {
   
   return (
     <>
-		  <Month month={currMonth} />
+      <Month month={currMonth} />
     </>
   )
 }

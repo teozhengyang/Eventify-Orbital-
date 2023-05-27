@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -16,8 +16,8 @@ export default function Event() {
   const navigate = useNavigate()
 
 
-  let AddEventInfo = async () => {
-    let formField = new FormData()
+  const AddEventInfo = async () => {
+    const formField = new FormData()
 
     formField.append('name', title)
     formField.append('description', description)
