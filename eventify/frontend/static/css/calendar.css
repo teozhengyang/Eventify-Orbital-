@@ -5,20 +5,16 @@
   flex-direction: column;
 }
 
-
 .calendar-header {
   display: flex;
   flex-direction: row;
-}
-
-.day-name {
-  flex: 1 1 0%;
+  height: 50px;
 }
 
 .calendar-month {
   display: flex;
   flex-direction: column;
-  height: 800px;
+  height: 700px;
 }
 
 .calendar-week {
@@ -28,8 +24,12 @@
 }
 
 .calendar-day {
-  border: 1px solid;
-  text-align: center;
-  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 0%;
+  border: 1px solid;
+}
+
+.day-text {
+  text-align: center;
 }
