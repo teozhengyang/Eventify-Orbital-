@@ -7,46 +7,42 @@ export default function Register() {
   const { registerUser } = useContext(AuthContext)
 
   return (
-    <div id="register-form">
+    <div className="register-form">
+      <Form onSubmit={registerUser} >
 
-    <Form onSubmit={registerUser}>
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>Username: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="text" name="username" placeholder="Enter username" /></div>
+        </Form.Group>  
+        
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>Password: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="password" name="password" placeholder="Enter password" /></div>
+        </Form.Group>
 
-      <Form.Group className="form-item" >
-        <Form.Label>Username: </Form.Label>
-        <Form.Control type="text" name="username" placeholder="Enter username" />
-      </Form.Group>
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>Confirm password: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="password" name="password2" placeholder="Enter password again" /></div>
+        </Form.Group>
 
-      <Form.Group className="form-item">
-        <Form.Label>Password: </Form.Label>
-        <Form.Control type="password" name="password" placeholder="Enter password" />
-      </Form.Group>
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>Email Address: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="email" name="email" placeholder="Enter email address" /></div>
+        </Form.Group>
 
-      <Form.Group className="form-item">
-        <Form.Label>Password: </Form.Label>
-        <Form.Control type="password" name="password2" placeholder="Enter password again" />
-      </Form.Group>
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>First name: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="text" name="first_name" placeholder="Enter first name" /></div>
+        </Form.Group>
 
-      <Form.Group className="form-item">
-        <Form.Label>Email: </Form.Label>
-        <Form.Control type="email" name="email" placeholder="Enter email" />
-      </Form.Group>
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>Last name: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="text" name="last_name" placeholder="Enter last name" /></div>
+        </Form.Group>
 
-      <Form.Group className="form-item">
-        <Form.Label>First name: </Form.Label>
-        <Form.Control type="text" name="first_name" placeholder="Enter first name" />
-      </Form.Group>
-
-      <Form.Group className="form-item">
-        <Form.Label>Last name: </Form.Label>
-        <Form.Control type="text" name="last_name" placeholder="Enter last name" />
-      </Form.Group>
-
-      <Button variant="primary" type="submit" className="form-item">
-        Register
-      </Button>
-
-    </Form>
-
-  </div>
+        <Button variant="primary" className="own-form-button" type="submit">Register</Button>
+        
+      </Form>
+    </div>
   );
 }

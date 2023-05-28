@@ -1,10 +1,24 @@
-#register-form {
+.register-form {
+    margin-left: 40%;
     width: 50%;
-    margin-left : 25%;
-    margin-top: 15%;
-    align-items: left;
+    margin-top: 7.5%;
 }
 
-.form-item {
-    margin: 20px;
+.own-form-item {
+    margin-top: 20px;
+}
+
+.own-form-label {
+    text-align: left;
+    margin-top: 5px;
+}
+
+.own-form-field {
+    width: 50%;
+    padding: 5px;
+}
+
+.own-form-button {
+    margin-top: 20px;
+    margin-left: 17.5%;
 }

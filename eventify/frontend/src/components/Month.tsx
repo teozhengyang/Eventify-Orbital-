@@ -5,7 +5,7 @@ export default function Month({month}) {
   return (
     
     <div className="flex-container">
-      <h2>{month[0]}</h2>
+      <h2 className='month'>{month[0]}</h2>
       <div className="calendar-header" role="header">
         <div className="day-name">Sun</div>
         <div className="day-name">Mon</div>
