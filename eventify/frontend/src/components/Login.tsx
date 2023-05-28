@@ -8,26 +8,22 @@ export default function Login() {
   const {loginUser} = useContext(AuthContext)
   
   return (
-    <div id="login-form">
-
+    <div className="login-form">
       <Form onSubmit={loginUser}>
 
-        <Form.Group className="form-item">
-          <Form.Label>Username: </Form.Label>
-          <Form.Control type="text" name="username" placeholder="Enter username" />
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>Username: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="text" name="username" placeholder="Enter username" /></div>
         </Form.Group>
 
-        <Form.Group className="form-item">
-          <Form.Label>Password: </Form.Label>
-          <Form.Control type="password" name="password" placeholder="Enter password" />
+        <Form.Group className="own-form-item">
+          <div><Form.Label className='own-form-label'>Password: </Form.Label></div>
+          <div><Form.Control className='own-form-field' type="password" name="password" placeholder="Enter password" /></div>
         </Form.Group>
 
-        <Button variant="primary" type="submit" className="form-item">
-          Login
-        </Button>
-
+        <Button variant="primary" className="own-form-button" type="submit">Login</Button>
+        
       </Form>
-
     </div>
   ) 
 }
