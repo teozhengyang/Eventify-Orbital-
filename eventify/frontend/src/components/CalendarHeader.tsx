@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { MonthContext } from "../context/MonthContext";
+import MonthContext from "../context/MonthContext";
 
 export default function CalendarHeader({month}: {month: string}) {
 
@@ -12,6 +12,7 @@ export default function CalendarHeader({month}: {month: string}) {
   function prevMonth() {
     setMonthIndex(monthIndex - 1);
   }
+  
   function nextMonth() {
     setMonthIndex(monthIndex + 1);
   }

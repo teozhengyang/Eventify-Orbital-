@@ -1,7 +1,7 @@
 import Day from './Day';
 import "/static/css/calendar.css";
 
-export default function Month({data}: {data: Array<Array<string>>}) {
+export default function MonthDisplay({data}: {data: Array<Array<string>>}) {
   return (
     <div className="calendar-month" role="month view">
       {data.map((row: Array<string>, i: number) => (

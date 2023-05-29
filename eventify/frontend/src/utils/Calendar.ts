@@ -7,7 +7,7 @@
  * @param month Month of current year, if argument unspecified defaults to current month when function is called
  * @returns 2D array of days in Sunday-Saturday format of input month, fills excess days with that of previous and next months
  */
-export function MonthCalendar(month = new Date().getMonth()) {
+export function getMonthMatrix(month = new Date().getMonth()) {
   const currDate = new Date();
   const year = currDate.getFullYear();
   const firstDayOfMonth = new Date(year, month, 1).getDay();

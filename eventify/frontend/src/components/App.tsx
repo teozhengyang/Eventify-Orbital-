@@ -7,6 +7,7 @@ import Login from "./Login";
 import Home from "./Home";
 import PrivateRoute from "../utils/PrivateRoute";
 import { AuthProvider } from "../context/AuthContext";
+import { MonthProvider } from "../context/MonthContext";
 import Profile from "./Profile";
 import Register from "./Register";
 
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <BrowserRouter>
     <AuthProvider>
+      <MonthProvider>
       <Header />
       <Routes>
         <Route path="" element={<PrivateRoute><Home /></PrivateRoute>} />
@@ -29,6 +31,7 @@ export default function App() {
         <Route path="register" element={<Register />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
+      </MonthProvider>
     </AuthProvider>
     </BrowserRouter>
   )
