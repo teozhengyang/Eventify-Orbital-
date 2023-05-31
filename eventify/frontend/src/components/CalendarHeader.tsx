@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import MonthContext from "../context/MonthContext";
+import "/static/css/calendar.css";
 
 export default function CalendarHeader({month}: {month: string}) {
 
@@ -22,7 +23,7 @@ export default function CalendarHeader({month}: {month: string}) {
       <button onClick={present}>Today</button>
       <button onClick={prevMonth}>&lt;</button>
       <button onClick={nextMonth}>&gt;</button>
-      <p>{month}</p>
+      <p id="calendar-header-month">{month}</p>
     </header>
   )
 }

@@ -53,9 +53,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   return (
     <div>
       <input type="text" placeholder="Enter Event name" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
-      <input type="text" placeholder="Enter Description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <input type="textarea" placeholder="Enter Description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
       <input type="text" placeholder="Enter Location" name="location" value={location} onChange={(e) => setLocation(e.target.value)} />
-      <input type="text" placeholder="Enter Budget" name="budget" value={budget} onChange={(e) => setBudget(e.target.value)} />
+      <input type="number" step="0.01" placeholder="Enter Budget" name="budget" value={budget} onChange={(e) => setBudget(e.target.value)} />
       <DatePicker placeholderText="Select Start Date" selected={startDate} onChange={(date: Date) => setStartDate(date)}/>
       <DatePicker placeholderText="Select End Date" selected={endDate} onChange={(date: Date) => setEndDate(date)}/>
       <button onClick={AddEventInfo}>Add Event</button>
