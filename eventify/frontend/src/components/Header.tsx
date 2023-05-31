@@ -5,10 +5,10 @@ import "/static/css/header.css";
 
 export default function Headers() {
   const { user, logoutUser } = useContext(AuthContext)
-  
+
   return (
     <div className="header-display">
-      <Navbar className="header" bg="dark" variant="dark">
+      <Navbar className="header">
         <Nav.Item>
           {user ? <Navbar.Brand className="own-nav-brand">Hello {user.username}</Navbar.Brand> : <Navbar.Brand className="own-nav-brand">Eventify</Navbar.Brand>}
         </Nav.Item>
@@ -20,9 +20,6 @@ export default function Headers() {
         </Nav.Item>
         <Nav.Item>
           {user ? <Nav.Link className="own-nav-link" href="/SearchEvent">Search Event</Nav.Link> : null}
-        </Nav.Item>
-        <Nav.Item>
-          {user ? <Nav.Link className="own-nav-link" href="/CreateEvent">Create Event</Nav.Link> : null}  
         </Nav.Item>
         <Nav.Item>
           {user ? <Nav.Link className="own-nav-link" href="/Profile">My Profile</Nav.Link> : null}

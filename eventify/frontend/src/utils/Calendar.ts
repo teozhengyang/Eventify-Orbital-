@@ -17,7 +17,7 @@ export function getMonthMatrix(month = new Date().getMonth()) {
   const daysMatrix = new Array(5).fill([]).map(() => {
     return new Array(7).fill(null).map(() => {
       dayInMonth++
-      return new Date(year, month, dayInMonth).toString();
+      return new Date(year, month, dayInMonth);
     });
   });
   return daysMatrix;

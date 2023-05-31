@@ -44,9 +44,6 @@ export default function GetEvent() {
         </form>
         {data && events}
       </div>
-      <div className="postTest">
-        
-      </div>
     </>
   );
 }

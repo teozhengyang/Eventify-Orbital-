@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GetEvent from "./GetEvent";
 import Header from "./Header";
-import Event from "./Event";
+import NewEvent from "./NewEvent";
 import NoPage from "./NoPage"
 import Login from "./Login";
 import Home from "./Home";
 import PrivateRoute from "../utils/PrivateRoute";
 import { AuthProvider } from "../context/AuthContext";
 import { MonthProvider } from "../context/MonthContext";
+import { ModalProvider } from "../context/NewEventModalContext";
 import Profile from "./Profile";
 import Register from "./Register";
 
@@ -19,20 +20,21 @@ import Register from "./Register";
 export default function App() {
   return (
     <BrowserRouter>
-    <AuthProvider>
-      <MonthProvider>
-      <Header />
-      <Routes>
-        <Route path="" element={<PrivateRoute><Home /></PrivateRoute>} />
-        <Route path="login" element={<Login />} />
-        <Route path='SearchEvent' element={<GetEvent />} />
-        <Route path="CreateEvent" element={<Event />} />
-        <Route path="Profile" element={<Profile />} />
-        <Route path="register" element={<Register />} />
-        <Route path="*" element={<NoPage />} />
-      </Routes>
-      </MonthProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <ModalProvider>
+          <MonthProvider>
+            <Header />
+              <Routes>
+                <Route path="" element={<PrivateRoute><Home /></PrivateRoute>} />
+                <Route path="login" element={<Login />} />
+                <Route path='SearchEvent' element={<GetEvent />} />
+                <Route path="Profile" element={<Profile />} />
+                <Route path="register" element={<Register />} />
+                <Route path="*" element={<NoPage />} />
+              </Routes>
+          </MonthProvider>
+        </ModalProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }
