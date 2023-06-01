@@ -3,20 +3,22 @@ import NewEventModalContext from "../context/NewEventModalContext";
 
 import "/static/css/calendar.css";
 
-// day is the string representation of Date() object, split by spaces to get individual string components
+// day is a Date() object, convert to string and split by spaces to get individual string components
 export default function Day({day, rowIndex}: {day: Date; key: number; rowIndex: number}) {
   const { setShowModal, setSelectedDate } = useContext(NewEventModalContext)
 
-  const click = () => {
+  const openModal = () => {
     setShowModal(true)
     setSelectedDate(day)
   }
 
+  const sameDate = new Date().toDateString() === day.toDateString()
+
   return (
-    <div className="calendar-day" onClick={click}>
+    <div className="calendar-day" onClick={openModal}>
       <header className="day-text">
         {rowIndex === 0 && (<>{day.toString().split(" ")[0]}</>)}
-        <p>{day.getDate()}</p>
+        <p id={sameDate ? "today" : "otherday"}>{day.getDate()}</p>
       </header>
     </div>
   )

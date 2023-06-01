@@ -28,6 +28,14 @@
   text-align: center;
 }
 
+#today {
+  margin: auto;
+  height: 25px;
+  width: 25px;
+  background-color: rgb(27, 27, 248);
+  border-radius: 50%;
+}
+
 #calendar-header-month {
   margin: auto;
   font-size: 24px;

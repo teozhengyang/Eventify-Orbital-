@@ -29,6 +29,8 @@ export default function GetEvent() {
       <h2>{data.name}</h2>
       <p>{"Description: " + data.description}</p>
       <p>{"Weather: " + data.weather + " Budget: $" + data.budget}</p>
+      <p>{"Start Date: " + new Date(data.start).toLocaleString()}</p>
+      <p>{"End Date: " + new Date(data.end).toLocaleString()}</p>
     </div>
   )
 
