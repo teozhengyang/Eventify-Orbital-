@@ -22,6 +22,9 @@ export default function Headers() {
           {user ? <Nav.Link className="own-nav-link" href="/SearchEvent">Search Event</Nav.Link> : null}
         </Nav.Item>
         <Nav.Item>
+          {user ? <Nav.Link className="own-nav-link" href="/NewEvent">Create New Event</Nav.Link> : null}
+        </Nav.Item>
+        <Nav.Item>
           {user ? <Nav.Link className="own-nav-link" href="/Profile">My Profile</Nav.Link> : null}
         </Nav.Item>
       </Navbar> 

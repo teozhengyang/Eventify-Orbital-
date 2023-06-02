@@ -11,6 +11,7 @@ import { MonthProvider } from "../context/MonthContext";
 import { ModalProvider } from "../context/NewEventModalContext";
 import Profile from "./Profile";
 import Register from "./Register";
+import NewEventPage from "./NewEventPage";
 
 /**
  * Main page, might be used for main calendar view? or to simply route to different pages
@@ -31,6 +32,7 @@ export default function App() {
                 <Route path="Profile" element={<Profile />} />
                 <Route path="register" element={<Register />} />
                 <Route path="*" element={<NoPage />} />
+                <Route path="NewEvent" element={<NewEventPage />} /> 
               </Routes>
           </MonthProvider>
         </ModalProvider>

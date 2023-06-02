@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
+import { Button } from 'react-bootstrap';
 
 export default function Profile() {
   const { authTokens, logoutUser, user } = useContext(AuthContext);
@@ -37,7 +38,7 @@ export default function Profile() {
             <h3>Event {i + 1}</h3>
             <p>Name: {event.name}</p>
             <p>Description: {event.description}</p>
-            <br />
+            <Button variant="primary">Edit WIP</Button>
           </div>
         ))}
       </div>
