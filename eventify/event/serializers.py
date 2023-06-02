@@ -19,8 +19,3 @@ class NewTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         return token
     
-class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-    class Meta:
-        model = models.Profile
-        fields = ('user', 'first_name', 'last_name', 'email')

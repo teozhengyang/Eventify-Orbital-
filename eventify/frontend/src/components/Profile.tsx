@@ -3,38 +3,56 @@ import AuthContext from '../context/AuthContext';
 import axios from "axios";
 
 export default function Profile() {
-  const { authTokens, logoutUser } = useContext(AuthContext);
-  let [profile, setProfile] = useState([])
+  const { authTokens, logoutUser, user } = useContext(AuthContext);
+  const [currUser, setCurrUser] = useState("")
+  const [organisedEvents, setOrganisedEvents] = useState([])
+  const [participatedEvents, setParticipatedEvents] = useState([])
 
   useEffect(() => {
-    getProfile()
+    getCurrUser()
   },[])
 
-    const getProfile = async () => {
-        try {
-          const response = await axios.get('http://127.0.0.1:8000/profile', {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + String(authTokens.access),
-            },
-          });
-    
-          const data = response.data;
-          console.log(data);
-          if (response.status === 200) {
-            setProfile(data);
-          } else if (response.status === 401) {
-            logoutUser();
-          }
-        } catch (error) {
-          console.error('Error getting profile:', error);
-        }
-      };
+  const getCurrUser = async () => {
+    const userResponse = await axios.get(`http://127.0.0.1:8000/api/users/${user.user_id}`);
+    const userData = userResponse.data
+    console.log(userData)
+    setCurrUser(userData)
+    const eventsResponse = await axios.get('http://127.0.0.1:8000/api/events/')
+    const eventsData = eventsResponse.data
+    console.log(eventsData)
+    eventsData.forEach((event) => {
+      if (event.organizers.includes(user.user_id)) {
+        setOrganisedEvents(event)
+        console.log(event)
+      } 
+      if (event.participants.includes(user.user_id)) {
+        setParticipatedEvents(event)
+        console.log(event)
+      } else {
+        // do nothing
+      }
+    })
+  };
+
+  const organisedEventDiv = (
+      <div>
+        <h2>{organisedEvents.name}</h2>
+      </div>
+  )
+
+  const participatedEventDiv = (
+    <div>
+      <h2>{participatedEvents.name}</h2>
+    </div>
+  )
 
   return (
     <div>
-      <p>Name: {profile.first_name} {profile.last_name}</p>
-      <p>Email: {profile.email}</p>
+      <p>Name: {currUser.first_name} {currUser.last_name}</p>
+      <p>Email: {currUser.email}</p>
+      {organisedEvents && organisedEventDiv}
+      <br/>
+      {participatedEvents && participatedEventDiv}
     </div>
   )
 }

@@ -71,10 +71,3 @@ def get_routes(request):
 class NewTokenObtainPairView(TokenObtainPairView):
     serializer_class= NewTokenObtainPairSerializer
     
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_profile(request):
-    user = request.user
-    profile = user.profile
-    serializer = ProfileSerializer(profile, many=False)
-    return Response(serializer.data)
