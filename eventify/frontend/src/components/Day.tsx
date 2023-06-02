@@ -7,11 +7,13 @@ import "/static/css/calendar.css";
 export default function Day({day, rowIndex}: {day: Date; key: number; rowIndex: number}) {
   const { setShowModal, setSelectedDate } = useContext(NewEventModalContext)
 
+  // Open NewEventModal when a day is clicked
   const openModal = () => {
     setShowModal(true)
     setSelectedDate(day)
   }
 
+  // Logic for blue circle on current day
   const sameDate = new Date().toDateString() === day.toDateString()
 
   return (
