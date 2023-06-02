@@ -11,11 +11,7 @@ class EventAdmin(admin.ModelAdmin):
 class ActivityAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.Event._meta.fields]
 
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "first_name", "last_name", "email")
-
 # Register your models here.
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Activity, ActivityAdmin)
-admin.site.register(models.Profile, ProfileAdmin)
