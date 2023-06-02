@@ -18,7 +18,7 @@
 }
 
 .own-nav-link:hover {
-  text-decoration: underline;
+  background-color: #3b3b3b;
 }
 
 #own-nav-brand {
