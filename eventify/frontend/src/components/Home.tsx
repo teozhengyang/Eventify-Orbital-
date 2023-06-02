@@ -11,8 +11,8 @@ export default function Home() {
   // Grabs a date from center of matrix, convert to string, split words by spaces (to get Month-Year header)
   const month = monthData[2][3].toString().split(" ");
 
+  // Update MonthDisplay whenever calendar is swapped to another
   const { monthIndex } = useContext(MonthContext);
-
   useEffect(() => {
     setMonthData(getMonthMatrix(monthIndex));
   }, [monthIndex]);

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import MonthContext from "../context/MonthContext";
 import "/static/css/calendar.css";
+import { Dropdown, Button } from "react-bootstrap";
 
 export default function CalendarHeader({month}: {month: string}) {
 
@@ -20,10 +21,17 @@ export default function CalendarHeader({month}: {month: string}) {
 
   return (
     <header className="calendar-header">
-      <button onClick={present}>Today</button>
-      <button onClick={prevMonth}>&lt;</button>
-      <button onClick={nextMonth}>&gt;</button>
+      <Button variant="secondary" onClick={present}>Today</Button>
+      <Button variant="secondary" onClick={prevMonth}>&lt;</Button>
+      <Button variant="secondary" onClick={nextMonth}>&gt;</Button>
       <p id="calendar-header-month">{month}</p>
+      <Dropdown>
+        <Dropdown.Toggle>View change WIP</Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item>Week</Dropdown.Item>
+          <Dropdown.Item>Month</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </header>
   )
 }
