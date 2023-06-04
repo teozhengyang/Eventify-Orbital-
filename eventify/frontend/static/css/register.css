@@ -29,3 +29,10 @@
     border: 1px solid;
     border-radius: 5px;
 }
+
+.event-form {
+    padding: 1em;
+    background-color: gray;
+    color: black;
+    border-radius: 5px;
+}

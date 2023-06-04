@@ -13,14 +13,22 @@ export default function Profile() {
     getCurrUser()
   },[])
 
+  // Headers for authorization @ backend => Allos Get/Post request for event data
+  const config = {
+    headers:{
+      'Authorization': 'Bearer ' + String(authTokens.access)
+    }
+  }
+
   const getCurrUser = async () => {
     const userResponse = await axios.get(`http://127.0.0.1:8000/api/users/${user.user_id}`);
     const userData = userResponse.data
     console.log(userData)
     setCurrUser(userData)
-    const eventsResponse = await axios.get('http://127.0.0.1:8000/api/events/')
+    const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
     const eventsData = eventsResponse.data
     console.log(eventsData)
+
     const filterOrganiseEvents = eventsData.filter(event => {
       return event.organizers.includes(user.user_id)
     })

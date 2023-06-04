@@ -22,10 +22,13 @@
   flex-direction: column;
   flex: 1 1 0%;
   border: 1px solid;
+  text-align: center
 }
 
-.day-text {
-  text-align: center;
+.event-display {
+  height: 30px;
+  font-size: 0.8em;
+  border: 1px solid;
 }
 
 #today {

@@ -1,17 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GetEvent from "./GetEvent";
+import GetEvent from "./PageGetEvent";
 import Header from "./Header";
-import NewEvent from "./NewEvent";
-import NoPage from "./NoPage"
-import Login from "./Login";
-import Home from "./Home";
+import NoPage from "./PageNone"
+import Login from "./PageLogin";
+import Home from "./PageHome";
 import PrivateRoute from "../utils/PrivateRoute";
 import { AuthProvider } from "../context/AuthContext";
 import { MonthProvider } from "../context/MonthContext";
 import { ModalProvider } from "../context/NewEventModalContext";
-import Profile from "./Profile";
-import Register from "./Register";
-import NewEventPage from "./NewEventPage";
+import Profile from "./PageProfile";
+import Register from "./PageRegister";
+import NewEventPage from "./PageNewEvent";
 
 /**
  * Main page, might be used for main calendar view? or to simply route to different pages

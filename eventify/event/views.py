@@ -1,25 +1,40 @@
 from rest_framework import viewsets
 from .serializers import EventSerializer, UserSerializer
 from .models import Event, User
+from django.db.models import Q
+
 # jwt imports
 from django.http import JsonResponse
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import NewTokenObtainPairSerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-# View for event
-class EventView(viewsets.ModelViewSet):
-  queryset = Event.objects.all()
-  serializer_class = EventSerializer
-
 # view for user
 class UserView(viewsets.ModelViewSet):
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
-  
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+# handles GET & POST requests for event data based on current user
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def get_Events(request):
+    if request.method == 'GET':
+        user = request.user.id
+        events = Event.objects.filter(Q(participants=user)|Q(organizers=user))
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = EventSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
 # register view
 @csrf_exempt
 def register(request):
@@ -68,4 +83,3 @@ def get_routes(request):
 
 class NewTokenObtainPairView(TokenObtainPairView):
     serializer_class= NewTokenObtainPairSerializer
-    

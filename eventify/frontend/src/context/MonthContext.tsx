@@ -2,7 +2,7 @@ import { createContext, useState } from 'react';
 
 const MonthContext = createContext({
   monthIndex: 0,
-  setMonthIndex: (index: number) => {}
+  setMonthIndex: (index: number) => {},
 })
 
 export default MonthContext;

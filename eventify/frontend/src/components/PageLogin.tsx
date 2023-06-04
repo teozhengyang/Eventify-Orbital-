@@ -5,7 +5,7 @@ import "/static/css/login.css";
 
 export default function Login() {
   
-  const {loginUser} = useContext(AuthContext)
+  const { loginUser } = useContext(AuthContext)
   
   return (
     <div className="login-form">

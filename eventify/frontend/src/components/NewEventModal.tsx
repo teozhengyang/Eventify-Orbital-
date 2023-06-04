@@ -19,6 +19,6 @@ export default function NewEventModal() {
 
         <Modal.Footer>
         </Modal.Footer>
-    </Modal>
+    </Modal>  
   );
 }
