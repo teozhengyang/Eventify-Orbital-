@@ -4,6 +4,7 @@ import axios from "axios";
 import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import "/static/css/register.css";
+import Select from 'react-select'
 
 //idk why got red line here, it seems to import and work just fine
 import DatePicker from "react-datepicker";
@@ -59,6 +60,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
       }, config);
       console.log(response.data)
       setShowModal(false)
+      
     } catch (error) {
       console.error(error.response)
     }
@@ -118,24 +120,26 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         <Row>
           <Form.Group as={Col}>
             <Form.Label>Select Organisers:</Form.Label>
-            <Form.Control as="select" multiple>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.username}
-                </option>
-              ))}
-            </Form.Control>
+            <Select
+              options={users}
+              placeholder="Search organisers"
+              getOptionLabel={(option) => option.username}
+              getOptionValue={(option) => option.id}
+              isSearchable={true}
+              isMulti
+            />
           </Form.Group>
 
           <Form.Group as={Col}>
             <Form.Label>Select Participants:</Form.Label>
-            <Form.Control as="select" multiple>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.username}
-                </option>
-              ))}
-            </Form.Control>
+            <Select
+              options={users}
+              placeholder="Search participants"
+              getOptionLabel={(option) => option.username}
+              getOptionValue={(option) => option.id}
+              isSearchable={true}
+              isMulti
+            />
           </Form.Group>
         </Row>
 
