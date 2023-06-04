@@ -31,7 +31,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
     }
   }, [startDate])
 
-  // Headers for authorization @ backend => Allos Get/Post request for event data
+  // Headers for authorization @ backend => Allows Get/Post request for event data
   const config = {
     headers:{
       'Authorization': 'Bearer ' + String(authTokens.access)
