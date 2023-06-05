@@ -5,6 +5,7 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import "/static/css/register.css";
 import Select from 'react-select'
+import { useNavigate } from "react-router-dom";
 
 //idk why got red line here, it seems to import and work just fine
 import DatePicker from "react-datepicker";
@@ -20,6 +21,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const [users, setUsers] = useState([])
   const [selectedOrganisers, setSelectedOrganisers] = useState([])
   const [selectedParticipants, setSelectedParticipants] = useState([])
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     getUsers();
@@ -46,6 +49,14 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
     console.log(data)
   }
 
+  const handleSelectedOrganisers = (data) => {
+    setSelectedOrganisers(data)
+  }
+
+  const handleSelectedParticipants = (data) => {
+    setSelectedParticipants(data)
+  }
+
   const AddEventInfo = async(e) => {
     e.preventDefault();
     try {
@@ -56,11 +67,13 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         end: endDate.toJSON(),
         location: e.target.location.value,
         budget: e.target.budget.value,
-        organizers: [user.user_id],
+        organizers: selectedOrganisers.map(organiser => organiser.id),
+        participants: selectedParticipants.map(participant => participant.id)
       }, config);
       console.log(response.data)
       setShowModal(false)
-      
+      alert('Event created successfully!')
+      navigate('/')
     } catch (error) {
       console.error(error.response)
     }
@@ -125,6 +138,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               placeholder="Search organisers"
               getOptionLabel={(option) => option.username}
               getOptionValue={(option) => option.id}
+              onChange={handleSelectedOrganisers}
               isSearchable={true}
               isMulti
             />
@@ -137,6 +151,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               placeholder="Search participants"
               getOptionLabel={(option) => option.username}
               getOptionValue={(option) => option.id}
+              onChange={handleSelectedParticipants}
               isSearchable={true}
               isMulti
             />
