@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
+import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';
 
 export default function Profile() {
@@ -33,46 +34,90 @@ export default function Profile() {
       return event.organizers.includes(user.user_id)
     })
     setOrganisedEvents(filterOrganiseEvents)
+
     const filterParticipateEvents = eventsData.filter(event => {
       return event.participants.includes(user.user_id)
     })
     setParticipatedEvents(filterParticipateEvents)
   };
 
+  
+
   const organisedEventDiv = (
       <div>
-        {organisedEvents.map((event, i) => (
-          <div key={i}>
-            <h3>Event {i + 1}</h3>
-            <p>Name: {event.name}</p>
-            <p>Description: {event.description}</p>
-            <Button variant="primary">Edit WIP</Button>
-          </div>
-        ))}
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Location</th>
+              <th>Budget</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {organisedEvents.map((event, i) => (
+              <tr key={i}>
+                <td>{event.name}</td>
+                <td>{event.description}</td>
+                <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
+                <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
+                <td>{event.location}</td>
+                <td>${event.budget}</td>
+                <td>
+                  <Button>Edit</Button>
+                  <Button>Delete</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
   )
 
   const participatedEventDiv = (
     <div>
-        {participatedEvents.map((event, i) => (
-          <div key={i}>
-            <h3>Event {i + 1}</h3>
-            <p>Name: {event.name}</p>
-            <p>Description: {event.description}</p>
-          </div>
-        ))}
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Location</th>
+              <th>Budget</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {participatedEvents.map((event, i) => (
+              <tr key={i}>
+                <td>{event.name}</td>
+                <td>{event.description}</td>
+                <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
+                <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
+                <td>{event.location}</td>
+                <td>${event.budget}</td>
+                <td>
+                  <Button>View</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
   )
 
   return (
     <div>
-      <p>Name: {currUser.first_name} {currUser.last_name}</p>
-      <p>Email: {currUser.email}</p>
-      <p> Organised Events </p>
+      <p>Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email}</p>
+      <h4> Organised Events </h4>
       <hr />
       {organisedEvents && organisedEventDiv}
       <br/>
-      <p> Participated Events </p>
+      <h4> Participated Events </h4>
       <hr/>
       {participatedEvents && participatedEventDiv}
     </div>
