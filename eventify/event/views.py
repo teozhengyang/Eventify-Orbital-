@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from .serializers import EventSerializer, UserSerializer
 from .models import Event, User
 from django.db.models import Q
+from django.core import serializers
 
 # jwt imports
 from django.http import JsonResponse
@@ -20,7 +21,7 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 # handles GET & POST requests for event data based on current user
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_Events(request):
     if request.method == 'GET':
@@ -33,6 +34,13 @@ def get_Events(request):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+    
+    elif request.method == 'DELETE':
+        item = serializers.deserialize("json", request.body)
+        print(item)
+        real = Event.objects.filter(pk=item.pk)
+        print(real)
+        return Response()
 
 
 # register view

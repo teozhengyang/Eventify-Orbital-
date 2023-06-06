@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { getMonthMatrix } from "../utils/Calendar";
 import MonthDisplay from "./MonthDisplay";
 import CalendarHeader from "./CalendarHeader";
-import NewEventModal from "./NewEventModal";
+import EventModal from "./EventModal";
 import MonthContext from "../context/MonthContext";
 import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
@@ -23,6 +23,7 @@ export default function Home() {
     setMonthData(getMonthMatrix(monthIndex));
   }, [monthIndex]);
 
+  // Update calendar event display when new event is created (ie. when modal is opened/closed or page is rendered)
   useEffect(() => {
     getdata()
   }, [showModal])
@@ -44,8 +45,8 @@ export default function Home() {
   return (
     <div className="flex-container">
       <CalendarHeader month={month[1] + " " + month[3]}/>
-      <NewEventModal />
-      <MonthDisplay data={monthData} events={events}/>
+      <EventModal />
+      <MonthDisplay data={monthData} eventlist={events}/>
     </div>
   )
 }

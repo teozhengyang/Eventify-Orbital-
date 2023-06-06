@@ -3,9 +3,9 @@ import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
-import "/static/css/register.css";
 import Select from 'react-select'
 import { useNavigate } from "react-router-dom";
+import "/static/css/register.css";
 
 //idk why got red line here, it seems to import and work just fine
 import DatePicker from "react-datepicker";
