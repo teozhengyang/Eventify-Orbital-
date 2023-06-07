@@ -1,10 +1,11 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useMemo } from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import dayjs from 'dayjs';
 import "/static/css/profile.css";
 import { Button } from 'react-bootstrap';
 import { useTable, usePagination } from 'react-table'
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
   const { authTokens, user } = useContext(AuthContext);
@@ -139,7 +140,7 @@ export default function Profile() {
             </tr>
           </thead>
           <tbody>
-            {organisedEvents.map((event, i) => (
+            {organisedEvents.map((event:Event, i) => (
               <tr key={i}>
                 <td>{event.name}</td>
                 <td>{event.description}</td>
@@ -148,12 +149,30 @@ export default function Profile() {
                 <td>{event.location}</td>
                 <td>${event.budget}</td>
                 <td>
-                  <Button>Edit</Button>
+                <Button>Edit</Button>
                   <Button>Delete</Button>
+                  <Button onClick={() => {
+                    navigate('/EditEvent', {state:{evt:event}})
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button onClick={async() => {
+                    const response = await axios.delete('http://127.0.0.1:8000/events/', {
+                      headers:{
+                        'Authorization': 'Bearer ' + String(authTokens.access)
+                      },
+                      data: event.id
+                    })
+                    console.log(response)
+                    }}
+                  >
+                    Delete
+                  </Button>
                 </td>
               </tr>
             )
-          })}
+          )}
         </tbody>
       </table>
     </div>
@@ -215,14 +234,6 @@ export default function Profile() {
     data: participatedEventsData
   })
 
-  const { 
-    getTableProps: getParticipatedTableProps,
-    getTableBodyProps: getParticipatedTableBodyProps,
-    headerGroups: participatedHeaderGroups,
-    rows: participatedRows,
-    prepareRow: prepareParticipatedRow,
-  } = participatedTableInstance
-
   const participatedEventDiv = (
     <div>
         <table>
@@ -238,7 +249,7 @@ export default function Profile() {
             </tr>
           </thead>
           <tbody>
-            {participatedEvents.map((event, i) => (
+            {participatedEvents.map((event:Event, i) => (
               <tr key={i}>
                 <td>{event.name}</td>
                 <td>{event.description}</td>
@@ -251,7 +262,7 @@ export default function Profile() {
                 </td>
               </tr>
             )
-          })}
+          )}
         </tbody>
       </table>
     </div>
