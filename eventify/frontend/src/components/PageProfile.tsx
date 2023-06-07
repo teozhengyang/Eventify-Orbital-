@@ -1,17 +1,21 @@
-import { useState, useEffect, useContext, useMemo } from 'react'
+import { useState, useEffect, useContext} from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import dayjs from 'dayjs';
 import "/static/css/profile.css";
 import { Button } from 'react-bootstrap';
-import { useTable, usePagination } from 'react-table'
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../utils/Pagination';
 
 export default function Profile() {
   const { authTokens, user } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState([])
   const [organisedEvents, setOrganisedEvents] = useState([])
   const [participatedEvents, setParticipatedEvents] = useState([])
+  const [currOrganisedPage, setCurrOrganisedPage] = useState(1)
+  const [organisedRecordsPerPage] = useState(1)
+  const [currParticipatedPage, setCurrParticipatedPage] = useState(1)
+  const [participatedRecordsPerPage] = useState(2)
 
   type Event = {
     id?: number;
@@ -59,212 +63,104 @@ export default function Profile() {
     setParticipatedEvents(filterParticipateEvents)
   };
 
-  const formatMoney = value => `$${value}`
-  const formatTime = time => dayjs(time).format("DD/MM/YYYY HH:mm")
-
-  const organisedEventsCOLUMNS  = [
-    {
-      Header: 'Select',
-      Cell: ({value}) => (
-        <div>
-          <input type='checkbox' />
-        </div>
-      )
-    },
-    {
-      Header: 'Name',
-      accessor: 'name'
-    },
-    {
-      Header: 'Description',
-      accessor: 'description'
-    },
-    {
-      Header: 'Location',
-      accessor: 'location'
-    },
-    {
-      Header: 'Budget',
-      accessor: 'budget',
-      Cell: ({ value }) => formatMoney(value),
-    },
-    {
-      Header: 'Start',
-      accessor: 'start',
-      Cell: ({ time }) => formatTime(time),
-    },
-    {
-      Header: 'End',
-      accessor: 'end',
-      Cell: ({ time }) => formatTime(time),
-    },
-    {
-      Header: 'Actions',
-      Cell: ({ value }) => (
-        <div>
-          <Button>Edit</Button>
-          <Button>Delete</Button>
-        </div>
-      )
-    }
-  ]
-  
-  const organisedEventsColumns = useMemo(() => organisedEventsCOLUMNS, [])
-  const organisedEventsData = useMemo(() => organisedEvents,[organisedEvents])
-
-  const organisedTableInstance = useTable({
-    columns: organisedEventsColumns, 
-    data: organisedEventsData
-  })
-
-  const { 
-    getTableProps: getOrganisedTableProps,
-    getTableBodyProps: getOrganisedTableBodyProps,
-    headerGroups: organisedHeaderGroups,
-    rows: organisedRows,
-    prepareRow: prepareOrganisedRow,
-  } = organisedTableInstance
+  const indexOfOrganisedLastRecord = currOrganisedPage * organisedRecordsPerPage;
+  const indexOfOrganisedFirstRecord = indexOfOrganisedLastRecord - organisedRecordsPerPage;
+  const currentOrganisedRecords = organisedEvents.slice(indexOfOrganisedFirstRecord, indexOfOrganisedLastRecord);
+  const nOrganisedPages = Math.ceil(organisedEvents.length / organisedRecordsPerPage)
 
   const organisedEventDiv = (
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Location</th>
-              <th>Budget</th>
-              <th>Actions</th>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Location</th>
+            <th>Budget</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentOrganisedRecords.map((event:Event, i) => (
+            <tr key={i}>
+              <td>{event.name}</td>
+              <td>{event.description}</td>
+              <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
+              <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
+              <td>{event.location}</td>
+              <td>${event.budget}</td>
+              <td>
+                <Button onClick={() => {
+                  navigate('/EditEvent', {state:{evt:event}})
+                }}>
+                  Edit
+                </Button>
+                <Button onClick={async() => {
+                  const response = await axios.delete('http://127.0.0.1:8000/events/', {
+                    headers:{
+                      'Authorization': 'Bearer ' + String(authTokens.access)
+                    },
+                    data: event.id
+                  })
+                  console.log(response)
+                }}>
+                  Delete
+                </Button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {organisedEvents.map((event:Event, i) => (
-              <tr key={i}>
-                <td>{event.name}</td>
-                <td>{event.description}</td>
-                <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{event.location}</td>
-                <td>${event.budget}</td>
-                <td>
-                <Button>Edit</Button>
-                  <Button>Delete</Button>
-                  <Button onClick={() => {
-                    navigate('/EditEvent', {state:{evt:event}})
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Button onClick={async() => {
-                    const response = await axios.delete('http://127.0.0.1:8000/events/', {
-                      headers:{
-                        'Authorization': 'Bearer ' + String(authTokens.access)
-                      },
-                      data: event.id
-                    })
-                    console.log(response)
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            )
-          )}
+          ))}
         </tbody>
       </table>
+      <Pagination
+        nPages={nOrganisedPages}
+        currentPage={currOrganisedPage}
+        setCurrentPage={setCurrOrganisedPage}
+      />
     </div>
   )
-
   
-
-  const participatedEventsCOLUMNS  = [
-    {
-      Header: 'Select',
-      Cell: ({value}) => (
-        <div>
-          <input type='checkbox' />
-        </div>
-      )
-    },
-    {
-      Header: 'Name',
-      accessor: 'name'
-    },
-    {
-      Header: 'Description',
-      accessor: 'description'
-    },
-    {
-      Header: 'Location',
-      accessor: 'location'
-    },
-    {
-      Header: 'Budget',
-      accessor: 'budget',
-      Cell: ({ value }) => formatMoney(value),
-    },
-    {
-      Header: 'Start',
-      accessor: 'start',
-      Cell: ({ time }) => formatTime(time),
-    },
-    {
-      Header: 'End',
-      accessor: 'end',
-      Cell: ({ time }) => formatTime(time),
-    },
-    {
-      Header: 'Actions',
-      Cell: ({ value }) => (
-        <div>
-          <Button>View</Button>
-        </div>
-      )
-    }
-  ]
-
-  const participatedEventsColumns = useMemo(() => participatedEventsCOLUMNS, [])
-  const participatedEventsData = useMemo(() => participatedEvents,[participatedEvents])
-  
-  const participatedTableInstance = useTable({
-    columns: participatedEventsColumns, 
-    data: participatedEventsData
-  })
+  const indexOfParticipatedLastRecord = currParticipatedPage * participatedRecordsPerPage;
+  const indexOfParticipatedFirstRecord = indexOfParticipatedLastRecord - participatedRecordsPerPage;
+  const currentParticipatedRecords = participatedEvents.slice(indexOfParticipatedFirstRecord, indexOfParticipatedLastRecord);
+  const nParticipatedPages = Math.ceil(participatedEvents.length / participatedRecordsPerPage)
 
   const participatedEventDiv = (
     <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Location</th>
-              <th>Budget</th>
-              <th>Actions</th>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Location</th>
+            <th>Budget</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentParticipatedRecords.map((event:Event, i) => (
+            <tr key={i}>
+              <td>{event.name}</td>
+              <td>{event.description}</td>
+              <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
+              <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
+              <td>{event.location}</td>
+              <td>${event.budget}</td>
+              <td>
+                <Button>View</Button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {participatedEvents.map((event:Event, i) => (
-              <tr key={i}>
-                <td>{event.name}</td>
-                <td>{event.description}</td>
-                <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{event.location}</td>
-                <td>${event.budget}</td>
-                <td>
-                  <Button>View</Button>
-                </td>
-              </tr>
-            )
-          )}
+          ))}
         </tbody>
       </table>
+      <Pagination
+        nPages={nParticipatedPages}
+        currentPage={currParticipatedPage}
+        setCurrentPage={setCurrParticipatedPage}
+      />
     </div>
   )
 
