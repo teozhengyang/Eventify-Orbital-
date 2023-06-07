@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import dayjs from 'dayjs';
@@ -9,6 +10,21 @@ export default function Profile() {
   const [currUser, setCurrUser] = useState([])
   const [organisedEvents, setOrganisedEvents] = useState([])
   const [participatedEvents, setParticipatedEvents] = useState([])
+
+  type Event = {
+    id?: number;
+    name?: string;
+    description?: string;
+    start?: Date;
+    end?: Date;
+    location?: string;
+    budget?: number;
+    organizers?: Array<number>;
+    participants?: Array<number>;
+  }
+
+  // For routing page to edit event page
+  const navigate = useNavigate()
 
   useEffect(() => {
     getCurrUser()
@@ -58,7 +74,7 @@ export default function Profile() {
             </tr>
           </thead>
           <tbody>
-            {organisedEvents.map((event, i) => (
+            {organisedEvents.map((event:Event, i) => (
               <tr key={i}>
                 <td>{event.name}</td>
                 <td>{event.description}</td>
@@ -67,8 +83,24 @@ export default function Profile() {
                 <td>{event.location}</td>
                 <td>${event.budget}</td>
                 <td>
-                  <Button>Edit</Button>
-                  <Button>Delete</Button>
+                  <Button onClick={() => {
+                    navigate('/EditEvent', {state:{evt:event}})
+                    }}
+                  >
+                    Edit
+                  </Button>
+                  <Button onClick={async() => {
+                    const response = await axios.delete('http://127.0.0.1:8000/events/', {
+                      headers:{
+                        'Authorization': 'Bearer ' + String(authTokens.access)
+                      },
+                      data: event.id
+                    })
+                    console.log(response)
+                    }}
+                  >
+                    Delete
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -92,7 +124,7 @@ export default function Profile() {
             </tr>
           </thead>
           <tbody>
-            {participatedEvents.map((event, i) => (
+            {participatedEvents.map((event:Event, i) => (
               <tr key={i}>
                 <td>{event.name}</td>
                 <td>{event.description}</td>

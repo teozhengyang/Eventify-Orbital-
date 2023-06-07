@@ -24,7 +24,7 @@
   flex: 1 1 0%;
   min-width: 120px;
   border: 1px solid;
-  text-align: center
+  text-align: center;
 }
 
 .event-items {
@@ -42,6 +42,11 @@
   width: 25px;
   background-color: rgb(27, 27, 248);
   border-radius: 50%;
+}
+
+#otherday {
+  margin: auto;
+  height: 25px;
 }
 
 #calendar-header-month {
