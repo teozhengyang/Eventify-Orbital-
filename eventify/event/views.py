@@ -21,7 +21,7 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 # handles GET & POST requests for event data based on current user
-@api_view(['GET', 'POST', 'DELETE'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def get_Events(request):
     if request.method == 'GET':
@@ -34,7 +34,17 @@ def get_Events(request):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-    
+    elif request.method == 'PUT':
+        item = request.data
+        print(item)
+        serializer = EventSerializer(data=item, partial=True)
+        serializer.is_valid(raise_exception=True)
+        wow = Event.objects.filter(__name__=serializer.validated_data['name'])
+# not sure how to do put request ngl im lost
+#        serializer.is_valid(raise_exception=True)
+#        serializer.save()
+
+        return Response()
     elif request.method == 'DELETE':
         event = Event.objects.filter(pk=request.body)
         if event:

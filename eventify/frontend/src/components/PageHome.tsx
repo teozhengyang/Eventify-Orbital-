@@ -34,7 +34,7 @@ export default function Home() {
       'Authorization': 'Bearer ' + String(authTokens.access)
     }
   }
-  
+
   const getdata = async () => {
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
     const eventsData = eventsResponse.data

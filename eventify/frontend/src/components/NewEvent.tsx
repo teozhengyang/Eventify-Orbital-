@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
-import Select from 'react-select'
+import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
 import "/static/css/register.css";
 
@@ -13,16 +13,14 @@ import "react-datepicker/dist/react-datepicker.css";
 
 // Might be nice to change the form to a bootstrap one
 export default function NewEvent({defaultdate}: {defaultdate: Date}) {
-  const [startDate, setStartDate] = useState(defaultdate);
-  const [endDate, setEndDate] = useState(defaultdate);
+  const [startDate, setStartDate] = useState(defaultdate)
+  const [endDate, setEndDate] = useState(defaultdate)
   const { setShowModal } = useContext(NewEventModalContext)
-  const { user, authTokens } = useContext(AuthContext); // Set event creator as default organiser
+  const { authTokens } = useContext(AuthContext)
 
   const [users, setUsers] = useState([])
   const [selectedOrganisers, setSelectedOrganisers] = useState([])
   const [selectedParticipants, setSelectedParticipants] = useState([])
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     getUsers();
@@ -49,16 +47,10 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
     console.log(data)
   }
 
-  const handleSelectedOrganisers = (data) => {
-    setSelectedOrganisers(data)
-  }
-
-  const handleSelectedParticipants = (data) => {
-    setSelectedParticipants(data)
-  }
+  const navigate = useNavigate()
 
   const AddEventInfo = async(e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       const response = await axios.post('http://127.0.0.1:8000/events/', {
         name: e.target.title.value,
@@ -83,7 +75,12 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
     <div className="event-form">
       <Form onSubmit={AddEventInfo}>
         <FloatingLabel controlId="floatingInput" label="Title">
-          <Form.Control className="event-form-field" type="text" name="title" placeholder="Enter username" />
+          <Form.Control 
+            className="event-form-field" 
+            type="text" 
+            name="title" 
+            placeholder="Enter username" 
+          />
         </FloatingLabel>
         
         <Row>
@@ -97,7 +94,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               timeCaption="Start time"
               timeIntervals={15}
               timeFormat="h:mm aa"
-              dateFormat="dd MMMM yyyy - h:mm aa"/>
+              dateFormat="dd MMMM yyyy - h:mm aa"
+            />
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>To</Form.Label>
@@ -110,27 +108,46 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               timeCaption="End time"
               timeIntervals={15}
               timeFormat="h:mm aa"
-              dateFormat="dd MMMM yyyy - h:mm aa"/>
+              dateFormat="dd MMMM yyyy - h:mm aa"
+            />
           </Form.Group>
         </Row>
 
         <FloatingLabel controlId="floatingInput" label="Description">
-          <Form.Control className="event-form-field" as="textarea" style={{ height: '120px' }} name="description" placeholder="Description"/>
+          <Form.Control 
+            className="event-form-field" 
+            as="textarea" 
+            style={{ height: '120px' }} 
+            name="description" 
+            placeholder="Description"
+          />
         </FloatingLabel>
 
         <Row>
           <Col>
             <FloatingLabel controlId="floatingInput" label="Location">
-              <Form.Control className="event-form-field" type="text" name="location" placeholder="Location" />
+              <Form.Control 
+                className="event-form-field" 
+                type="text" 
+                name="location" 
+                placeholder="Location"
+              />
             </FloatingLabel>
           </Col>
           <Col>
             <FloatingLabel controlId="floatingInput" label="Budget">
-              <Form.Control className="event-form-field" type="number" name="budget" min="0" step="0.01" placeholder="Budget" />
+              <Form.Control 
+                className="event-form-field" 
+                type="number" 
+                name="budget" 
+                min="0" 
+                step="0.01" 
+                placeholder="Budget"
+              />
             </FloatingLabel>
           </Col>
         </Row>
-        
+
         <Row>
           <Form.Group as={Col}>
             <Form.Label>Select Organisers:</Form.Label>
@@ -139,7 +156,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               placeholder="Search organisers"
               getOptionLabel={(option) => option.username}
               getOptionValue={(option) => option.id}
-              onChange={handleSelectedOrganisers}
+              onChange={(data) => setSelectedOrganisers(data)}
               isSearchable={true}
               isMulti
             />
@@ -151,7 +168,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               placeholder="Search participants"
               getOptionLabel={(option) => option.username}
               getOptionValue={(option) => option.id}
-              onChange={handleSelectedParticipants}
+              onChange={(data) => setSelectedParticipants(data)}
               isSearchable={true}
               isMulti
             />
