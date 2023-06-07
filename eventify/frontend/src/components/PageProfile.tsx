@@ -1,11 +1,13 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useMemo } from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import dayjs from 'dayjs';
+import "/static/css/profile.css";
 import { Button } from 'react-bootstrap';
+import { useTable, usePagination } from 'react-table'
 
 export default function Profile() {
-  const { authTokens, logoutUser, user } = useContext(AuthContext);
+  const { authTokens, user } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState([])
   const [organisedEvents, setOrganisedEvents] = useState([])
   const [participatedEvents, setParticipatedEvents] = useState([])
@@ -41,73 +43,208 @@ export default function Profile() {
     setParticipatedEvents(filterParticipateEvents)
   };
 
+  const formatMoney = value => `$${value}`
+  const formatTime = time => dayjs(time).format("DD/MM/YYYY HH:mm")
+
+  const organisedEventsCOLUMNS  = [
+    {
+      Header: 'Select',
+      Cell: ({value}) => (
+        <div>
+          <input type='checkbox' />
+        </div>
+      )
+    },
+    {
+      Header: 'Name',
+      accessor: 'name'
+    },
+    {
+      Header: 'Description',
+      accessor: 'description'
+    },
+    {
+      Header: 'Location',
+      accessor: 'location'
+    },
+    {
+      Header: 'Budget',
+      accessor: 'budget',
+      Cell: ({ value }) => formatMoney(value),
+    },
+    {
+      Header: 'Start',
+      accessor: 'start',
+      Cell: ({ time }) => formatTime(time),
+    },
+    {
+      Header: 'End',
+      accessor: 'end',
+      Cell: ({ time }) => formatTime(time),
+    },
+    {
+      Header: 'Actions',
+      Cell: ({ value }) => (
+        <div>
+          <Button>Edit</Button>
+          <Button>Delete</Button>
+        </div>
+      )
+    }
+  ]
   
+  const organisedEventsColumns = useMemo(() => organisedEventsCOLUMNS, [])
+  const organisedEventsData = useMemo(() => organisedEvents,[organisedEvents])
+
+  const organisedTableInstance = useTable({
+    columns: organisedEventsColumns, 
+    data: organisedEventsData
+  })
+
+  const { 
+    getTableProps: getOrganisedTableProps,
+    getTableBodyProps: getOrganisedTableBodyProps,
+    headerGroups: organisedHeaderGroups,
+    rows: organisedRows,
+    prepareRow: prepareOrganisedRow,
+  } = organisedTableInstance
 
   const organisedEventDiv = (
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Location</th>
-              <th>Budget</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {organisedEvents.map((event, i) => (
-              <tr key={i}>
-                <td>{event.name}</td>
-                <td>{event.description}</td>
-                <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{event.location}</td>
-                <td>${event.budget}</td>
-                <td>
-                  <Button>Edit</Button>
-                  <Button>Delete</Button>
-                </td>
+    <div>
+      <table {...getOrganisedTableProps()}>
+        <thead>
+          {
+            organisedHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {
+                  headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                  ))
+                }
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            ))
+          }
+          <tr>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody {...getOrganisedTableBodyProps()}>
+          {organisedRows.map(row => {
+            prepareOrganisedRow(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {
+                  row.cells.map(cell => {
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  })
+                }
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
+
+  
+
+  const participatedEventsCOLUMNS  = [
+    {
+      Header: 'Select',
+      Cell: ({value}) => (
+        <div>
+          <input type='checkbox' />
+        </div>
+      )
+    },
+    {
+      Header: 'Name',
+      accessor: 'name'
+    },
+    {
+      Header: 'Description',
+      accessor: 'description'
+    },
+    {
+      Header: 'Location',
+      accessor: 'location'
+    },
+    {
+      Header: 'Budget',
+      accessor: 'budget',
+      Cell: ({ value }) => formatMoney(value),
+    },
+    {
+      Header: 'Start',
+      accessor: 'start',
+      Cell: ({ time }) => formatTime(time),
+    },
+    {
+      Header: 'End',
+      accessor: 'end',
+      Cell: ({ time }) => formatTime(time),
+    },
+    {
+      Header: 'Actions',
+      Cell: ({ value }) => (
+        <div>
+          <Button>View</Button>
+        </div>
+      )
+    }
+  ]
+
+  const participatedEventsColumns = useMemo(() => participatedEventsCOLUMNS, [])
+  const participatedEventsData = useMemo(() => participatedEvents,[participatedEvents])
+  
+  const participatedTableInstance = useTable({
+    columns: participatedEventsColumns, 
+    data: participatedEventsData
+  })
+
+  const { 
+    getTableProps: getParticipatedTableProps,
+    getTableBodyProps: getParticipatedTableBodyProps,
+    headerGroups: participatedHeaderGroups,
+    rows: participatedRows,
+    prepareRow: prepareParticipatedRow,
+  } = participatedTableInstance
 
   const participatedEventDiv = (
     <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Location</th>
-              <th>Budget</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {participatedEvents.map((event, i) => (
-              <tr key={i}>
-                <td>{event.name}</td>
-                <td>{event.description}</td>
-                <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
-                <td>{event.location}</td>
-                <td>${event.budget}</td>
-                <td>
-                  <Button>View</Button>
-                </td>
+      <table {...getParticipatedTableProps()}>
+        <thead>
+          {
+            participatedHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {
+                  headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                  ))
+                }
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            ))
+          }
+          <tr>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody {...getParticipatedTableBodyProps()}>
+          {participatedRows.map(row => {
+            prepareParticipatedRow(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {
+                  row.cells.map(cell => {
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  })
+                }
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 
   return (
