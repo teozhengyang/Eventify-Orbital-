@@ -19,7 +19,7 @@ export default function Day({day, rowIndex, events}: {day: Date; rowIndex: numbe
   const disp = (
     <div>
     {events.map((evt, i) => (
-      <div className="event-display" key={i} onClick={() => setSelectedEvent(evt)}>
+      <div className="event-items" key={i} onClick={() => setSelectedEvent(evt)}>
         <p>{evt.name}</p>
       </div>
     ))}

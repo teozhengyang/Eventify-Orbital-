@@ -11,7 +11,9 @@ export default function EventModal() {
 
   const closeModal = () => {
     setShowModal(false)
-    setSelectedEvent(null)
+    setTimeout(() => {
+      setSelectedEvent(null)
+    }, 120)
   }
 
   const title = selectedEvent == null

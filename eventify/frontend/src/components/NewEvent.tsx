@@ -130,6 +130,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             </FloatingLabel>
           </Col>
         </Row>
+        
         <Row>
           <Form.Group as={Col}>
             <Form.Label>Select Organisers:</Form.Label>
@@ -143,7 +144,6 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               isMulti
             />
           </Form.Group>
-
           <Form.Group as={Col}>
             <Form.Label>Select Participants:</Form.Label>
             <Select

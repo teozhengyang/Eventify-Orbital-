@@ -1,6 +1,7 @@
 .calendar-header {
   display: flex;
   flex-direction: row;
+  min-width: 840px;
   height: 50px;
   margin-top: 5px;
 }
@@ -21,14 +22,18 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 0%;
+  min-width: 120px;
   border: 1px solid;
   text-align: center
 }
 
-.event-display {
+.event-items {
   height: 30px;
   font-size: 0.8em;
   border: 1px solid;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-left: 0.6em;
 }
 
 #today {

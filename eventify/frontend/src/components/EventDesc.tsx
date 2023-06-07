@@ -6,7 +6,7 @@ import axios from "axios";
 
 // Might consider changing to dayjs idk
 export default function EventDesc({info}={info: Object}) {
-  const { setShowModal } = useContext(NewEventModalContext)
+  const { setShowModal, setSelectedEvent } = useContext(NewEventModalContext)
   const { authTokens } = useContext(AuthContext)
 
 
@@ -15,10 +15,13 @@ export default function EventDesc({info}={info: Object}) {
       headers:{
         'Authorization': 'Bearer ' + String(authTokens.access)
       },
-      data: info
+      data: info.id
     })
     console.log(response)
     setShowModal(false)
+    setTimeout(() => {
+      setSelectedEvent(null)
+    }, 120)
   }
 
   return (

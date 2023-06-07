@@ -36,11 +36,12 @@ def get_Events(request):
         return Response(serializer.data)
     
     elif request.method == 'DELETE':
-        item = serializers.deserialize("json", request.body)
-        print(item)
-        real = Event.objects.filter(pk=item.pk)
-        print(real)
-        return Response()
+        event = Event.objects.filter(pk=request.body)
+        if event:
+            event.delete()
+            return Response('Deleted event')
+        else:
+            return Response('Failed to delete')
 
 
 # register view
