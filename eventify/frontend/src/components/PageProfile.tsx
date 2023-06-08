@@ -36,7 +36,7 @@ export default function Profile() {
     getCurrUser()
   },[])
 
-  // Headers for authorization @ backend => Allows Get/Post request for event data
+  // Headers for authorization @ backend => Allows request to django
   const config = {
     headers:{
       'Authorization': 'Bearer ' + String(authTokens.access)
@@ -98,12 +98,7 @@ export default function Profile() {
                   Edit
                 </Button>
                 <Button onClick={async() => {
-                  const response = await axios.delete('http://127.0.0.1:8000/events/', {
-                    headers:{
-                      'Authorization': 'Bearer ' + String(authTokens.access)
-                    },
-                    data: event.id
-                  })
+                  const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
                   console.log(response)
                 }}>
                   Delete

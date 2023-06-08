@@ -28,7 +28,7 @@ export default function Home() {
     getdata()
   }, [showModal])
 
-  // Headers for authorization @ backend => Allows Get/Post request for event data
+  // Headers for authorization @ backend => Allows request to django
   const config = {
     headers:{
       'Authorization': 'Bearer ' + String(authTokens.access)

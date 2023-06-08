@@ -19,9 +19,6 @@ export default function Headers() {
           {user ? <Nav.Link className="own-nav-link" onClick={logoutUser}>Log out</Nav.Link> : <Nav.Link className="own-nav-link"  href="/login">Login</Nav.Link>}
         </Nav.Item>
         <Nav.Item>
-          {user ? <Nav.Link className="own-nav-link" href="/SearchEvent">Search Event</Nav.Link> : null}
-        </Nav.Item>
-        <Nav.Item>
           {user ? <Nav.Link className="own-nav-link" href="/NewEvent">Create New Event</Nav.Link> : null}
         </Nav.Item>
         <Nav.Item>

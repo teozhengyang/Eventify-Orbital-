@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "/static/css/register.css";
 
 export default function EditEvent() {
-  // Get event data from EventDesc.tsx and saves it as const evt, to be used for default values
+  // Get event data from EventDesc.tsx and saves it as a const, to be used for default values
   const location = useLocation()
   const event = location.state.evt
 
@@ -15,16 +15,19 @@ export default function EditEvent() {
   const [endDate, setEndDate] = useState(new Date(event.end));
 
   const { authTokens } = useContext(AuthContext)
-  // Headers for authorization @ backend => Allows Get/Post request for event data
+  // Headers for authorization @ backend => Allows request to django
   const config = {
     headers:{
       'Authorization': 'Bearer ' + String(authTokens.access)
     }
   }
+
+  const navigate = useNavigate()
+  // Update event
   const UpdateEventInfo = async(e) => {
     e.preventDefault();
     try {
-      const response = await axios.put('http://127.0.0.1:8000/events/', {
+      const response = await axios.put(`http://127.0.0.1:8000/events/${event.id}/`, {
         name: e.target.title.value,
         description: e.target.description.value,
         start: startDate.toJSON(),
@@ -33,8 +36,8 @@ export default function EditEvent() {
         budget: e.target.budget.value,
       }, config);
       console.log(response.data)
-//      alert('Event updated successfully!')
-//      navigate('/')
+      alert('Event updated successfully!')
+      navigate('/')
     } catch (error) {
       console.error(error.response)
     }

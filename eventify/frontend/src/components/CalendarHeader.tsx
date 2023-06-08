@@ -4,7 +4,6 @@ import "/static/css/calendar.css";
 import { Dropdown, Button } from "react-bootstrap";
 
 export default function CalendarHeader({month}: {month: string}) {
-
   const { monthIndex, setMonthIndex } = useContext(MonthContext)
 
   function present() {

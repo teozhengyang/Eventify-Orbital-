@@ -21,38 +21,38 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 # handles GET & POST requests for event data based on current user
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
-def get_Events(request):
+def event_list(request, format=None):
     if request.method == 'GET':
         user = request.user.id
-        events = Event.objects.filter(Q(participants=user)|Q(organizers=user))
+        events = Event.objects.filter(Q(organizers=user) | Q(participants=user)).distinct()
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = EventSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=True) 
         serializer.save()
         return Response(serializer.data)
-    elif request.method == 'PUT':
-        item = request.data
-        print(item)
-        serializer = EventSerializer(data=item, partial=True)
-        serializer.is_valid(raise_exception=True)
-        wow = Event.objects.filter(__name__=serializer.validated_data['name'])
-# not sure how to do put request ngl im lost
-#        serializer.is_valid(raise_exception=True)
-#        serializer.save()
 
-        return Response()
+# handles PUT & DELETE requests, finds relevant event by primary key
+@api_view(['PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def event_detail(request, pk, format=None):
+    if request.method == 'PUT':
+        event = Event.objects.get(pk=pk)
+        serializer = EventSerializer(event, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
     elif request.method == 'DELETE':
-        event = Event.objects.filter(pk=request.body)
+        event = Event.objects.get(pk=pk)
         if event:
             event.delete()
             return Response('Deleted event')
         else:
             return Response('Failed to delete')
-
 
 # register view
 @csrf_exempt
