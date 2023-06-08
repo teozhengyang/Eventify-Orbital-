@@ -82,9 +82,7 @@ def register(request):
 
             # Create a new user
             user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name, budget=0)
-            profile = Profile(user=user, first_name=first_name, last_name=last_name, email=email)
-            profile.save()
-
+            
             return JsonResponse({'success': 'User registered successfully'}, status=201)
 
         except Exception as e:
