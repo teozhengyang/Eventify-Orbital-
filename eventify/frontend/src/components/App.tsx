@@ -11,6 +11,7 @@ import PrivateRoute from "../utils/PrivateRoute";
 import { AuthProvider } from "../context/AuthContext";
 import { MonthProvider } from "../context/MonthContext";
 import { ModalProvider } from "../context/NewEventModalContext";
+import Event from "./PageEvent";
 
 /**
  * Main page, route to different pages
@@ -31,6 +32,7 @@ export default function App() {
                 <Route path="*" element={<NoPage />} />
                 <Route path="NewEvent" element={<NewEventPage />} />
                 <Route path="EditEvent" element={<EditEvent />}/>
+                <Route path="Event/:id" element={<Event />} />
               </Routes>
           </MonthProvider>
         </ModalProvider>

@@ -145,7 +145,11 @@ export default function Profile() {
               <td>{event.location}</td>
               <td>${event.budget}</td>
               <td>
-                <Button>View</Button>
+                <Button onClick={() => {
+                  navigate(`/Event/${event.id}`)
+                }}>
+                  View
+                </Button>
               </td>
             </tr>
           ))}

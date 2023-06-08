@@ -36,7 +36,7 @@ def event_list(request, format=None):
         return Response(serializer.data)
 
 # handles PUT & DELETE requests, finds relevant event by primary key
-@api_view(['PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def event_detail(request, pk, format=None):
     if request.method == 'PUT':
@@ -53,6 +53,10 @@ def event_detail(request, pk, format=None):
             return Response('Deleted event')
         else:
             return Response('Failed to delete')
+    elif request.method == 'GET':
+        event = Event.objects.get(pk=pk)
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
 
 # register view
 @csrf_exempt
