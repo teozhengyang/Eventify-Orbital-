@@ -1,10 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "/static/css/register.css";
+import Select from 'react-select';
 
 export default function EditEvent() {
   // Get event data from EventDesc.tsx and saves it as a const, to be used for default values
@@ -14,7 +15,12 @@ export default function EditEvent() {
   const [startDate, setStartDate] = useState(new Date(event.start));
   const [endDate, setEndDate] = useState(new Date(event.end));
 
+  const [users, setUsers] = useState([])
+  const [selectedOrganisers, setSelectedOrganisers] = useState([])
+  const [selectedParticipants, setSelectedParticipants] = useState([])
+
   const { authTokens } = useContext(AuthContext)
+
   // Headers for authorization @ backend => Allows request to django
   const config = {
     headers:{
@@ -23,6 +29,22 @@ export default function EditEvent() {
   }
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    getUsers();
+  }, [])
+
+  const getUsers = async () => {
+    const response = await axios.get('http://127.0.0.1:8000/api/users/')
+    const data = response.data
+    const users = data.map(user => ({
+      "value": user.id,
+      "label": user.username
+    }))
+    setUsers(users)
+    console.log(users)
+  }
+
   // Update event
   const UpdateEventInfo = async(e) => {
     e.preventDefault();
@@ -34,6 +56,8 @@ export default function EditEvent() {
         end: endDate.toJSON(),
         location: e.target.location.value,
         budget: e.target.budget.value,
+        organizers: selectedOrganisers,
+        participants: selectedParticipants
       }, config);
       console.log(response.data)
       alert('Event updated successfully!')
@@ -125,7 +149,28 @@ export default function EditEvent() {
           </Col>
         </Row>
 
-
+        <Row>
+          <Form.Group as={Col}>
+            <Form.Label>Select Organisers:</Form.Label>
+            <Select
+              options={users}
+              placeholder="Search organisers"
+              onChange={(data) => setSelectedOrganisers(data)}
+              isSearchable={true}
+              isMulti
+            />
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label>Select Participants:</Form.Label>
+            <Select
+              options={users}
+              placeholder="Search participants"
+              onChange={(data) => setSelectedParticipants(data)}
+              isSearchable={true}
+              isMulti
+            />
+          </Form.Group>
+        </Row>
         <h3>Field inputs to change participants, or promote them to organiser somehow. Will need to implement organiser/participant for other components too</h3>
         <Button variant="primary" type="submit">Update Event</Button>
       </Form>
