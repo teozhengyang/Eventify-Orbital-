@@ -16,8 +16,8 @@ export default function EditEvent() {
   const [endDate, setEndDate] = useState(new Date(event.end));
 
   const [users, setUsers] = useState([])
-  const [selectedOrganisers, setSelectedOrganisers] = useState([])
-  const [selectedParticipants, setSelectedParticipants] = useState([])
+  const [selectedOrganisers, setSelectedOrganisers] = useState()
+  const [selectedParticipants, setSelectedParticipants] = useState()
 
   const { authTokens } = useContext(AuthContext)
 
@@ -28,11 +28,16 @@ export default function EditEvent() {
     }
   }
 
-  const navigate = useNavigate()
-
   useEffect(() => {
     getUsers();
   }, [])
+
+  // Event end date must be >= start date
+  useEffect(() => {
+    if (startDate > endDate) {
+      setEndDate(startDate)
+    }
+  }, [startDate])
 
   const getUsers = async () => {
     const response = await axios.get('http://127.0.0.1:8000/api/users/')
@@ -44,6 +49,8 @@ export default function EditEvent() {
     setUsers(users)
     console.log(users)
   }
+ 
+  const navigate = useNavigate()
 
   // Update event
   const UpdateEventInfo = async(e) => {

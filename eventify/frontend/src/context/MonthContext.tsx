@@ -1,16 +1,19 @@
 import { createContext, useState } from 'react';
 
 const MonthContext = createContext({
-  monthIndex: 0,
-  setMonthIndex: (index: number) => {},
+  displayDate: new Date(),
+  setDisplayDate: (index: Date) => {},
+  displayType: "month",
+  setDisplayType: (index: string) => {}
 })
 
 export default MonthContext;
 
 export const MonthProvider = ({children}) => {
-  const [monthIndex, setMonthIndex] = useState(new Date().getMonth());
+  const [displayDate, setDisplayDate] = useState(new Date());
+  const [displayType, setDisplayType] = useState("month")
   return (
-    <MonthContext.Provider value={{ monthIndex, setMonthIndex }}>
+    <MonthContext.Provider value={{ displayDate, setDisplayDate, displayType, setDisplayType }}>
       {children}
     </MonthContext.Provider>
   )
