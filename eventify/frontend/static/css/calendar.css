@@ -26,11 +26,17 @@
   border: 1px solid;
   text-align: center;
 }
-
+/*
+.event-display {
+  overflow: auto;
+  max-height: 113px;
+}
+*/
 .event-items {
   height: 30px;
   font-size: 0.8em;
   border: 1px solid;
+  text-align: left;
   overflow: hidden;
   white-space: nowrap;
   padding-left: 0.6em;
