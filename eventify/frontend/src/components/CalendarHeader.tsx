@@ -1,36 +1,38 @@
 import { useContext } from "react";
 import MonthContext from "../context/MonthContext";
 import "/static/css/calendar.css";
-import { Dropdown, Button } from "react-bootstrap";
+import { ButtonGroup, Button } from "react-bootstrap";
+import { addMonths, subMonths, addWeeks, subWeeks, format } from "date-fns";
 
-export default function CalendarHeader({month}: {month: string}) {
-  const { monthIndex, setMonthIndex } = useContext(MonthContext)
+export default function CalendarHeader() {
+  const { displayDate, setDisplayDate, displayType, setDisplayType } = useContext(MonthContext)
 
   function present() {
-    setMonthIndex(new Date().getMonth());
+    setDisplayDate(new Date());
   }
 
-  function prevMonth() {
-    setMonthIndex(monthIndex - 1);
+  function prev() {
+    displayType === "month"
+      ? setDisplayDate(subMonths(displayDate, 1))
+      : setDisplayDate(subWeeks(displayDate, 1))
   }
   
-  function nextMonth() {
-    setMonthIndex(monthIndex + 1);
+  function next() {
+    displayType === "month"
+    ? setDisplayDate(addMonths(displayDate, 1))
+    : setDisplayDate(addWeeks(displayDate, 1))
   }
 
   return (
     <header className="calendar-header">
       <Button variant="secondary" onClick={present}>Today</Button>
-      <Button variant="secondary" onClick={prevMonth}>&lt;</Button>
-      <Button variant="secondary" onClick={nextMonth}>&gt;</Button>
-      <p id="calendar-header-month">{month}</p>
-      <Dropdown>
-        <Dropdown.Toggle>View change WIP</Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item>Week</Dropdown.Item>
-          <Dropdown.Item>Month</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <Button variant="secondary" onClick={prev}>&lt;</Button>
+      <Button variant="secondary" onClick={next}>&gt;</Button>
+      <p id="calendar-header-month">{format(displayDate, "MMM yyyy")}</p>
+      <ButtonGroup>
+        <Button variant="secondary" onClick={() => setDisplayType("week")}>Week</Button>
+        <Button variant="secondary" onClick={() => setDisplayType("month")}>Month</Button>
+      </ButtonGroup>
     </header>
   )
 }

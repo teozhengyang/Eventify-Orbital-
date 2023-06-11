@@ -3,7 +3,7 @@
   flex-direction: row;
   min-width: 840px;
   height: 50px;
-  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .calendar-month {
@@ -18,6 +18,12 @@
   flex: 1 1 0%;
 }
 
+.week-display {
+  display: flex;
+  flex-direction: row;
+  height: 700px;
+}
+
 .calendar-day {
   display: flex;
   flex-direction: column;
@@ -27,13 +33,33 @@
   text-align: center;
 }
 
+.event-display {
+  overflow: auto;
+  max-height: 113px;
+}
+
 .event-items {
   height: 30px;
   font-size: 0.8em;
-  border: 1px solid;
+  line-height: 30px;
+  border-radius: 4px;
+  padding-left: 0.6em;
+  margin-bottom: 2px;
+  text-align: left;
   overflow: hidden;
   white-space: nowrap;
-  padding-left: 0.6em;
+}
+
+.event-items:hover {
+  filter: brightness(85%)
+}
+
+.organise {
+  background-color: green;
+}
+
+.participate {
+  background: brown;
 }
 
 #today {

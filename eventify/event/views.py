@@ -33,8 +33,8 @@ def event_list(request, format=None):
         serializer.is_valid(raise_exception=True) 
         serializer.save()
         return Response(serializer.data)
-  
-# handles PUT & DELETE requests, finds relevant event by primary key
+
+# handles GET, PUT & DELETE requests using primary key
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def event_detail(request, pk, format=None):

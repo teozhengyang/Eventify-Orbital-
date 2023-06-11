@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext} from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
-import dayjs from 'dayjs';
+import { format } from 'date-fns';
 import "/static/css/profile.css";
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -87,8 +87,8 @@ export default function Profile() {
             <tr key={i}>
               <td>{event.name}</td>
               <td>{event.description}</td>
-              <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
-              <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
+              <td>{format(new Date(event.start), "Pp")}</td>
+              <td>{format(new Date(event.end), "Pp")}</td>
               <td>{event.location}</td>
               <td>${event.budget}</td>
               <td>
@@ -140,8 +140,8 @@ export default function Profile() {
             <tr key={i}>
               <td>{event.name}</td>
               <td>{event.description}</td>
-              <td>{dayjs(event.start).format("DD/MM/YYYY HH:mm")}</td>
-              <td>{dayjs(event.end).format("DD/MM/YYYY HH:mm")}</td>
+              <td>{format(new Date(event.start), "Pp")}</td>
+              <td>{format(new Date(event.end), "Pp")}</td>
               <td>{event.location}</td>
               <td>${event.budget}</td>
               <td>

@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect } from "react";
-import { getMonthMatrix } from "../utils/Calendar";
-import MonthDisplay from "./MonthDisplay";
+import { getMonthMatrix, getWeekArray } from "../utils/Calendar";
+import DisplayMonth from "./DisplayMonth";
+import DisplayWeek from "./DisplayWeek";
 import CalendarHeader from "./CalendarHeader";
 import EventModal from "./EventModal";
 import MonthContext from "../context/MonthContext";
@@ -10,18 +11,18 @@ import axios from "axios";
 
 export default function Home() {
   const [monthData, setMonthData] = useState(getMonthMatrix());
+  const [weekData, setWeekData] = useState(getWeekArray());
+
   const [events, setEvents] = useState([])
   const { showModal } = useContext(NewEventModalContext)
-  const { monthIndex } = useContext(MonthContext);
+  const { displayDate, displayType } = useContext(MonthContext);
   const { authTokens } = useContext(AuthContext);
 
-  // Grabs a date from center of matrix, convert to string, split words by spaces (to get Month-Year header)
-  const month = monthData[2][3].toString().split(" ");
-
-  // Update MonthDisplay whenever calendar is swapped to another
+  // Update Calendar display whenever prev/next buttons are pressed
   useEffect(() => {
-    setMonthData(getMonthMatrix(monthIndex));
-  }, [monthIndex]);
+    setMonthData(getMonthMatrix(displayDate));
+    setWeekData(getWeekArray(displayDate))
+  }, [displayDate]);
 
   // Update calendar event display when new event is created (ie. when modal is opened/closed or page is rendered)
   useEffect(() => {
@@ -42,11 +43,15 @@ export default function Home() {
     setEvents(eventsData)
   };
 
+  const calendar = displayType === "month"
+    ? <DisplayMonth data={monthData} eventlist={events}/> 
+    : <DisplayWeek data={weekData} eventlist={events}/>
+
   return (
     <div className="flex-container">
-      <CalendarHeader month={month[1] + " " + month[3]}/>
+      <CalendarHeader />
       <EventModal />
-      <MonthDisplay data={monthData} eventlist={events}/>
+      {calendar}
     </div>
   )
 }
