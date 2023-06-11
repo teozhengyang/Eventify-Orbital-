@@ -1,8 +1,7 @@
 from rest_framework import viewsets
-from .serializers import EventSerializer, UserSerializer
-from .models import Event, User
+from .serializers import EventSerializer, UserSerializer, ActivitySerializer
+from .models import Event, User, Activity
 from django.db.models import Q
-from django.core import serializers
 
 # jwt imports
 from django.http import JsonResponse
@@ -34,7 +33,7 @@ def event_list(request, format=None):
         serializer.is_valid(raise_exception=True) 
         serializer.save()
         return Response(serializer.data)
-
+  
 # handles PUT & DELETE requests, finds relevant event by primary key
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -56,6 +55,44 @@ def event_detail(request, pk, format=None):
     elif request.method == 'GET':
         event = Event.objects.get(pk=pk)
         serializer = EventSerializer(event)
+        return Response(serializer.data)
+
+# handles GET & POST requests for activity data based on current user for event
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def activity_list(request, format=None):
+    if request.method == 'GET':
+        user = request.user.id
+        activities = Activity.objects.filter(Q(organizers=user) | Q(participants=user)).distinct()
+        serializer = ActivitySerializer(activities, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ActivitySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        serializer.save()
+        return Response(serializer.data)
+    
+# handles PUT & DELETE requests, finds relevant event by primary key for activity
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def activity_detail(request, pk, format=None):
+    if request.method == 'PUT':
+        activity = Activity.objects.get(pk=pk)
+        serializer = ActivitySerializer(activity, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE':
+        activity = Activity.objects.get(pk=pk)
+        if activity:
+            activity.delete()
+            return Response('Deleted event')
+        else:
+            return Response('Failed to delete')
+    elif request.method == 'GET':
+        activity = Activity.objects.get(pk=pk)
+        serializer = EventSerializer(activity)
         return Response(serializer.data)
 
 # register view

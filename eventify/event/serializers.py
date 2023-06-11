@@ -11,6 +11,11 @@ class EventSerializer(ModelSerializer):
     class Meta:
         model = models.Event
         fields = '__all__'
+        
+class ActivitySerializer(ModelSerializer):
+    class Meta:
+        model = models.Activity
+        fields = '__all__'
 
 class NewTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
