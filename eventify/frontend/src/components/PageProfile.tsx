@@ -20,7 +20,7 @@ type Event = {
 }
 
 export default function Profile() {
-  const { authTokens, user } = useContext(AuthContext);
+  const { authTokens, user, logoutUser } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState([])
   const [organisedEvents, setOrganisedEvents] = useState([])
   const [participatedEvents, setParticipatedEvents] = useState([])
@@ -62,6 +62,13 @@ export default function Profile() {
     })
     setParticipatedEvents(filterParticipateEvents)
   };
+
+  const deleteUser = () => {
+    const response = axios.delete(`http://127.0.0.1:8000/delete_user/${user.user_id}/`, config)
+    console.log(response)
+    alert('User deleted')
+    logoutUser()
+  }
 
   const indexOfOrganisedLastRecord = currOrganisedPage * organisedRecordsPerPage;
   const indexOfOrganisedFirstRecord = indexOfOrganisedLastRecord - organisedRecordsPerPage;
@@ -165,7 +172,7 @@ export default function Profile() {
 
   return (
     <div>
-      <p>Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email}</p>
+      <p>Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} | <Button onClick={deleteUser}>Delete Profile</Button></p>
       <h4> Organised Events </h4>
       <hr />
       {organisedEvents && organisedEventDiv}

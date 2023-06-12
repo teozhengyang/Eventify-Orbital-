@@ -98,6 +98,16 @@ def activity_detail(request, pk, format=None):
         serializer = EventSerializer(activity)
         return Response(serializer.data)
 
+@csrf_exempt
+def delete_user(request, pk):
+    if request.method == 'DELETE':
+        user = User.objects.get(pk=pk)
+        if user:
+            user.delete()
+            return Response('Deleted user')
+        else:
+            return Response('Failed to delete')
+
 # register view
 @csrf_exempt
 def register(request):
@@ -133,7 +143,10 @@ def register(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-      
+
+
+
+
 @api_view(['GET'])
 def get_routes(request):
     routes = [
