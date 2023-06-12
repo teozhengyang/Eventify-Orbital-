@@ -13,8 +13,8 @@ export default function MonthDisplay({data, eventlist,}: {data: Array<Array<Date
               rowIndex={i}
               events={eventlist.filter((evt) => {
                 const curr = day.valueOf();
-                const start = new Date(evt.start).valueOf();
-                const end = new Date(evt.end).valueOf();
+                const start = new Date(evt.start).setHours(0, 0, 0, 0).valueOf();
+                const end = new Date(evt.end).setHours(0, 0, 0, 0).valueOf();
                 return curr >= start && curr <= end;
               })}
             />

@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import NewEventModalContext from "../context/NewEventModalContext";
+import { format } from "date-fns";
 import AuthContext from "../context/AuthContext";
 import "/static/css/calendar.css";
 
@@ -32,7 +33,7 @@ export default function Day({day, rowIndex, events}: {day: Date; rowIndex: numbe
 
   return (
     <div className="calendar-day" onClick={openModal}>
-    {rowIndex === 0 && day.toString().split(" ")[0]}
+    {rowIndex === 0 && format(day, 'E')}
       <header>
         <p id={sameDate ? "today" : "otherday"}>{day.getDate()}</p>
       </header>

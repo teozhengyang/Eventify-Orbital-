@@ -2,29 +2,36 @@ import { useState, useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
-import Select from 'react-select';
-import { useNavigate } from "react-router-dom";
 import "/static/css/register.css";
+import { subDays } from "date-fns";
 
 //idk why got red line here, it seems to import and work just fine
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// Might be nice to change the form to a bootstrap one
-export default function NewEvent({defaultdate}: {defaultdate: Date}) {
-  const [startDate, setStartDate] = useState(defaultdate)
-  const [endDate, setEndDate] = useState(defaultdate)
-  const { authTokens, user } = useContext(AuthContext)
+type Event = {
+  id?: number;
+  name?: string;
+  description?: string;
+  start?: string;
+  end?: string;
+  location?: string;
+  budget?: number;
+  organizers?: Array<number>;
+  participants?: Array<number>;
+}
 
-  const [users, setUsers] = useState([])
-  const [selectedOrganisers, setSelectedOrganisers] = useState([])
-  const [selectedParticipants, setSelectedParticipants] = useState([])
-  const [events, setEvents] = useState([])
-  const [selectedEvent, setSelectedEvent] = useState([])
+// Might be nice to change the form to a bootstrap one
+export default function NewActivity({event}: {event: Event}) {
+  const eventStart = new Date(event.start)
+  const eventEnd = new Date(event.end)
+
+  const [startDate, setStartDate] = useState(eventStart)
+  const [endDate, setEndDate] = useState(eventStart)
+  const { authTokens, user } = useContext(AuthContext)
 
   // Activity end date must be >= start date
   useEffect(() => {
-    getUsers();
     if (startDate > endDate) {
       setEndDate(startDate)
     }
@@ -37,22 +44,6 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
     }
   }
 
-  const getUsers = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/api/users/')
-    const data = response.data
-    setUsers(data)
-    console.log(data)
-    const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
-    const eventsData = eventsResponse.data
-    const filterOrganiseEvents = eventsData.filter(event => {
-      return event.organizers.includes(user.user_id)
-    })
-    console.log(filterOrganiseEvents)
-    setEvents(filterOrganiseEvents)
-  }
-
-  const navigate = useNavigate()
-
   const AddActivityInfo = async(e) => {
     e.preventDefault()
     console.log(e)
@@ -62,15 +53,12 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         description: e.target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
+        event: event.id,
         location: e.target.location.value,
         budget: e.target.budget.value,
-        organizers: selectedOrganisers.map(organiser => organiser.id),
-        participants: selectedParticipants.map(participant => participant.id),
-        event: selectedEvent.map(event => event.id)
       }, config);
       console.log(response.data)
       alert('Activity created successfully!')
-      navigate('/')
     } catch (error) {
       console.error(error.response)
     }
@@ -94,6 +82,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               className="datepicker"
               selected={startDate}
               onChange={(date: Date) => setStartDate(date)}
+              includeDateIntervals={[
+                {start: subDays(eventStart, 1), end: eventEnd}
+              ]}
               showTimeSelect
               timeCaption="Start time"
               timeIntervals={15}
@@ -107,7 +98,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               className="datepicker"
               selected={endDate}
               onChange={(date: Date) => setEndDate(date)}
-              minDate={startDate}
+              includeDateIntervals={[
+                {start: subDays(eventStart, 1), end: eventEnd}
+              ]}
               showTimeSelect
               timeCaption="End time"
               timeIntervals={15}
@@ -152,46 +145,6 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
           </Col>
         </Row>
 
-        <Row>
-          <Form.Group as={Col}>
-            <Form.Label>Select Organisers:</Form.Label>
-            <Select
-              options={users}
-              placeholder="Search organisers"
-              getOptionLabel={(option) => option.username}
-              getOptionValue={(option) => option.id}
-              onChange={(data) => setSelectedOrganisers(data)}
-              isSearchable={true}
-              isMulti
-            />
-          </Form.Group>
-          <Form.Group as={Col}>
-            <Form.Label>Select Participants:</Form.Label>
-            <Select
-              options={users}
-              placeholder="Search participants"
-              getOptionLabel={(option) => option.username}
-              getOptionValue={(option) => option.id}
-              onChange={(data) => setSelectedParticipants(data)}
-              isSearchable={true}
-              isMulti
-            />
-          </Form.Group>
-        </Row>
-
-        <Row>
-        <Form.Group>
-            <Form.Label>Select Event:</Form.Label>
-            <Select
-              options={events}
-              placeholder="Search event"
-              getOptionLabel={(option) => option.name}
-              getOptionValue={(option) => option.id}
-              onChange={(data) => setSelectedEvent(data)}
-              isSearchable={true}
-            />
-          </Form.Group>
-        </Row>
 
         <Button variant="primary" type="submit">Create Activity</Button>
       </Form>

@@ -57,13 +57,16 @@ def event_detail(request, pk, format=None):
         serializer = EventSerializer(event)
         return Response(serializer.data)
 
-# handles GET & POST requests for activity data based on current user for event
+
+
+# handles GET & POST requests for activity data based on associated event
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def activity_list(request, format=None):
     if request.method == 'GET':
-        user = request.user.id
-        activities = Activity.objects.filter(Q(organizers=user) | Q(participants=user)).distinct()
+        eventID = request.GET.get("EventID")
+        event = Event.objects.get(pk=eventID)
+        activities = Activity.objects.filter(event=event)
         serializer = ActivitySerializer(activities, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -72,7 +75,7 @@ def activity_list(request, format=None):
         serializer.save()
         return Response(serializer.data)
     
-# handles PUT & DELETE requests, finds relevant event by primary key for activity
+# (PENDING USE) handles PUT & DELETE requests, finds relevant event by primary key for activity
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def activity_detail(request, pk, format=None):

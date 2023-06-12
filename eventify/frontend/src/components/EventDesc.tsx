@@ -5,10 +5,10 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 
-// Might consider changing to dayjs idk
+
 export default function EventDesc({info}={info: Object}) {
   const { setShowModal, setSelectedEvent } = useContext(NewEventModalContext)
-  const { authTokens } = useContext(AuthContext)
+  const { authTokens, user } = useContext(AuthContext)
 
   // Delete event
   const remove = async() => {
@@ -32,12 +32,23 @@ export default function EventDesc({info}={info: Object}) {
     setShowModal(false)
   }
 
+  const view = () => {
+    navigate(`/Event/${info.id}`)
+  }
+
+  const options = (
+    <>
+      <Button onClick={remove}>Delete Event (temp)</Button>
+      <Button onClick={edit}>Edit (temp)</Button>
+    </>
+  )
+
   return (
     <>
       <p>{info.description}</p>
       <p>{new Date(info.start).toLocaleString()} - {new Date(info.end).toLocaleString()}</p>
-      <Button onClick={remove}>Delete Event (temp)</Button>
-      <Button onClick={edit}>Edit (temp)</Button>
+      <Button onClick={view}>View Details</Button>
+      {info.organizers.includes(user.user_id) && options}
     </>
   )
 }

@@ -11,7 +11,7 @@ import "/static/css/register.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-// Might be nice to change the form to a bootstrap one
+
 export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const [startDate, setStartDate] = useState(defaultdate)
   const [endDate, setEndDate] = useState(defaultdate)
@@ -71,6 +71,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
     }
   }
 
+
+
   return (
     <div className="event-form">
       <Form onSubmit={AddEventInfo}>
@@ -90,6 +92,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               className="datepicker"
               selected={startDate}
               onChange={(date: Date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
               showTimeSelect
               timeCaption="Start time"
               timeIntervals={15}
@@ -103,6 +108,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               className="datepicker"
               selected={endDate}
               onChange={(date: Date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
               minDate={startDate}
               showTimeSelect
               timeCaption="End time"

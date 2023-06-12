@@ -12,7 +12,6 @@ import { AuthProvider } from "../context/AuthContext";
 import { MonthProvider } from "../context/MonthContext";
 import { ModalProvider } from "../context/NewEventModalContext";
 import Event from "./PageEvent";
-import NewActivityPage from "./PageNewActivity";
 
 /**
  * Main page, route to different pages
@@ -34,7 +33,6 @@ export default function App() {
                 <Route path="NewEvent" element={<NewEventPage />} />
                 <Route path="EditEvent" element={<EditEvent />}/>
                 <Route path="Event/:id" element={<Event />} />
-                <Route path="NewActivity" element={<NewActivityPage />} />
               </Routes>
           </MonthProvider>
         </ModalProvider>

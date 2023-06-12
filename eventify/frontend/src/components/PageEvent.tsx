@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import AuthContext from '../context/AuthContext';
+import DisplayActivity from "./DisplayActivity";
 
 export default function Event() {
   const [event, setEvent] = useState({});
@@ -24,7 +25,6 @@ export default function Event() {
         console.error(error);
       }
     };
-
     fetchEvent();
   }, [id]);
 
@@ -32,6 +32,9 @@ export default function Event() {
     <div>
       <h2>Name: {event.name}</h2>
       <p>Description: {event.description}</p>
+      <DisplayActivity event={event}/>
+      <p>Potentially use an external timetable/schedule display component to show activities of event instead of above box</p>
+      <p>If organiser, add buttons to edit/delete event</p>
     </div>
   );
 }

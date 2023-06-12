@@ -7,6 +7,18 @@ import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../utils/Pagination';
 
+type Event = {
+  id?: number;
+  name?: string;
+  description?: string;
+  start?: Date;
+  end?: Date;
+  location?: string;
+  budget?: number;
+  organizers?: Array<number>;
+  participants?: Array<number>;
+}
+
 export default function Profile() {
   const { authTokens, user } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState([])
@@ -16,18 +28,6 @@ export default function Profile() {
   const [organisedRecordsPerPage] = useState(1)
   const [currParticipatedPage, setCurrParticipatedPage] = useState(1)
   const [participatedRecordsPerPage] = useState(2)
-
-  type Event = {
-    id?: number;
-    name?: string;
-    description?: string;
-    start?: Date;
-    end?: Date;
-    location?: string;
-    budget?: number;
-    organizers?: Array<number>;
-    participants?: Array<number>;
-  }
 
   // For routing page to edit event page
   const navigate = useNavigate()

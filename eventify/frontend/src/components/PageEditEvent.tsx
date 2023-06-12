@@ -6,6 +6,12 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "/static/css/register.css";
 import Select from 'react-select';
+import NewActivity from "./NewActivity";
+
+type user = {
+  id?: number;
+  username?: string;
+}
 
 export default function EditEvent() {
   // Get event data from EventDesc.tsx and saves it as a const, to be used for default values
@@ -42,13 +48,14 @@ export default function EditEvent() {
   const getUsers = async () => {
     const response = await axios.get('http://127.0.0.1:8000/api/users/')
     const data = response.data
-    const users = data.map(user => ({
-      "value": user.id,
-      "label": user.username
-    }))
-    setUsers(users)
-    console.log(users)
+    let hashmap = new Map<number, user>()
+    data.forEach((user) => hashmap.set(user.id, user))
+    setSelectedOrganisers(event.organizers.map(id => hashmap.get(id)))
+    setSelectedParticipants(event.participants.map(id => hashmap.get(id)))
+    setUsers(data)
+    console.log(data)
   }
+
  
   const navigate = useNavigate()
 
@@ -63,8 +70,8 @@ export default function EditEvent() {
         end: endDate.toJSON(),
         location: e.target.location.value,
         budget: e.target.budget.value,
-        organizers: selectedOrganisers,
-        participants: selectedParticipants
+        organizers: selectedOrganisers.map(organiser => organiser.id),
+        participants: selectedParticipants.map(participant => participant.id)
       }, config);
       console.log(response.data)
       alert('Event updated successfully!')
@@ -162,16 +169,22 @@ export default function EditEvent() {
             <Select
               options={users}
               placeholder="Search organisers"
+              value={selectedOrganisers}
+              getOptionLabel={(option) => option.username}
+              getOptionValue={(option) => option.id}
               onChange={(data) => setSelectedOrganisers(data)}
               isSearchable={true}
               isMulti
-            />
+              />
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Select Participants:</Form.Label>
             <Select
               options={users}
+              value={selectedParticipants}
               placeholder="Search participants"
+              getOptionLabel={(option) => option.username}
+              getOptionValue={(option) => option.id}
               onChange={(data) => setSelectedParticipants(data)}
               isSearchable={true}
               isMulti
@@ -181,8 +194,8 @@ export default function EditEvent() {
         <h3>Field inputs to change participants, or promote them to organiser somehow. Will need to implement organiser/participant for other components too</h3>
         <Button variant="primary" type="submit">Update Event</Button>
       </Form>
-
-      
+      <h2>Temp activity create form, not sure if we wanna keep it here, get activity button is at individual activity event page</h2>
+      <NewActivity event={event}/>
     </div>
   )
 }

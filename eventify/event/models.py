@@ -32,8 +32,6 @@ class Activity(models.Model):
     location = models.TextField(blank=True)
     weather = models.TextField(blank=True)
     budget = models.FloatField(default=0)
-    organizers = models.ManyToManyField(User, related_name='organized_activities')
-    participants = models.ManyToManyField(User, related_name='participated_activities', blank=True)
     
     def __str__(self):
         return f"{self.start} to {self.end}: {self.name}"
