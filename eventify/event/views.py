@@ -107,6 +107,17 @@ def delete_user(request, pk):
             return Response('Deleted user')
         else:
             return Response('Failed to delete')
+    return Response('Try again')
+ 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])      
+def reset_password(request, pk):
+    if request.method == 'POST':
+        user = User.objects.get(pk=pk)
+        password = request.data.get('password')
+        user.set_password(password)
+        user.save()
+    return Response('Try again')
 
 # register view
 @csrf_exempt

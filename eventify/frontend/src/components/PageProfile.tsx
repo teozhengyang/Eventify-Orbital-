@@ -172,7 +172,15 @@ export default function Profile() {
 
   return (
     <div>
-      <p>Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} | <Button onClick={deleteUser}>Delete Profile</Button></p>
+      <p>
+        Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} |
+        <Button onClick={deleteUser}>Delete Profile</Button> |
+        <Button onClick={() => {
+          navigate('/ResetPassword')
+        }}>
+          Reset Password
+        </Button>
+      </p>
       <h4> Organised Events </h4>
       <hr />
       {organisedEvents && organisedEventDiv}
