@@ -1,40 +1,29 @@
-import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import AuthContext from '../context/AuthContext';
 import DisplayActivity from "./DisplayActivity";
 
+
+type Event = {
+  id?: number;
+}
+
 export default function Event() {
-  const [event, setEvent] = useState({});
+  const location = useLocation();
+  const [event, setEvent] = useState(location.state.evt);
   const { authTokens, user } = useContext(AuthContext);
 
-  const { id } = useParams()
-
   const config = {
-    headers:{
-      'Authorization': 'Bearer ' + String(authTokens.access)
-    }
+    headers:{'Authorization': 'Bearer ' + String(authTokens.access)},
+    params:{'EventID': event.id},
   }
-
-  useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const response = await axios.get(`http://127.0.0.1:8000/events/${id}/`, config);
-        setEvent(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchEvent();
-  }, [id]);
 
   return (
     <div>
       <h2>Name: {event.name}</h2>
       <p>Description: {event.description}</p>
+      <br></br>
       <DisplayActivity event={event}/>
-      <p>Potentially use an external timetable/schedule display component to show activities of event instead of above box</p>
-      <p>If organiser, add buttons to edit/delete event</p>
     </div>
   );
 }

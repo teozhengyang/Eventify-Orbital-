@@ -3,7 +3,7 @@ import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { format } from 'date-fns';
 import "/static/css/profile.css";
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../utils/Pagination';
 
@@ -11,8 +11,8 @@ type Event = {
   id?: number;
   name?: string;
   description?: string;
-  start?: Date;
-  end?: Date;
+  start?: string;
+  end?: string;
   location?: string;
   budget?: number;
   organizers?: Array<number>;
@@ -22,12 +22,11 @@ type Event = {
 export default function Profile() {
   const { authTokens, user, logoutUser } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState([])
-  const [organisedEvents, setOrganisedEvents] = useState([])
-  const [participatedEvents, setParticipatedEvents] = useState([])
-  const [currOrganisedPage, setCurrOrganisedPage] = useState(1)
-  const [organisedRecordsPerPage] = useState(1)
-  const [currParticipatedPage, setCurrParticipatedPage] = useState(1)
-  const [participatedRecordsPerPage] = useState(2)
+  const [eventList, setEventList] = useState([])
+
+  const [currPage, setCurrPage] = useState(1)
+  const [recordsPerPage] = useState(1)
+
 
   // For routing page to edit event page
   const navigate = useNavigate()
@@ -49,18 +48,8 @@ export default function Profile() {
     console.log(userData)
     setCurrUser(userData)
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
-    const eventsData = eventsResponse.data
-    console.log(eventsData)
-
-    const filterOrganiseEvents = eventsData.filter(event => {
-      return event.organizers.includes(user.user_id)
-    })
-    setOrganisedEvents(filterOrganiseEvents)
-
-    const filterParticipateEvents = eventsData.filter(event => {
-      return event.participants.includes(user.user_id)
-    })
-    setParticipatedEvents(filterParticipateEvents)
+    console.log(eventsResponse.data)
+    setEventList(eventsResponse.data)
   };
 
   const deleteUser = () => {
@@ -70,12 +59,12 @@ export default function Profile() {
     logoutUser()
   }
 
-  const indexOfOrganisedLastRecord = currOrganisedPage * organisedRecordsPerPage;
-  const indexOfOrganisedFirstRecord = indexOfOrganisedLastRecord - organisedRecordsPerPage;
-  const currentOrganisedRecords = organisedEvents.slice(indexOfOrganisedFirstRecord, indexOfOrganisedLastRecord);
-  const nOrganisedPages = Math.ceil(organisedEvents.length / organisedRecordsPerPage)
+  const indexOfLastRecord = currPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = eventList.slice(indexOfFirstRecord, indexOfLastRecord);
+  const nOrganisedPages = Math.ceil(eventList.length / recordsPerPage)
 
-  const organisedEventDiv = (
+  const eventDiv = (
     <div>
       <table>
         <thead>
@@ -90,26 +79,53 @@ export default function Profile() {
           </tr>
         </thead>
         <tbody>
-          {currentOrganisedRecords.map((event:Event, i) => (
+          {currentRecords.map((event:Event, i) => (
             <tr key={i}>
               <td>{event.name}</td>
               <td>{event.description}</td>
-              <td>{format(new Date(event.start), "Pp")}</td>
-              <td>{format(new Date(event.end), "Pp")}</td>
+              <td>{format(new Date(event.start), "dd/MM/yyyy, p")}</td>
+              <td>{format(new Date(event.end), "dd/MM/yyyy, p")}</td>
               <td>{event.location}</td>
               <td>${event.budget}</td>
               <td>
-                <Button onClick={() => {
-                  navigate('/EditEvent', {state:{evt:event}})
-                }}>
-                  Edit
-                </Button>
-                <Button onClick={async() => {
-                  const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
-                  console.log(response)
-                }}>
-                  Delete
-                </Button>
+                <ButtonGroup>
+                  <Button onClick={() => {
+                    navigate(`/Event/${event.id}`, {state:{evt:event}})
+                  }}>
+                    View
+                  </Button>
+
+                  <Button onClick={async() => {
+                    try {
+                      const response = await axios.put(`http://127.0.0.1:8000/events/${event.id}/`, {
+                        organizers: event.organizers.filter(organiser => organiser != user.user_id),
+                        participants: event.participants.filter(participant => participant != user.user_id)
+                      }, config);
+                      console.log(response.data)
+                    } catch (error) {
+                      console.error(error)
+                    }
+                  }}>
+                    Leave
+                  </Button>
+
+                  {event.organizers?.includes(user.user_id) && (
+                    <>
+                      <Button onClick={() => {
+                        navigate('/EditEvent', {state:{evt:event}})
+                      }}>
+                        Edit
+                      </Button>
+
+                      <Button onClick={async() => {
+                        const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
+                        console.log(response)
+                      }}>
+                        Delete
+                      </Button>
+                    </>
+                  )}
+                </ButtonGroup>
               </td>
             </tr>
           ))}
@@ -117,55 +133,8 @@ export default function Profile() {
       </table>
       <Pagination
         nPages={nOrganisedPages}
-        currentPage={currOrganisedPage}
-        setCurrentPage={setCurrOrganisedPage}
-      />
-    </div>
-  )
-  
-  const indexOfParticipatedLastRecord = currParticipatedPage * participatedRecordsPerPage;
-  const indexOfParticipatedFirstRecord = indexOfParticipatedLastRecord - participatedRecordsPerPage;
-  const currentParticipatedRecords = participatedEvents.slice(indexOfParticipatedFirstRecord, indexOfParticipatedLastRecord);
-  const nParticipatedPages = Math.ceil(participatedEvents.length / participatedRecordsPerPage)
-
-  const participatedEventDiv = (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Location</th>
-            <th>Budget</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentParticipatedRecords.map((event:Event, i) => (
-            <tr key={i}>
-              <td>{event.name}</td>
-              <td>{event.description}</td>
-              <td>{format(new Date(event.start), "Pp")}</td>
-              <td>{format(new Date(event.end), "Pp")}</td>
-              <td>{event.location}</td>
-              <td>${event.budget}</td>
-              <td>
-                <Button onClick={() => {
-                  navigate(`/Event/${event.id}`)
-                }}>
-                  View
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Pagination
-        nPages={nParticipatedPages}
-        currentPage={currParticipatedPage}
-        setCurrentPage={setCurrParticipatedPage}
+        currentPage={currPage}
+        setCurrentPage={setCurrPage}
       />
     </div>
   )
@@ -183,11 +152,7 @@ export default function Profile() {
       </p>
       <h4> Organised Events </h4>
       <hr />
-      {organisedEvents && organisedEventDiv}
-      <br/>
-      <h4> Participated Events </h4>
-      <hr/>
-      {participatedEvents && participatedEventDiv}
+      {eventList && eventDiv}
     </div>
   )
 }

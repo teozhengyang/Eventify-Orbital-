@@ -48,6 +48,7 @@ export default function EditEvent() {
   const getUsers = async () => {
     const response = await axios.get('http://127.0.0.1:8000/api/users/')
     const data = response.data
+    
     let hashmap = new Map<number, user>()
     data.forEach((user) => hashmap.set(user.id, user))
     setSelectedOrganisers(event.organizers.map(id => hashmap.get(id)))

@@ -16,14 +16,14 @@ export default function EventModal() {
       setSelectedEvent(null)
     }, 120)
   }
-
+  
   const title = selectedEvent == null
     ? <Modal.Title>New Event on {selectedDate.toString().slice(4, 10)}</Modal.Title>
     : <Modal.Title>{selectedEvent.name}</Modal.Title>
 
   const body = selectedEvent == null
     ? <NewEvent defaultdate={selectedDate}/>
-    : <EventDesc info={selectedEvent}/>
+    : <EventDesc event={selectedEvent}/>
 
   return (
     <Modal dialogClassName="createevent" show={showModal} onHide={closeModal} centered>
