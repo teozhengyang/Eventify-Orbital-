@@ -1,8 +1,12 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import ActivityModal from "./ActivityModal";
 import AuthContext from "../context/AuthContext";
+import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
-import { Button } from "react-bootstrap";
-import { format, subDays, addDays } from "date-fns";
+import { Button, ButtonGroup } from "react-bootstrap";
+import { format } from "date-fns";
+import "/static/css/timetable.css";
 
 type Activity = {
   id?: number;
@@ -18,12 +22,13 @@ type Event = {
   id?: number;
   start?: string;
   end?: string;
+  organizers?: Array<number>;
 }
 
 // Temporary activity display until we either figure out timetable display or use an external one
 export default function DisplayActivity({event}: {event: Event}) {
-
-  const { authTokens } = useContext(AuthContext)
+  const { activityModal, setActivityModal } = useContext(NewEventModalContext)
+  const { authTokens, user } = useContext(AuthContext)
   const [activities, setActivities] = useState([])
 
   // Headers for authorization @ backend => Allows request to django
@@ -32,6 +37,7 @@ export default function DisplayActivity({event}: {event: Event}) {
     params:{'EventID': event.id},
   }
 
+  // Update activity list when page first rendered or activity submitted via activity modal
   useEffect(() => {
     const fetchActivity = async () => {
       try {
@@ -43,8 +49,14 @@ export default function DisplayActivity({event}: {event: Event}) {
       }
     };
     fetchActivity();
-  }, []);
-  
+  }, [activityModal]);
+
+  // For edit button function
+  const navigate = useNavigate()
+
+  // Disable edit/delete options for activity if not an organiser
+  const isOrganiser = event.organizers?.includes(user.user_id)
+
   const activityDisplay = (
     <div>
       <table style={{border: 'solid'}}>
@@ -67,15 +79,17 @@ export default function DisplayActivity({event}: {event: Event}) {
               <td>{format(new Date(activity.end), "dd/MM/yyyy, p")}</td>
               <td>${activity.budget}</td>
               <td>
-                <Button>
-                  Edit
-                </Button>
-                <Button onClick={async() => {
-                  const response = await axios.delete(`http://127.0.0.1:8000/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
-                  console.log(response)
-                }}>
-                  Delete
-                </Button>
+                <ButtonGroup>
+                  <Button disabled={!isOrganiser} onClick={() => navigate('/EditActivity', {state:{act:activity, evt:event}})}>
+                    Edit
+                  </Button>
+                  <Button disabled={!isOrganiser} onClick={async() => {
+                    const response = await axios.delete(`http://127.0.0.1:8000/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
+                    console.log(response)
+                  }}>
+                    Delete
+                  </Button>
+                </ButtonGroup>
               </td>
             </tr>
           ))}
@@ -85,20 +99,35 @@ export default function DisplayActivity({event}: {event: Event}) {
   )
 
   return (
-    <div style={{border: '1px solid'}}>
+    <div style={{border: '1px solid', overflow: 'scroll'}}>
       <p style={{color: 'red'}}>Temporary activity display</p>
+      <Button disabled={!isOrganiser} onClick={() => setActivityModal(true)}>Add Activity</Button>
       {activities && activityDisplay}
+      <ActivityModal event={event}/>
 
-      <div className="activity-container">
-          <div className="date-header">
-            if i can figure out the timetable thing maybe i can put it here if not rip
-            Or we could try devexpress 
-            
-            *Add logic to edit/delete events if user is organiser
-          </div>
-          <div className="timeslots-container">
-            <ul>
-            </ul>
+      <br></br>
+      <p>
+        Everything from here on is a test
+        if i can figure out the timetable thing maybe i can put it here if not will just use the above table as a display (with sorting functions?)
+        Or we could try devexpress 
+      </p>
+      <div className="display-container">
+          <ul className="timeslots">
+            {Array.from(Array(24).keys()).map((hour) => {
+              if (hour < 10) {
+                return <li>{"0" + hour + "00"}</li>
+              } else {
+                return <li>{hour + "00"}</li>
+              }
+            })}
+          </ul>
+          <div className="activity-container">
+              <div className="slot slot-1">
+                <p>Hi</p>
+              </div>
+              <div className="slot slot-2">
+                <p>Test</p>
+              </div>
           </div>
       </div>
     </div>

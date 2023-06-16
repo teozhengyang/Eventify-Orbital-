@@ -67,7 +67,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
       alert('Event created successfully!')
       navigate('/')
     } catch (error) {
-      console.error(error.response)
+      console.error(error)
     }
   }
 
@@ -121,7 +121,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
           </Form.Group>
         </Row>
 
-        <FloatingLabel controlId="floatingInput" label="Description">
+        <FloatingLabel controlId="floatingInput" label="Description" style={{paddingTop: "5px"}}>
           <Form.Control 
             className="event-form-field" 
             as="textarea" 
@@ -133,7 +133,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
 
         <Row>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Location">
+            <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
               <Form.Control 
                 className="event-form-field" 
                 type="text" 
@@ -143,7 +143,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             </FloatingLabel>
           </Col>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Budget">
+            <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
               <Form.Control 
                 className="event-form-field" 
                 type="number" 

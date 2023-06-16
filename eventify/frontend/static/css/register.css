@@ -26,10 +26,11 @@
 .datepicker {
     background-color: white;
     color: black;
-    border: 1px solid;
     border-radius: 5px;
     width: 100%;
 }
+
+
 
 .event-form {
     padding: 1em;

@@ -1,66 +1,50 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from "../context/AuthContext";
-import NewEventModalContext from "../context/NewEventModalContext";
-import axios from "axios";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
-import "/static/css/register.css";
 import { subDays } from "date-fns";
-
-//idk why got red line here, it seems to import and work just fine
+import axios from "axios";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import "/static/css/register.css";
 
-type Event = {
-  id?: number;
-  name?: string;
-  description?: string;
-  start?: string;
-  end?: string;
-  location?: string;
-  budget?: number;
-  organizers?: Array<number>;
-  participants?: Array<number>;
-}
 
-// Might be nice to change the form to a bootstrap one
-export default function NewActivity({event}: {event: Event}) {
+export default function EditActivity() {
+  // Get event/activity data from DisplayActivity.tsx and saves it as a const, to be used for default values
+  const location = useLocation()
+  const event = location.state.evt
+  const activity = location.state.act
+
   const eventStart = new Date(event.start)
   const eventEnd = new Date(event.end)
 
-  const [startDate, setStartDate] = useState(eventStart)
-  const [endDate, setEndDate] = useState(eventStart)
-  const { authTokens, user } = useContext(AuthContext)
-  const { setActivityModal } = useContext(NewEventModalContext)
+  const [startDate, setStartDate] = useState(new Date(activity.start));
+  const [endDate, setEndDate] = useState(new Date(activity.end));
 
-  // Activity end date must be >= start date
-  useEffect(() => {
-    if (startDate > endDate) {
-      setEndDate(startDate)
-    }
-  }, [startDate])
-
-  // Headers for authorization @ backend => Allows Get/Post request for activity data
+  const { authTokens } = useContext(AuthContext)
+  // Headers for authorization @ backend => Allows request to django
   const config = {
     headers:{
       'Authorization': 'Bearer ' + String(authTokens.access)
     }
   }
 
-  const AddActivityInfo = async(e) => {
-    e.preventDefault()
+  // For redirect to event page after submitting form
+  const navigate = useNavigate()
+
+  const UpdateActivityInfo = async(e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/activities/', {
+      const response = await axios.put(`http://127.0.0.1:8000/activities/${activity.id}/`, {
         name: e.target.title.value,
         description: e.target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
-        event: event.id,
         location: e.target.location.value,
         budget: e.target.budget.value,
       }, config);
       console.log(response.data)
-      alert('Activity created successfully!')
-      setActivityModal(false)
+      alert('Activity updated successfully!')
+      navigate(`/Event/${event.id}`, {state:{evt:event}})
     } catch (error) {
       console.error(error)
     }
@@ -68,12 +52,13 @@ export default function NewActivity({event}: {event: Event}) {
 
   return (
     <div className="event-form">
-      <Form onSubmit={AddActivityInfo}>
+      <Form onSubmit={UpdateActivityInfo}>
         <FloatingLabel controlId="floatingInput" label="Title">
           <Form.Control 
             className="event-form-field" 
             type="text" 
-            name="title" 
+            name="title"
+            defaultValue={activity.name}
           />
         </FloatingLabel> 
 
@@ -119,6 +104,7 @@ export default function NewActivity({event}: {event: Event}) {
             style={{ height: '120px' }} 
             name="description" 
             placeholder="Description"
+            defaultValue={activity.description}
           />
         </FloatingLabel>
 
@@ -130,6 +116,7 @@ export default function NewActivity({event}: {event: Event}) {
                 type="text" 
                 name="location" 
                 placeholder="Location"
+                defaultValue={activity.location}
               />
             </FloatingLabel>
           </Col>
@@ -142,13 +129,14 @@ export default function NewActivity({event}: {event: Event}) {
                 min="0" 
                 step="0.01" 
                 placeholder="Budget"
+                defaultValue={activity.budget}
               />
             </FloatingLabel>
           </Col>
         </Row>
 
 
-        <Button variant="primary" type="submit">Create Activity</Button>
+        <Button variant="primary" type="submit">Update Activity</Button>
       </Form>
     </div>
   )

@@ -6,7 +6,6 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "/static/css/register.css";
 import Select from 'react-select';
-import NewActivity from "./NewActivity";
 
 type user = {
   id?: number;
@@ -14,7 +13,7 @@ type user = {
 }
 
 export default function EditEvent() {
-  // Get event data from EventDesc.tsx and saves it as a const, to be used for default values
+  // Get event data from EventDesc.tsx/PageProfile.tsx and saves it as a const, to be used for default values
   const location = useLocation()
   const event = location.state.evt
 
@@ -22,8 +21,8 @@ export default function EditEvent() {
   const [endDate, setEndDate] = useState(new Date(event.end));
 
   const [users, setUsers] = useState([])
-  const [selectedOrganisers, setSelectedOrganisers] = useState()
-  const [selectedParticipants, setSelectedParticipants] = useState()
+  const [selectedOrganisers, setSelectedOrganisers] = useState([])
+  const [selectedParticipants, setSelectedParticipants] = useState([])
 
   const { authTokens } = useContext(AuthContext)
 
@@ -50,6 +49,7 @@ export default function EditEvent() {
     const data = response.data
     
     let hashmap = new Map<number, user>()
+    // Map user.id to user object so they can be set to the organiser/participant field
     data.forEach((user) => hashmap.set(user.id, user))
     setSelectedOrganisers(event.organizers.map(id => hashmap.get(id)))
     setSelectedParticipants(event.participants.map(id => hashmap.get(id)))
@@ -84,7 +84,7 @@ export default function EditEvent() {
 
   return (
     <div className="event-form">
-      <p>Edit Event (WIP)</p>
+      <p>Edit Event</p>
       <Form onSubmit={UpdateEventInfo}>
         <FloatingLabel controlId="floatingInput" label="Title">
           <Form.Control 
@@ -126,11 +126,11 @@ export default function EditEvent() {
           </Form.Group>
         </Row>
 
-        <FloatingLabel controlId="floatingInput" label="Description">
+        <FloatingLabel controlId="floatingInput" label="Description" style={{paddingTop: "5px"}}>
           <Form.Control 
             className="event-form-field" 
             as="textarea" 
-            style={{ height: '120px' }} 
+            style={{ height: '120px'}} 
             name="description" 
             placeholder="Description" 
             defaultValue={event.description}
@@ -139,7 +139,7 @@ export default function EditEvent() {
 
         <Row>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Location">
+            <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
               <Form.Control 
                 className="event-form-field" 
                 type="text" 
@@ -150,7 +150,7 @@ export default function EditEvent() {
             </FloatingLabel>
           </Col>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Budget">
+            <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
               <Form.Control 
                 className="event-form-field" 
                 type="number" 
@@ -195,8 +195,6 @@ export default function EditEvent() {
         <h3>Field inputs to change participants, or promote them to organiser somehow. Will need to implement organiser/participant for other components too</h3>
         <Button variant="primary" type="submit">Update Event</Button>
       </Form>
-      <h2>Temp activity create form, not sure if we wanna keep it here, get activity button is at individual activity event page</h2>
-      <NewActivity event={event}/>
     </div>
   )
 }
