@@ -119,6 +119,7 @@ export default function Profile() {
 
                       <Button onClick={async() => {
                         const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
+                        window.location.reload()
                         console.log(response)
                       }}>
                         Delete

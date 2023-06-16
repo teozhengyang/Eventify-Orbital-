@@ -85,6 +85,7 @@ export default function DisplayActivity({event}: {event: Event}) {
                   </Button>
                   <Button disabled={!isOrganiser} onClick={async() => {
                     const response = await axios.delete(`http://127.0.0.1:8000/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
+                    window.location.reload()
                     console.log(response)
                   }}>
                     Delete
