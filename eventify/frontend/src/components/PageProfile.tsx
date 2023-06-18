@@ -151,7 +151,7 @@ export default function Profile() {
           Reset Password
         </Button>
       </p>
-      <h4> Organised Events </h4>
+      <h4> Events </h4>
       <hr />
       {eventList && eventDiv}
     </div>
