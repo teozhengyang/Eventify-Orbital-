@@ -79,6 +79,7 @@ export default function EditActivity() {
             type="text" 
             name="title"
             defaultValue={activity.name}
+            required
           />
         </FloatingLabel> 
 
@@ -97,6 +98,7 @@ export default function EditActivity() {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
           <Form.Group as={Col}>
@@ -113,6 +115,7 @@ export default function EditActivity() {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
         </Row>
@@ -150,6 +153,7 @@ export default function EditActivity() {
                 step="0.01" 
                 placeholder="Budget"
                 defaultValue={activity.budget}
+                required
               />
             </FloatingLabel>
           </Col>

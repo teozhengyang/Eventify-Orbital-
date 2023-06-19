@@ -100,6 +100,7 @@ export default function EditEvent() {
             name="title" 
             placeholder="Enter username" 
             defaultValue={event.name}
+            required
           />
         </FloatingLabel>
 
@@ -118,6 +119,7 @@ export default function EditEvent() {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
           <Form.Group as={Col}>
@@ -135,6 +137,7 @@ export default function EditEvent() {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
         </Row>
@@ -172,6 +175,7 @@ export default function EditEvent() {
                 step="0.01" 
                 placeholder="Budget"
                 defaultValue={event.budget}
+                required
               />
             </FloatingLabel>
           </Col>
@@ -189,6 +193,7 @@ export default function EditEvent() {
               onChange={(data) => setSelectedOrganisers(data)}
               isSearchable={true}
               isMulti
+              required
               />
           </Form.Group>
           <Form.Group as={Col}>

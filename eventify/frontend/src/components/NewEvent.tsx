@@ -71,14 +71,11 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
       }, config);
       console.log(response.data)
       setShowModal(false)
-      alert('Event created successfully!')
       navigate('/')
     } catch (error) {
       console.error(error)
     }
   }
-
-
 
   return (
     <div className="event-form">
@@ -88,7 +85,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             className="event-form-field" 
             type="text" 
             name="title" 
-            placeholder="Enter username" 
+            placeholder="Enter username"
+            required
           />
         </FloatingLabel>
         
@@ -107,6 +105,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
           <Form.Group as={Col}>
@@ -124,6 +123,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
         </Row>
@@ -152,13 +152,18 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
           <Col>
             <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
               <Form.Control 
-                className="event-form-field" 
+                className="event-form-field"
+                defaultValue={0} 
                 type="number" 
                 name="budget" 
                 min="0" 
                 step="0.01" 
                 placeholder="Budget"
+                required
               />
+              <Form.Control.Feedback type="invalid">
+                Please input a budget.
+              </Form.Control.Feedback>
             </FloatingLabel>
           </Col>
         </Row>
@@ -174,6 +179,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               onChange={(data) => setSelectedOrganisers(data)}
               isSearchable={true}
               isMulti
+              required
             />
           </Form.Group>
           <Form.Group as={Col}>

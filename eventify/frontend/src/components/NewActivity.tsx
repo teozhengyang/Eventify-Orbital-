@@ -72,7 +72,6 @@ export default function NewActivity({event}: {event: Event}) {
         budget: e.target.budget.value,
       }, config);
       console.log(response.data)
-      alert('Activity created successfully!')
       setActivityModal(false)
     } catch (error) {
       console.error(error)
@@ -87,6 +86,7 @@ export default function NewActivity({event}: {event: Event}) {
             className="event-form-field" 
             type="text" 
             name="title" 
+            required
           />
         </FloatingLabel> 
 
@@ -105,6 +105,7 @@ export default function NewActivity({event}: {event: Event}) {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
           <Form.Group as={Col}>
@@ -121,6 +122,7 @@ export default function NewActivity({event}: {event: Event}) {
               timeIntervals={15}
               timeFormat="h:mm aa"
               dateFormat="dd MMMM yyyy - h:mm aa"
+              required
             />
           </Form.Group>
         </Row>
@@ -150,11 +152,13 @@ export default function NewActivity({event}: {event: Event}) {
             <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
               <Form.Control 
                 className="event-form-field" 
+                defaultValue={0}
                 type="number" 
                 name="budget" 
                 min="0" 
                 step="0.01" 
                 placeholder="Budget"
+                required
               />
             </FloatingLabel>
           </Col>
