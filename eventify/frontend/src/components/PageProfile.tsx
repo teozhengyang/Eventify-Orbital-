@@ -47,6 +47,7 @@ export default function Profile() {
     const userData = userResponse.data
     console.log(userData)
     setCurrUser(userData)
+    
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
     const filteredEventsResponse = eventsResponse.data.filter(event => new Date(event.end) > new Date()).sort((event1, event2) => new Date(event2.start) - new Date(event1.start))
     console.log(filteredEventsResponse)
@@ -120,7 +121,7 @@ export default function Profile() {
 
                       <Button onClick={async() => {
                         const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
-                        window.location.reload()
+                        getCurrUser()
                         console.log(response)
                       }}>
                         Delete

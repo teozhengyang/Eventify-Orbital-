@@ -36,7 +36,6 @@ export default function EventDesc({event}={event: Object}) {
   const navigate = useNavigate()
   const edit = () => {
     navigate('/EditEvent', {state:{evt:event}})
-    setShowModal(false)
   }
 
   // Go to individual event page
