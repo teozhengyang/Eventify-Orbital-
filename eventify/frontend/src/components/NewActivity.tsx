@@ -32,12 +32,25 @@ export default function NewActivity({event}: {event: Event}) {
   const { authTokens, user } = useContext(AuthContext)
   const { setActivityModal } = useContext(NewEventModalContext)
 
-  // Activity end date must be >= start date
+  // Activity end date must be >= start date, activity start cannot precede event start
   useEffect(() => {
     if (startDate > endDate) {
       setEndDate(startDate)
     }
+    if (startDate < eventStart) {
+      setStartDate(eventStart)
+    }
   }, [startDate])
+
+  // Activity start date must be <= end date, activity end cannot go beyond event end
+  useEffect(() => {
+    if (endDate < startDate) {
+      setStartDate(endDate)
+    }
+    if (endDate > eventEnd) {
+      setEndDate(eventEnd)
+    }
+  }, [endDate])
 
   // Headers for authorization @ backend => Allows Get/Post request for activity data
   const config = {

@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, ButtonGroup } from "react-bootstrap";
-import { format } from "date-fns";
+import { format, differenceInMinutes } from "date-fns";
 import "/static/css/timetable.css";
 
 type Activity = {
@@ -112,6 +112,7 @@ export default function DisplayActivity({event}: {event: Event}) {
         if i can figure out the timetable thing maybe i can put it here if not will just use the above table as a display (with sorting functions?)
         Or we could try devexpress 
       </p>
+
       <div className="display-container">
           <ul className="timeslots">
             {Array.from(Array(24).keys()).map((hour) => {
@@ -129,6 +130,21 @@ export default function DisplayActivity({event}: {event: Event}) {
               <div className="slot slot-2">
                 <p>Test</p>
               </div>
+              {activities.map(activity => {
+                const start = new Date(activity.start)
+                const end = new Date(activity.end)
+                const boxStyle = {
+                  border: "1px solid",
+                  gridRow: "1",
+                  gridColumn: (start.getHours() * 4 + (start.getMinutes() / 15) + 1),
+                  width: differenceInMinutes(end, start),
+                }
+                return (
+                  <div className="slot" style={boxStyle}>
+                    <p>{activity.name}</p>
+                  </div>
+                )
+              })}
           </div>
       </div>
     </div>

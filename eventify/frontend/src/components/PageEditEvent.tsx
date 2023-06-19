@@ -37,19 +37,26 @@ export default function EditEvent() {
     getUsers();
   }, [])
 
-  // Event end date must be >= start date
+  // End time/date for event >= start
   useEffect(() => {
     if (startDate > endDate) {
       setEndDate(startDate)
     }
   }, [startDate])
 
+  // Start time/date for event <= end
+  useEffect(() => {
+    if (endDate < startDate) {
+      setStartDate(endDate)
+    }
+  }, [endDate])
+
   const getUsers = async () => {
     const response = await axios.get('http://127.0.0.1:8000/api/users/')
     const data = response.data
     
     let hashmap = new Map<number, user>()
-    // Map user.id to user object so they can be set to the organiser/participant field
+    // Map user.id to user object so they can be set to the organiser/participant field as default values
     data.forEach((user) => hashmap.set(user.id, user))
     setSelectedOrganisers(event.organizers.map(id => hashmap.get(id)))
     setSelectedParticipants(event.participants.map(id => hashmap.get(id)))
@@ -57,7 +64,7 @@ export default function EditEvent() {
     console.log(data)
   }
 
- 
+  // For redirect after form submit
   const navigate = useNavigate()
 
   // Update event
@@ -103,6 +110,9 @@ export default function EditEvent() {
               className="datepicker"
               selected={startDate}
               onChange={(date: Date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
               showTimeSelect
               timeCaption="Start time"
               timeIntervals={15}
@@ -116,6 +126,9 @@ export default function EditEvent() {
               className="datepicker"
               selected={endDate}
               onChange={(date: Date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
               minDate={startDate}
               showTimeSelect
               timeCaption="End time"

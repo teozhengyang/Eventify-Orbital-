@@ -26,12 +26,19 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
     getUsers();
   }, [])
 
-  // Event end date must be >= start date
+  // End time/date for event >= start
   useEffect(() => {
     if (startDate > endDate) {
       setEndDate(startDate)
     }
   }, [startDate])
+
+  // Start time/date for event <= end
+  useEffect(() => {
+    if (endDate < startDate) {
+      setStartDate(endDate)
+    }
+  }, [endDate])
 
   // Headers for authorization @ backend => Allows Get/Post request for event data
   const config = {

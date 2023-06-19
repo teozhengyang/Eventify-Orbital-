@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import AuthContext from "../context/AuthContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
@@ -27,6 +27,26 @@ export default function EditActivity() {
       'Authorization': 'Bearer ' + String(authTokens.access)
     }
   }
+
+  // Activity end date must be >= start date, activity start cannot precede event start
+  useEffect(() => {
+    if (startDate > endDate) {
+      setEndDate(startDate)
+    }
+    if (startDate < eventStart) {
+      setStartDate(eventStart)
+    }
+  }, [startDate])
+
+  // Activity start date must be <= end date, activity end cannot go beyond event end
+  useEffect(() => {
+    if (endDate < startDate) {
+      setStartDate(endDate)
+    }
+    if (endDate > eventEnd) {
+      setEndDate(eventEnd)
+    }
+  }, [endDate])
 
   // For redirect to event page after submitting form
   const navigate = useNavigate()
