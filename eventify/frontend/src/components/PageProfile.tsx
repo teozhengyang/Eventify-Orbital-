@@ -48,8 +48,9 @@ export default function Profile() {
     console.log(userData)
     setCurrUser(userData)
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
-    console.log(eventsResponse.data)
-    setEventList(eventsResponse.data)
+    const filteredEventsResponse = eventsResponse.data.filter(event => new Date(event.end) > new Date()).sort((event1, event2) => new Date(event2.start) - new Date(event1.start))
+    console.log(filteredEventsResponse)
+    setEventList(filteredEventsResponse)
   };
 
   const deleteUser = () => {
@@ -151,7 +152,7 @@ export default function Profile() {
           Reset Password
         </Button>
       </p>
-      <h4> Organised Events </h4>
+      <h4> Events </h4>
       <hr />
       {eventList && eventDiv}
     </div>
