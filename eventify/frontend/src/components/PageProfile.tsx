@@ -3,7 +3,7 @@ import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { format } from 'date-fns';
 import "/static/css/profile.css";
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../utils/Pagination';
 
@@ -25,7 +25,7 @@ export default function Profile() {
   const [eventList, setEventList] = useState([])
 
   const [currPage, setCurrPage] = useState(1)
-  const [recordsPerPage] = useState(1)
+  const [recordsPerPage] = useState(2)
 
 
   // For routing page to edit event page
@@ -110,7 +110,6 @@ export default function Profile() {
                   }}>
                     Leave
                   </Button>
-
                   {event.organizers?.includes(user.user_id) && (
                     <>
                       <Button onClick={() => {
@@ -144,16 +143,24 @@ export default function Profile() {
 
   return (
     <div>
+      <h4 className='header'>User Information</h4>
       <p>
-        Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} |
-        <Button onClick={deleteUser}>Delete Profile</Button> |
-        <Button onClick={() => {
-          navigate('/ResetPassword')
-        }}>
-          Reset Password
-        </Button>
-      </p>
-      <h4> Events </h4>
+        Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} 
+      </p>  
+      <div>
+        <p>Actions: 
+          <Button onClick={deleteUser}>Delete Profile</Button> 
+          <Button onClick={() => {
+            navigate('/ResetPassword')
+          }}>
+            Reset Password
+          </Button> 
+          <Button>
+            Update Profile
+          </Button>
+        </p>
+      </div>
+      <h4 className='header'> Events </h4>
       <hr />
       {eventList && eventDiv}
     </div>
