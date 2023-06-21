@@ -169,26 +169,6 @@ export default function Profile() {
     <div>
       <h4 className='header'>User Information</h4>
       <p>
-<<<<<<< HEAD
-        Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} 
-      </p>  
-      <div>
-        <p>Actions: 
-          <Button onClick={deleteUser}>Delete Profile</Button> 
-          <Button onClick={() => {
-            navigate('/ResetPassword')
-          }}>
-            Reset Password
-          </Button> 
-          <Button onClick={() => {
-            navigate(`/UpdateUser`, {state:{evt:user}})
-          }}>
-            Update Profile
-          </Button>
-        </p>
-      </div>
-      <h4 className='header'> Events </h4>
-=======
         Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} |
         <Button onClick={deleteUser}>Delete Profile</Button> |
         <Button onClick={() => {
@@ -214,7 +194,6 @@ export default function Profile() {
         </form>
       </header>
 
->>>>>>> b89b92e45729deecf433d524d63ac866e76095a7
       <hr />
       {eventList && eventDiv}
     </div>
