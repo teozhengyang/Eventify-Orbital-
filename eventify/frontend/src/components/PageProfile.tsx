@@ -2,10 +2,10 @@ import { useState, useEffect, useContext} from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { format } from 'date-fns';
-import "/static/css/profile.css";
-import { Button, ButtonGroup, Row } from 'react-bootstrap';
+import { Button, ButtonGroup, Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../utils/Pagination';
+import "/static/css/display.css";
 
 type Event = {
   id?: number;
@@ -22,10 +22,13 @@ type Event = {
 export default function Profile() {
   const { authTokens, user, logoutUser } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState([])
-  const [eventList, setEventList] = useState([])
+  const [eventList, setEventList] = useState([])      // The full list of user events
+  const [displayList, setDisplayList] = useState([])  // A filtered list based on display preference to show the user
 
   const [currPage, setCurrPage] = useState(1)
-  const [recordsPerPage] = useState(2)
+  const [recordsPerPage, setRecordsPerPage] = useState(5)
+
+  const [showAlert, setShowAlert] = useState(false)   // Alert for leaving event as single organiser
 
 
   // For routing page to edit event page
@@ -49,10 +52,18 @@ export default function Profile() {
     setCurrUser(userData)
     
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
-    const filteredEventsResponse = eventsResponse.data.filter(event => new Date(event.end) > new Date()).sort((event1, event2) => new Date(event2.start) - new Date(event1.start))
-    console.log(filteredEventsResponse)
-    setEventList(filteredEventsResponse)
+    setEventList(eventsResponse.data)
+    setDisplayList(eventsResponse.data)
   };
+
+  const setDisplay = (e:number) => {
+    if (e == 0) {
+      setDisplayList(eventList)
+    } else {
+      const filteredEvents = eventList.filter((event:Event) => new Date(event.end) > new Date()).sort((event1:Event, event2:Event) => new Date(event2.start) - new Date(event1.start))
+      setDisplayList(filteredEvents)
+    }
+  }
 
   const deleteUser = () => {
     const response = axios.delete(`http://127.0.0.1:8000/user/${user.user_id}/`, config)
@@ -63,14 +74,14 @@ export default function Profile() {
 
   const indexOfLastRecord = currPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = eventList.slice(indexOfFirstRecord, indexOfLastRecord);
-  const nOrganisedPages = Math.ceil(eventList.length / recordsPerPage)
+  const currentRecords = displayList.slice(indexOfFirstRecord, indexOfLastRecord);
+  const nOrganisedPages = Math.ceil(displayList.length / recordsPerPage)
 
   const eventDiv = (
     <div>
       <table>
         <thead>
-          <tr>
+          <tr className="table-head">
             <th>Name</th>
             <th>Description</th>
             <th>Start</th>
@@ -82,14 +93,14 @@ export default function Profile() {
         </thead>
         <tbody>
           {currentRecords.map((event:Event, i) => (
-            <tr key={i}>
+            <tr key={i} className="table-row">
               <td>{event.name}</td>
               <td>{event.description}</td>
               <td>{format(new Date(event.start), "dd/MM/yyyy, p")}</td>
               <td>{format(new Date(event.end), "dd/MM/yyyy, p")}</td>
               <td>{event.location}</td>
-              <td>${event.budget}</td>
-              <td>
+              <td className="data-align-left">${event.budget}</td>
+              <td className="data-align-left">
                 <ButtonGroup>
                   <Button onClick={() => {
                     navigate(`/Event/${event.id}`, {state:{evt:event}})
@@ -104,6 +115,9 @@ export default function Profile() {
                         participants: event.participants.filter(participant => participant != user.user_id)
                       }, config);
                       console.log(response.data)
+                      if (response.data.organizers[0] == "This list may not be empty.") {
+                        setShowAlert(true)
+                      }
                     } catch (error) {
                       console.error(error)
                     }
@@ -133,6 +147,16 @@ export default function Profile() {
           ))}
         </tbody>
       </table>
+
+      <Modal show={showAlert} onHide={() => setShowAlert(false)} centered style={{color:"yellow"}}>
+        <Modal.Header closeButton style={{color:"black", backgroundColor:"gold"}}>
+          Cannot leave event as User is the only organiser
+          <br />
+          Delete the event or promote a participant to organiser
+        </Modal.Header>
+        <ModalFooter style={{backgroundColor:"gold"}}/>
+      </Modal>
+
       <Pagination
         nPages={nOrganisedPages}
         currentPage={currPage}
@@ -145,6 +169,7 @@ export default function Profile() {
     <div>
       <h4 className='header'>User Information</h4>
       <p>
+<<<<<<< HEAD
         Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} 
       </p>  
       <div>
@@ -163,6 +188,33 @@ export default function Profile() {
         </p>
       </div>
       <h4 className='header'> Events </h4>
+=======
+        Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} |
+        <Button onClick={deleteUser}>Delete Profile</Button> |
+        <Button onClick={() => {
+          navigate('/ResetPassword')
+        }}>
+          Reset Password
+        </Button>
+      </p>
+
+      <header className="display-header">
+        <h4 id="display-title">Events</h4>
+        <form>
+          <select style={{width:"7em"}} className="profile-display-selector" onChange={e => {setDisplay(e.target.value)}}>
+            <option value="0">All</option>
+            <option value="1">Upcoming</option>
+          </select>
+          <select style={{width:"3em"}} className="profile-display-selector" value={recordsPerPage} onChange={e => setRecordsPerPage(e.target.value)}>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </form>
+      </header>
+
+>>>>>>> b89b92e45729deecf433d524d63ac866e76095a7
       <hr />
       {eventList && eventDiv}
     </div>

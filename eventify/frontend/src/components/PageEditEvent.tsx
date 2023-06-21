@@ -82,7 +82,7 @@ export default function EditEvent() {
         participants: selectedParticipants.map(participant => participant.id)
       }, config);
       console.log(response.data)
-      alert('Event updated successfully!')
+      alert('Event updated successfully! THIS ALERT IS TEMPORARY FOR TESTING PURPOSES')
       navigate('/')
     } catch (error) {
       console.error(error.response)
@@ -91,7 +91,8 @@ export default function EditEvent() {
 
   return (
     <div className="event-form">
-      <p>Edit Event</p>
+      <h4>Edit Event</h4>
+      <hr />
       <Form onSubmit={UpdateEventInfo}>
         <FloatingLabel controlId="floatingInput" label="Title">
           <Form.Control 
@@ -103,7 +104,7 @@ export default function EditEvent() {
             required
           />
         </FloatingLabel>
-
+        <hr />
         <Row>
           <Form.Group as={Col}>
             <Form.Label>From</Form.Label>
@@ -141,8 +142,8 @@ export default function EditEvent() {
             />
           </Form.Group>
         </Row>
-
-        <FloatingLabel controlId="floatingInput" label="Description" style={{paddingTop: "5px"}}>
+        <hr />
+        <FloatingLabel controlId="floatingInput" label="Description">
           <Form.Control 
             className="event-form-field" 
             as="textarea" 
@@ -180,7 +181,7 @@ export default function EditEvent() {
             </FloatingLabel>
           </Col>
         </Row>
-
+        <hr />
         <Row>
           <Form.Group as={Col}>
             <Form.Label>Select Organisers:</Form.Label>
@@ -210,7 +211,7 @@ export default function EditEvent() {
             />
           </Form.Group>
         </Row>
-        <h3>Field inputs to change participants, or promote them to organiser somehow. Will need to implement organiser/participant for other components too</h3>
+        <hr />
         <Button variant="primary" type="submit">Update Event</Button>
       </Form>
     </div>

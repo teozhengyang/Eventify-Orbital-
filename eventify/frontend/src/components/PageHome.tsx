@@ -48,7 +48,7 @@ export default function Home() {
     : <DisplayWeek data={weekData} eventlist={events}/>
 
   return (
-    <div className="flex-container">
+    <div className="flex-container" style={{marginTop:"5px"}}>
       <CalendarHeader />
       <EventModal />
       {calendar}

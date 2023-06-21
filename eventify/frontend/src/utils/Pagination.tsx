@@ -1,4 +1,4 @@
-import "/static/css/profile.css";
+import "/static/css/display.css";
 
 export default function Pagination({ nPages, currentPage, setCurrentPage }) {
   const pageNumbers = [...Array(nPages + 1).keys()].slice(1)

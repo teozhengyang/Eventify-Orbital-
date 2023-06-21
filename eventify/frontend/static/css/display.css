@@ -1,0 +1,34 @@
+table {
+  width: 100%;
+}
+
+.display-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-display-selector {
+  border-radius: 5px;
+}
+
+#display-title {
+  margin: auto;
+}
+
+th,td {
+  overflow-x: auto;
+}
+
+tr {
+  text-align: center;
+  border-bottom: 1px solid;
+  border-color: rgb(77, 77, 77);
+}
+
+.data-align-left {
+  text-align: left;
+}
+
+.pagination-tab {
+  margin-top: 10px;
+}
