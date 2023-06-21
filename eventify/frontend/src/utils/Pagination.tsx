@@ -1,3 +1,5 @@
+import "/static/css/profile.css";
+
 export default function Pagination({ nPages, currentPage, setCurrentPage }) {
   const pageNumbers = [...Array(nPages + 1).keys()].slice(1)
 
@@ -9,7 +11,7 @@ export default function Pagination({ nPages, currentPage, setCurrentPage }) {
   }
    
   return (
-    <nav>
+    <nav className="pagination-tab">
       <ul className='pagination justify-content-center'>
         <li className="page-item">
           <a className="page-link" onClick={prevPage} href='#'>

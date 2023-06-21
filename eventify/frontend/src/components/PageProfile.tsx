@@ -116,7 +116,6 @@ export default function Profile() {
                   }}>
                     Leave
                   </Button>
-
                   {event.organizers?.includes(user.user_id) && (
                     <>
                       <Button onClick={() => {
@@ -160,6 +159,7 @@ export default function Profile() {
 
   return (
     <div>
+      <h4 className='header'>User Information</h4>
       <p>
         Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} |
         <Button onClick={deleteUser}>Delete Profile</Button> |

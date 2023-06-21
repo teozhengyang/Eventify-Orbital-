@@ -1,0 +1,26 @@
+table {
+  width: 100%;
+  border: 1px solid white;
+  table-layout: fixed;
+}
+
+th,td {
+  border: 1px solid white;
+  overflow-x: auto;
+}
+
+tr {
+  text-align: center;
+}
+
+.pagination-tab {
+  margin-top: 10px;
+}
+
+Button {
+  margin: 5px;
+}
+
+.header {
+  margin-top: 10px;
+}
