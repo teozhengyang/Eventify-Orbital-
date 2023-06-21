@@ -24,7 +24,7 @@ export default function Headers() {
         <Nav.Item>
           {user ? <Nav.Link className="own-nav-link" href="/Profile">My Profile</Nav.Link> : null}
         </Nav.Item>
-      </Navbar> 
+      </Navbar>
     </div>
   )
   

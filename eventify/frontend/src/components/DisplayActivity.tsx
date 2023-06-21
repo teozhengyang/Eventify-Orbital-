@@ -6,6 +6,7 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { format, differenceInMinutes } from "date-fns";
+import "/static/css/display.css";
 import "/static/css/timetable.css";
 
 type Activity = {
@@ -58,11 +59,20 @@ export default function DisplayActivity({event}: {event: Event}) {
   // Disable edit/delete options for activity if not an organiser
   const isOrganiser = event.organizers?.includes(user.user_id)
 
+  function isOutOfBounds(activity:Activity) {
+
+    const eventStart = new Date(event.start).valueOf()
+    const eventEnd = new Date(event.end).valueOf()
+    if (new Date(activity.start).valueOf() < eventStart || new Date(activity.end).valueOf() > eventEnd) {
+      return {color:"red"};
+    }
+  }
+
   const activityDisplay = (
     <div>
-      <table style={{border: 'solid'}}>
+      <table>
         <thead>
-          <tr>
+          <tr className="table-head">
             <th>Name</th>
             <th>Description</th>
             <th>Start</th>
@@ -73,7 +83,7 @@ export default function DisplayActivity({event}: {event: Event}) {
         </thead>
         <tbody>
         {activities.map((activity:Activity, i) => (
-            <tr key={i}>
+            <tr key={i} className="table-row" style={isOutOfBounds(activity)}>
               <td>{activity.name}</td>
               <td>{activity.description}</td>
               <td>{format(new Date(activity.start), "dd/MM/yyyy, p")}</td>
@@ -101,19 +111,24 @@ export default function DisplayActivity({event}: {event: Event}) {
   )
 
   return (
-    <div style={{border: '1px solid', overflow: 'scroll'}}>
-      <p style={{color: 'red'}}>Temporary activity display</p>
-      <Button disabled={!isOrganiser} onClick={() => setActivityModal(true)}>Add Activity</Button>
+    <div style={{overflow: 'scroll'}}>
+
+      <header className="display-header">
+        <h4 id="display-title">Activities</h4>
+        <Button disabled={!isOrganiser} onClick={() => setActivityModal(true)}>Add Activity</Button>
+      </header>
+
+      <hr />
       {activities && activityDisplay}
       <ActivityModal event={event}/>
 
-      <br></br>
+      <br />
+      <br />
       <p>
         Everything from here on is a test
         if i can figure out the timetable thing maybe i can put it here if not will just use the above table as a display (with sorting functions?)
         Or we could try devexpress 
       </p>
-
       <div className="display-container">
           <ul className="timeslots">
             {Array.from(Array(24).keys()).map((hour) => {
@@ -131,7 +146,7 @@ export default function DisplayActivity({event}: {event: Event}) {
               <div className="slot slot-2">
                 <p>Test</p>
               </div>
-              {activities.map(activity => {
+              {activities.map((activity:Activity, i) => {
                 const start = new Date(activity.start)
                 const end = new Date(activity.end)
                 const boxStyle = {
@@ -141,7 +156,7 @@ export default function DisplayActivity({event}: {event: Event}) {
                   width: differenceInMinutes(end, start),
                 }
                 return (
-                  <div className="slot" style={boxStyle}>
+                  <div key={i} className="slot" style={boxStyle}>
                     <p>{activity.name}</p>
                   </div>
                 )

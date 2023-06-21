@@ -85,11 +85,11 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             className="event-form-field" 
             type="text" 
             name="title" 
-            placeholder="Enter username"
+            placeholder="Enter title"
             required
           />
         </FloatingLabel>
-        
+        <hr />
         <Row>
           <Form.Group as={Col}>
             <Form.Label>From</Form.Label>
@@ -127,8 +127,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             />
           </Form.Group>
         </Row>
-
-        <FloatingLabel controlId="floatingInput" label="Description" style={{paddingTop: "5px"}}>
+        <hr />
+        <FloatingLabel controlId="floatingInput" label="Description">
           <Form.Control 
             className="event-form-field" 
             as="textarea" 
@@ -167,7 +167,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             </FloatingLabel>
           </Col>
         </Row>
-
+        <hr />
         <Row>
           <Form.Group as={Col}>
             <Form.Label>Select Organisers:</Form.Label>
@@ -195,7 +195,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             />
           </Form.Group>
         </Row>
-
+        <hr />
         <Button variant="primary" type="submit">Create Event</Button>
       </Form>
     </div>

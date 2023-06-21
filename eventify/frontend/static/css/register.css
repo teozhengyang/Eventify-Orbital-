@@ -25,11 +25,9 @@
     width: 100%;
 }
 
-
-
 .event-form {
     padding: 1em;
-    background-color: gray;
+    background-color: lightgray;
     color: black;
     border-radius: 5px;
 }

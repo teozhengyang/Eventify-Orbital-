@@ -2,10 +2,10 @@ import { useState, useEffect, useContext} from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { format } from 'date-fns';
-import "/static/css/profile.css";
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup, Modal, ModalBody, ModalFooter } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../utils/Pagination';
+import "/static/css/display.css";
 
 type Event = {
   id?: number;
@@ -25,7 +25,9 @@ export default function Profile() {
   const [eventList, setEventList] = useState([])
 
   const [currPage, setCurrPage] = useState(1)
-  const [recordsPerPage] = useState(1)
+  const [recordsPerPage, setRecordsPerPage] = useState(5)
+
+  const [showAlert, setShowAlert] = useState(false)
 
 
   // For routing page to edit event page
@@ -49,9 +51,10 @@ export default function Profile() {
     setCurrUser(userData)
     
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
-    const filteredEventsResponse = eventsResponse.data.filter(event => new Date(event.end) > new Date()).sort((event1, event2) => new Date(event2.start) - new Date(event1.start))
-    console.log(filteredEventsResponse)
-    setEventList(filteredEventsResponse)
+//    const filteredEventsResponse = eventsResponse.data.filter(event => new Date(event.end) > new Date()).sort((event1, event2) => new Date(event2.start) - new Date(event1.start))
+//    console.log(filteredEventsResponse)
+//    setEventList(filteredEventsResponse)
+    setEventList(eventsResponse.data)
   };
 
   const deleteUser = () => {
@@ -70,7 +73,7 @@ export default function Profile() {
     <div>
       <table>
         <thead>
-          <tr>
+          <tr className="table-head">
             <th>Name</th>
             <th>Description</th>
             <th>Start</th>
@@ -82,7 +85,7 @@ export default function Profile() {
         </thead>
         <tbody>
           {currentRecords.map((event:Event, i) => (
-            <tr key={i}>
+            <tr key={i} className="table-row">
               <td>{event.name}</td>
               <td>{event.description}</td>
               <td>{format(new Date(event.start), "dd/MM/yyyy, p")}</td>
@@ -104,6 +107,9 @@ export default function Profile() {
                         participants: event.participants.filter(participant => participant != user.user_id)
                       }, config);
                       console.log(response.data)
+                      if (response.data.organizers[0] == "This list may not be empty.") {
+                        setShowAlert(true)
+                      }
                     } catch (error) {
                       console.error(error)
                     }
@@ -134,6 +140,16 @@ export default function Profile() {
           ))}
         </tbody>
       </table>
+
+      <Modal show={showAlert} onHide={() => setShowAlert(false)} centered style={{color:"yellow"}}>
+        <Modal.Header closeButton style={{color:"black", backgroundColor:"gold"}}>
+          Cannot leave event as User is the only organiser
+          <br />
+          Delete the event or promote a participant to organiser
+        </Modal.Header>
+        <ModalFooter style={{backgroundColor:"gold"}}/>
+      </Modal>
+
       <Pagination
         nPages={nOrganisedPages}
         currentPage={currPage}
@@ -153,7 +169,19 @@ export default function Profile() {
           Reset Password
         </Button>
       </p>
-      <h4> Events </h4>
+
+      <header className="display-header">
+        <h4 id="display-title">Events</h4>
+        <form>
+          <select className="profile-display-selector" value={recordsPerPage} onChange={e => setRecordsPerPage(e.target.value)}>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+        </form>
+      </header>
+
       <hr />
       {eventList && eventDiv}
     </div>

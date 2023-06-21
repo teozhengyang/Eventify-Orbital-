@@ -1,0 +1,25 @@
+table {
+  width: 100%;
+}
+
+.display-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-display-selector {
+  width: 4em;
+}
+
+#display-title {
+  margin: auto;
+}
+
+.table-head, .table-row {
+  border-bottom: 1px solid;
+  border-color: rgb(77, 77, 77);
+}
+
+.table-head {
+  text-align: center;
+}
