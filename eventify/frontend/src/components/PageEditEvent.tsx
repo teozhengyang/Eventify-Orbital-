@@ -52,7 +52,7 @@ export default function EditEvent() {
   }, [endDate])
 
   const getUsers = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/users/')
+    const response = await axios.get('http://127.0.0.1:8000/users/', config)
     const data = response.data
     
     let hashmap = new Map<number, user>()
