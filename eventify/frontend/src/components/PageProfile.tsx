@@ -22,12 +22,13 @@ type Event = {
 export default function Profile() {
   const { authTokens, user, logoutUser } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState([])
-  const [eventList, setEventList] = useState([])
+  const [eventList, setEventList] = useState([])      // The full list of user events
+  const [displayList, setDisplayList] = useState([])  // A filtered list based on display preference to show the user
 
   const [currPage, setCurrPage] = useState(1)
   const [recordsPerPage, setRecordsPerPage] = useState(5)
 
-  const [showAlert, setShowAlert] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)   // Alert for leaving event as single organiser
 
 
   // For routing page to edit event page
@@ -46,16 +47,22 @@ export default function Profile() {
 
   const getCurrUser = async () => {
     const userResponse = await axios.get(`http://127.0.0.1:8000/api/users/${user.user_id}`);
-    const userData = userResponse.data
-    console.log(userData)
-    setCurrUser(userData)
+    console.log(userResponse.data)
+    setCurrUser(userResponse.data)
     
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
-//    const filteredEventsResponse = eventsResponse.data.filter(event => new Date(event.end) > new Date()).sort((event1, event2) => new Date(event2.start) - new Date(event1.start))
-//    console.log(filteredEventsResponse)
-//    setEventList(filteredEventsResponse)
     setEventList(eventsResponse.data)
+    setDisplayList(eventList)
   };
+
+  const setDisplay = (e:number) => {
+    if (e == 0) {
+      setDisplayList(eventList)
+    } else {
+      const filteredEvents = eventList.filter((event:Event) => new Date(event.end) > new Date()).sort((event1:Event, event2:Event) => new Date(event2.start) - new Date(event1.start))
+      setDisplayList(filteredEvents)
+    }
+  }
 
   const deleteUser = () => {
     const response = axios.delete(`http://127.0.0.1:8000/delete_user/${user.user_id}/`, config)
@@ -66,8 +73,8 @@ export default function Profile() {
 
   const indexOfLastRecord = currPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = eventList.slice(indexOfFirstRecord, indexOfLastRecord);
-  const nOrganisedPages = Math.ceil(eventList.length / recordsPerPage)
+  const currentRecords = displayList.slice(indexOfFirstRecord, indexOfLastRecord);
+  const nOrganisedPages = Math.ceil(displayList.length / recordsPerPage)
 
   const eventDiv = (
     <div>
@@ -91,8 +98,8 @@ export default function Profile() {
               <td>{format(new Date(event.start), "dd/MM/yyyy, p")}</td>
               <td>{format(new Date(event.end), "dd/MM/yyyy, p")}</td>
               <td>{event.location}</td>
-              <td>${event.budget}</td>
-              <td>
+              <td className="data-align-left">${event.budget}</td>
+              <td className="data-align-left">
                 <ButtonGroup>
                   <Button onClick={() => {
                     navigate(`/Event/${event.id}`, {state:{evt:event}})
@@ -173,6 +180,10 @@ export default function Profile() {
       <header className="display-header">
         <h4 id="display-title">Events</h4>
         <form>
+          <select className="profile-display-selector" onChange={e => {setDisplay(e.target.value)}}>
+            <option value="0">All</option>
+            <option value="1">Hide Past</option>
+          </select>
           <select className="profile-display-selector" value={recordsPerPage} onChange={e => setRecordsPerPage(e.target.value)}>
             <option value="5">5</option>
             <option value="10">10</option>

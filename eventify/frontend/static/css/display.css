@@ -8,18 +8,27 @@ table {
 }
 
 .profile-display-selector {
-  width: 4em;
+  width: 6em;
 }
 
 #display-title {
   margin: auto;
 }
 
-.table-head, .table-row {
+th,td {
+  overflow-x: auto;
+}
+
+tr {
+  text-align: center;
   border-bottom: 1px solid;
   border-color: rgb(77, 77, 77);
 }
 
-.table-head {
-  text-align: center;
+.data-align-left {
+  text-align: left;
+}
+
+.pagination-tab {
+  margin-top: 10px;
 }
