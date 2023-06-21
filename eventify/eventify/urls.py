@@ -16,17 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
-from event import views
-
-router = routers.DefaultRouter()
-
-#router.register(r'events', views.EventView)
-router.register(r'users', views.UserView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
     path('', include("event.urls"))
     
 ]

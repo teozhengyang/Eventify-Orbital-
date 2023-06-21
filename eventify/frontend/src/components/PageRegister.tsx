@@ -8,7 +8,7 @@ export default function Register() {
 
   return (
     <div className="register-form">
-      <Form onSubmit={registerUser} >
+      <Form onSubmit={registerUser}>
 
         <Form.Group className="own-form-item">
           <div><Form.Label className='own-form-label'>Username: </Form.Label></div>

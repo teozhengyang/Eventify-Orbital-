@@ -155,8 +155,40 @@ def register(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def user_list(request, format=None):
+    if request.method == 'GET':
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        serializer.save()
+        return Response(serializer.data)
 
-
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def user_detail(request, pk, format=None):
+    if request.method == 'PUT':
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE':
+        user = User.objects.get(pk=pk)
+        if user:
+            user.delete()
+            return Response('Deleted user')
+        else:
+            return Response('Failed to delete')
+    elif request.method == 'GET':
+        user = User.objects.get(pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 @api_view(['GET'])
 def get_routes(request):

@@ -14,6 +14,7 @@ import { ModalProvider } from "../context/NewEventModalContext";
 import Event from "./PageEvent";
 import ResetPassword from "./PageResetPassword";
 import EditActivity from "./PageEditActivity";
+import UpdateUser from "./PageUpdateUser";
 
 /**
  * Main page, route to different pages
@@ -37,6 +38,7 @@ export default function App() {
                 <Route path="Event/:id" element={<Event />} />
                 <Route path="EditActivity" element={<EditActivity />} />
                 <Route path="ResetPassword" element={<ResetPassword />} />
+                <Route path="UpdateUser" element={<UpdateUser />} />
               </Routes>
           </MonthProvider>
         </ModalProvider>

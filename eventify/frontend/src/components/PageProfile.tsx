@@ -43,7 +43,7 @@ export default function Profile() {
   }
 
   const getCurrUser = async () => {
-    const userResponse = await axios.get(`http://127.0.0.1:8000/api/users/${user.user_id}`);
+    const userResponse = await axios.get(`http://127.0.0.1:8000/user/${user.user_id}`, config);
     const userData = userResponse.data
     console.log(userData)
     setCurrUser(userData)
@@ -55,7 +55,7 @@ export default function Profile() {
   };
 
   const deleteUser = () => {
-    const response = axios.delete(`http://127.0.0.1:8000/delete_user/${user.user_id}/`, config)
+    const response = axios.delete(`http://127.0.0.1:8000/user/${user.user_id}/`, config)
     console.log(response)
     alert('User deleted')
     logoutUser()
@@ -155,7 +155,9 @@ export default function Profile() {
           }}>
             Reset Password
           </Button> 
-          <Button>
+          <Button onClick={() => {
+            navigate(`/UpdateUser`, {state:{evt:user}})
+          }}>
             Update Profile
           </Button>
         </p>
