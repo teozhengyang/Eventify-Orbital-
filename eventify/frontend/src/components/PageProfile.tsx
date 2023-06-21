@@ -169,12 +169,20 @@ export default function Profile() {
     <div>
       <h4 className='header'>User Information</h4>
       <p>
-        Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email} |
+        Name: {currUser.first_name} {currUser.last_name} | Email: {currUser.email}
+      </p>
+      <p>
+        Actions: 
         <Button onClick={deleteUser}>Delete Profile</Button> |
         <Button onClick={() => {
           navigate('/ResetPassword')
         }}>
           Reset Password
+        </Button> |
+        <Button onClick={() => {
+            navigate(`/UpdateUser`, {state:{evt:user}})
+        }}>
+          Update Profile
         </Button>
       </p>
 
