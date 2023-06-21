@@ -52,7 +52,7 @@ export default function Profile() {
     
     const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
     setEventList(eventsResponse.data)
-    setDisplayList(eventList)
+    setDisplayList(eventsResponse.data)
   };
 
   const setDisplay = (e:number) => {
@@ -180,11 +180,11 @@ export default function Profile() {
       <header className="display-header">
         <h4 id="display-title">Events</h4>
         <form>
-          <select className="profile-display-selector" onChange={e => {setDisplay(e.target.value)}}>
+          <select style={{width:"7em"}} className="profile-display-selector" onChange={e => {setDisplay(e.target.value)}}>
             <option value="0">All</option>
-            <option value="1">Hide Past</option>
+            <option value="1">Upcoming</option>
           </select>
-          <select className="profile-display-selector" value={recordsPerPage} onChange={e => setRecordsPerPage(e.target.value)}>
+          <select style={{width:"3em"}} className="profile-display-selector" value={recordsPerPage} onChange={e => setRecordsPerPage(e.target.value)}>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>

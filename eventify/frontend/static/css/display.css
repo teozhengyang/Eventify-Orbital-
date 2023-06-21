@@ -8,7 +8,7 @@ table {
 }
 
 .profile-display-selector {
-  width: 6em;
+  border-radius: 5px;
 }
 
 #display-title {
