@@ -48,7 +48,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   }
 
   const getUsers = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/users/')
+    const response = await axios.get('http://127.0.0.1:8000/users/', config)
     const data = response.data
     setUsers(data)
     console.log(data)
