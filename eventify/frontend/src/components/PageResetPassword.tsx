@@ -46,7 +46,7 @@ export default function ResetPassword() {
           <div><Form.Label className='own-form-label'>Confirm password: </Form.Label></div>
           <div><Form.Control className='own-form-field' type="password" name="password2" placeholder="Enter new password again" /></div>
         </Form.Group>
-        <Button type='submit'>Reset Password</Button>
+        <Button className="own-form-button" type='submit'>Reset Password</Button>
       </Form>
     </div>
   )

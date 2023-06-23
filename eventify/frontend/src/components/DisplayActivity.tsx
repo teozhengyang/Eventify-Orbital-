@@ -60,7 +60,6 @@ export default function DisplayActivity({event}: {event: Event}) {
   const isOrganiser = event.organizers?.includes(user.user_id)
 
   function isOutOfBounds(activity:Activity) {
-
     const eventStart = new Date(event.start).valueOf()
     const eventEnd = new Date(event.end).valueOf()
     if (new Date(activity.start).valueOf() < eventStart || new Date(activity.end).valueOf() > eventEnd) {
@@ -77,6 +76,7 @@ export default function DisplayActivity({event}: {event: Event}) {
             <th>Description</th>
             <th>Start</th>
             <th>End</th>
+            <th>Location</th>
             <th>Budget</th>
             <th>Actions</th>
           </tr>
@@ -88,6 +88,7 @@ export default function DisplayActivity({event}: {event: Event}) {
               <td>{activity.description}</td>
               <td>{format(new Date(activity.start), "dd/MM/yyyy, p")}</td>
               <td>{format(new Date(activity.end), "dd/MM/yyyy, p")}</td>
+              <td>{activity.location}</td>
               <td>${activity.budget}</td>
               <td>
                 <ButtonGroup>

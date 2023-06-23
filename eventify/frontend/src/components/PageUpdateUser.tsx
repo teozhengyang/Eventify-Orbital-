@@ -32,7 +32,7 @@ export default function UpdateUser() {
   // For redirect after form submit
   const navigate = useNavigate()
 
-  // Update event
+  // Update user
   const updateUserInfo = async(e) => {
     e.preventDefault();
     try {

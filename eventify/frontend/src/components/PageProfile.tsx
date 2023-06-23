@@ -148,13 +148,12 @@ export default function Profile() {
         </tbody>
       </table>
 
-      <Modal show={showAlert} onHide={() => setShowAlert(false)} centered style={{color:"yellow"}}>
-        <Modal.Header closeButton style={{color:"black", backgroundColor:"gold"}}>
+      <Modal show={showAlert} onHide={() => setShowAlert(false)} centered>
+        <Modal.Header closeButton style={{color:"#664D03", backgroundColor:"#FFF3CD", borderRadius:"5px"}}>
           Cannot leave event as User is the only organiser
           <br />
           Delete the event or promote a participant to organiser
         </Modal.Header>
-        <ModalFooter style={{backgroundColor:"gold"}}/>
       </Modal>
 
       <Pagination
@@ -173,13 +172,13 @@ export default function Profile() {
       </p>
       <p>
         Actions: 
-        <Button onClick={deleteUser}>Delete Profile</Button> |
-        <Button onClick={() => {
+        <Button className="margin-button" onClick={deleteUser}>Delete Profile</Button>|
+        <Button className="margin-button" onClick={() => {
           navigate('/ResetPassword')
         }}>
           Reset Password
-        </Button> |
-        <Button onClick={() => {
+        </Button>|
+        <Button className="margin-button" onClick={() => {
             navigate(`/UpdateUser`, {state:{evt:user}})
         }}>
           Update Profile

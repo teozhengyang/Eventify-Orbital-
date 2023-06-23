@@ -80,7 +80,7 @@ export default function EventDesc({event}={event: Object}) {
         <Button variant="secondary" onClick={leave}>Leave</Button>
         {event.organizers.includes(user.user_id) && organiserButtons}
       </ButtonGroup>
-      <Alert style={{paddingTop:"5px"}} variant="warning" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
+      <Alert style={{marginTop:"10px"}} variant="warning" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
         <p>Cannot leave event as User is the only Organiser</p>
         <p>Delete the event or promote a participant to organiser</p>
       </Alert>

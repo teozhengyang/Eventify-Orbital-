@@ -75,7 +75,7 @@ def activity_list(request, format=None):
         serializer.save()
         return Response(serializer.data)
     
-# (PENDING USE) handles PUT & DELETE requests, finds relevant event by primary key for activity
+# handles PUT & DELETE requests, finds relevant event by primary key for activity
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def activity_detail(request, pk, format=None):
@@ -93,22 +93,14 @@ def activity_detail(request, pk, format=None):
             return Response('Deleted event')
         else:
             return Response('Failed to delete')
+# Might not need this
     elif request.method == 'GET':
         activity = Activity.objects.get(pk=pk)
         serializer = EventSerializer(activity)
         return Response(serializer.data)
-
-@csrf_exempt
-def delete_user(request, pk):
-    if request.method == 'DELETE':
-        user = User.objects.get(pk=pk)
-        if user:
-            user.delete()
-            return Response('Deleted user')
-        else:
-            return Response('Failed to delete')
-    return Response('Try again')
  
+ 
+ # Update password
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])      
 def reset_password(request, pk):
@@ -119,7 +111,7 @@ def reset_password(request, pk):
         user.save()
     return Response('Try again')
 
-# register view
+# register new users
 @csrf_exempt
 def register(request):
     if request.method == 'POST':
@@ -155,19 +147,19 @@ def register(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-@api_view(['GET', 'POST'])
+
+# GET all users used in Event creation form for user fields
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_list(request, format=None):
     if request.method == 'GET':
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = UserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True) 
-        serializer.save()
-        return Response(serializer.data)
 
+
+
+# GET by pk used in Profile/Update user page, PUT by pk used in Update user page, DELETE by pk used in Profile page
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def user_detail(request, pk, format=None):
