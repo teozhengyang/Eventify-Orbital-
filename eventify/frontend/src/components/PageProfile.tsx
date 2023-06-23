@@ -115,9 +115,11 @@ export default function Profile() {
                         participants: event.participants.filter(participant => participant != user.user_id)
                       }, config);
                       console.log(response.data)
+                      // Only organiser cannot leave event
                       if (response.data.organizers[0] == "This list may not be empty.") {
                         setShowAlert(true)
                       }
+                      getCurrUser()
                     } catch (error) {
                       console.error(error)
                     }
