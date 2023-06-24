@@ -23,11 +23,10 @@ export default function ResetPassword() {
     }
     e.preventDefault();
     try {
-      const response = await axios.post(`http://127.0.0.1:8000/reset_password/${user.user_id}/`, {
+      const response = await axios.post(`/api/reset_password/${user.user_id}/`, {
         password: e.target.password.value,
       }, config);
       console.log(response.data)
-      alert('Password reset successfully!')
       logoutUser();
       navigate('/login')
     } catch (error) {

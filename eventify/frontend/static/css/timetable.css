@@ -17,7 +17,7 @@ ul {
     "slots"
     "main";
   border: 1px solid;
-  width: 1440px;
+  width: auto;
 }
 
 .timeslots {
@@ -27,40 +27,25 @@ ul {
 }
 
 .timeslots li {
-  min-width: 60px;
+  min-width: 40px;
 }
 
 .activity-container {
   display: grid;
   grid-template-columns: repeat(96, 1fr);
-  grid-template-rows: repeat(8, 1fr);
+  grid-auto-flow: row dense;
+  row-gap: 2px;
   column-gap: 2px;
   grid-area: main;
   position: relative;
-  height: 400px;
+  height: auto;
 }
 
 .slot {
-  position: absolute;
-  background: lightblue;
+  background: green;
+  border: 1px solid;
   border-radius: 5px;
   z-index: 5;
   color: white;
   font-size: 12px;
-}
-
-.slot-1 {
-  width: 30px;
-  /**
-  9 - 10 = 1hr * 60mins = 60 (width)
-  60/15 + 1 = 5 (grid-row)
-  */
-  grid-row: 1;
-  grid-column: 1;
-}
-
-.slot-2 {
-  width: 30px;
-  grid-row: 2;
-  grid-column: 10;
 }

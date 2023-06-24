@@ -62,7 +62,7 @@ export default function NewActivity({event}: {event: Event}) {
   const AddActivityInfo = async(e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://127.0.0.1:8000/activities/', {
+      const response = await axios.post('/api/activities/', {
         name: e.target.title.value,
         description: e.target.description.value,
         start: startDate.toJSON(),

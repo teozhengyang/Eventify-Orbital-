@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, ButtonGroup } from "react-bootstrap";
-import { format, differenceInMinutes } from "date-fns";
+import { format } from "date-fns";
 import "/static/css/display.css";
 import "/static/css/timetable.css";
 
@@ -45,7 +45,7 @@ export default function DisplayActivity({event}: {event: Event}) {
 
   const fetchActivity = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/activities/', config);
+      const response = await axios.get('/api/activities/', config);
       console.log(response.data)
       setActivities(response.data)
     } catch (error) {
@@ -130,6 +130,9 @@ export default function DisplayActivity({event}: {event: Event}) {
         if i can figure out the timetable thing maybe i can put it here if not will just use the above table as a display (with sorting functions?)
         Or we could try devexpress 
       </p>
+      <header>
+
+      </header>
       <div className="display-container">
           <ul className="timeslots">
             {Array.from(Array(24).keys()).map((hour) => {
@@ -141,23 +144,16 @@ export default function DisplayActivity({event}: {event: Event}) {
             })}
           </ul>
           <div className="activity-container">
-              <div className="slot slot-1">
-                <p>Hi</p>
-              </div>
-              <div className="slot slot-2">
-                <p>Test</p>
-              </div>
               {activities.map((activity:Activity, i) => {
-                const start = new Date(activity.start)
-                const end = new Date(activity.end)
-                const boxStyle = {
-                  border: "1px solid",
-                  gridRow: "1",
-                  gridColumn: (start.getHours() * 4 + (start.getMinutes() / 15) + 1),
-                  width: differenceInMinutes(end, start),
+                const columnNo = (time:Date) => {
+                  return time.getHours() * 4 + (time.getMinutes() / 15) + 1
+                }
+                const columnInfo = {
+                  gridColumnStart: columnNo(new Date(activity.start)),
+                  gridColumnEnd: columnNo(new Date(activity.end)),
                 }
                 return (
-                  <div key={i} className="slot" style={boxStyle}>
+                  <div key={i} className="slot" style={columnInfo}>
                     <p>{activity.name}</p>
                   </div>
                 )

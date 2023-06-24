@@ -21,14 +21,17 @@ export default function EventDesc({event}={event: Object}) {
   const closeModal = () => {
     setShowModal(false)
     // Fixes visual where modal is seen to change display briefly due to modal closing animation time
-    setTimeout(() => {
+    const time = setTimeout(() => {
       setSelectedEvent(null)
-    }, 120)
+    }, 140)
+    return () => {
+      clearTimeout(time)
+    }
   }
 
   // Delete event
   const remove = async() => {
-    const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
+    const response = await axios.delete(`/api/events/${event.id}/`, config)
     console.log(response)
     closeModal()
   }
@@ -43,12 +46,13 @@ export default function EventDesc({event}={event: Object}) {
   // Go to individual event page
   const view = () => {
     navigate(`/Event/${event.id}`, {state:{evt:event}})
+    closeModal()
   }
 
   // Leave event if participant (removes user from participant array)
   const leave = async() => {
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/events/${event.id}/`, {
+      const response = await axios.put(`/api/events/${event.id}/`, {
         organizers: event.organizers.filter(organiser => organiser != user.user_id),
         participants: event.participants.filter(participant => participant != user.user_id)
       }, config);

@@ -14,7 +14,7 @@ export default function EventModal() {
     // Fixes visual where modal is seen to change display briefly due to modal closing animation time
     setTimeout(() => {
       setSelectedEvent(null)
-    }, 120)
+    }, 140)
   }
   
   const title = selectedEvent == null

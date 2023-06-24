@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   const getdata = async () => {
-    const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
+    const eventsResponse = await axios.get('/api/events/', config)
     const eventsData = eventsResponse.data
     console.log(eventsData)
     setEvents(eventsData)

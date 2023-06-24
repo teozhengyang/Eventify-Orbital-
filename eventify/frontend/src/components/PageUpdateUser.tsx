@@ -23,6 +23,7 @@ export default function UpdateUser() {
   }
     
   const getCurrUser = async () => {
+    // Somehow changing this to /api (proxy set in vite.config.ts) instead of the full address breaks the profile page
     const userResponse = await axios.get(`http://127.0.0.1:8000/user/${user.user_id}`, config);
     const userData = userResponse.data
     console.log(userData)
@@ -36,7 +37,7 @@ export default function UpdateUser() {
   const updateUserInfo = async(e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/user/${currUser.id}/`, {
+      const response = await axios.put(`/api/user/${currUser.id}/`, {
         username: e.target.username.value,
         email: e.target.email.value,
         first_name: e.target.first_name.value,

@@ -19,7 +19,7 @@ export const AuthProvider = ({children}) => {
       e.preventDefault()
 
       try {
-        const response = await axios.post('http://127.0.0.1:8000/register/', {
+        const response = await axios.post('/api/register/', {
           username: e.target.username.value,
           password: e.target.password.value,
           password2: e.target.password2.value,
@@ -55,7 +55,7 @@ export const AuthProvider = ({children}) => {
       e.preventDefault()
 
       try {
-        const response = await axios.post('http://127.0.0.1:8000/token/', {
+        const response = await axios.post('/api/token/', {
           username: e.target.username.value,
           password: e.target.password.value,
         });
@@ -88,7 +88,7 @@ export const AuthProvider = ({children}) => {
 
     const updateToken = async () => {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/token/refresh/', {
+        const response = await axios.post('/api/token/refresh/', {
         refresh: authTokens?.refresh,
         }, {
           headers: {

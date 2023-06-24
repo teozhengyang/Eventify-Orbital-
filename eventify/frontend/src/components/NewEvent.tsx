@@ -48,7 +48,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   }
 
   const getUsers = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/users/', config)
+    const response = await axios.get('/api/users/', config)
     const data = response.data
     setUsers(data)
     console.log(data)
@@ -59,7 +59,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const AddEventInfo = async(e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://127.0.0.1:8000/events/', {
+      const response = await axios.post('/api/events/', {
         name: e.target.title.value,
         description: e.target.description.value,
         start: startDate.toJSON(),

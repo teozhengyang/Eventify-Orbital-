@@ -54,7 +54,7 @@ export default function EditActivity() {
   const UpdateActivityInfo = async(e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/activities/${activity.id}/`, {
+      const response = await axios.put(`/api/activities/${activity.id}/`, {
         name: e.target.title.value,
         description: e.target.description.value,
         start: startDate.toJSON(),

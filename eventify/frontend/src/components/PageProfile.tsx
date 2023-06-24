@@ -46,12 +46,13 @@ export default function Profile() {
   }
 
   const getCurrUser = async () => {
+    // Somehow changing this to /api (proxy set in vite.config.ts) instead of the full address breaks the profile page
     const userResponse = await axios.get(`http://127.0.0.1:8000/user/${user.user_id}`, config);
     const userData = userResponse.data
     console.log(userData)
     setCurrUser(userData)
     
-    const eventsResponse = await axios.get('http://127.0.0.1:8000/events/', config)
+    const eventsResponse = await axios.get('/api/events/', config)
     setEventList(eventsResponse.data)
     setDisplayList(eventsResponse.data)
   };
@@ -67,14 +68,14 @@ export default function Profile() {
 
   // If user is deleted, first delete events where said user is the only organiser
   const deleteEventUser = async (event:Event) => {
-    const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
+    const response = await axios.delete(`/api/events/${event.id}/`, config)
     console.log(response)
   }
   const deleteUser = () => {
     eventList.filter((event) => (event.organizers.length == 1) && (event.organizers[0] == user.user_id))
              .map((event) => deleteEventUser(event))
 
-    const response = axios.delete(`http://127.0.0.1:8000/user/${user.user_id}/`, config)
+    const response = axios.delete(`/api/user/${user.user_id}/`, config)
     console.log(response)
     alert('User deleted')
     logoutUser()
@@ -118,7 +119,7 @@ export default function Profile() {
 
                   <Button onClick={async() => {
                     try {
-                      const response = await axios.put(`http://127.0.0.1:8000/events/${event.id}/`, {
+                      const response = await axios.put(`/api/events/${event.id}/`, {
                         organizers: event.organizers.filter(organiser => organiser != user.user_id),
                         participants: event.participants.filter(participant => participant != user.user_id)
                       }, config);
@@ -143,7 +144,7 @@ export default function Profile() {
                       </Button>
 
                       <Button onClick={async() => {
-                        const response = await axios.delete(`http://127.0.0.1:8000/events/${event.id}/`, config)
+                        const response = await axios.delete(`/api/events/${event.id}/`, config)
                         getCurrUser()
                         console.log(response)
                       }}>
