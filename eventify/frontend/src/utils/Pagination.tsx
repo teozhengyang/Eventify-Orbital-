@@ -1,6 +1,6 @@
 import "/static/css/display.css";
 
-export default function Pagination({ nPages, currentPage, setCurrentPage }) {
+export default function Pagination({nPages, currentPage, setCurrentPage}:{nPages:number; currentPage:number; setCurrentPage:React.Dispatch<React.SetStateAction<number>>}) {
   const pageNumbers = [...Array(nPages + 1).keys()].slice(1)
 
   const nextPage = () => {

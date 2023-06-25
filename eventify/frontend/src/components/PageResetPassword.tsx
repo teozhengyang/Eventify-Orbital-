@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext} from 'react'
+import { useContext} from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
-import { Button, Form, FloatingLabel } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
@@ -30,7 +30,7 @@ export default function ResetPassword() {
       logoutUser();
       navigate('/login')
     } catch (error) {
-      console.error(error.response)
+      console.error(error)
     }
   }
 

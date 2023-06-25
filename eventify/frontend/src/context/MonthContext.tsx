@@ -9,7 +9,7 @@ const MonthContext = createContext({
 
 export default MonthContext;
 
-export const MonthProvider = ({children}) => {
+export const MonthProvider = ({children}: {children: React.ReactNode}) => {
   const [displayDate, setDisplayDate] = useState(new Date());
   const [displayType, setDisplayType] = useState("month")
   return (

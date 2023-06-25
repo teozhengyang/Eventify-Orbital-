@@ -8,7 +8,6 @@ import "/static/css/register.css";
 export default function UpdateUser() {
 
   const [currUser, setCurrUser] = useState([])
-
   const { user, authTokens } = useContext(AuthContext)
 
   useEffect(() => {
@@ -48,7 +47,7 @@ export default function UpdateUser() {
       alert('User information updated successfully!')
       navigate('/Profile')
     } catch (error) {
-      console.error(error.response)
+      console.error(error)
     }
   }
 

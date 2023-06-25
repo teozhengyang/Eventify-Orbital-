@@ -4,13 +4,10 @@ import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import DatePicker from "react-datepicker";
-import "/static/css/register.css";
 import Select from 'react-select';
+import { User } from "src/utils/Types";
+import "/static/css/register.css";
 
-type user = {
-  id?: number;
-  username?: string;
-}
 
 export default function EditEvent() {
   // Get event data from EventDesc.tsx/PageProfile.tsx and saves it as a const, to be used for default values
@@ -55,11 +52,11 @@ export default function EditEvent() {
     const response = await axios.get('/api/users/', config)
     const data = response.data
     
-    let hashmap = new Map<number, user>()
+    let hashmap = new Map<number, User>()
     // Map user.id to user object so they can be set to the organiser/participant field as default values
-    data.forEach((user) => hashmap.set(user.id, user))
-    setSelectedOrganisers(event.organizers.map(id => hashmap.get(id)))
-    setSelectedParticipants(event.participants.map(id => hashmap.get(id)))
+    data.forEach((user: User) => hashmap.set(user.id, user))
+    setSelectedOrganisers(event.organizers.map((id: number) => hashmap.get(id)))
+    setSelectedParticipants(event.participants.map((id: number) => hashmap.get(id)))
     setUsers(data)
     console.log(data)
   }
@@ -78,14 +75,14 @@ export default function EditEvent() {
         end: endDate.toJSON(),
         location: e.target.location.value,
         budget: e.target.budget.value,
-        organizers: selectedOrganisers.map(organiser => organiser.id),
-        participants: selectedParticipants.map(participant => participant.id)
+        organizers: selectedOrganisers.map((organiser: User) => organiser.id),
+        participants: selectedParticipants.map((participant: User) => participant.id)
       }, config);
       console.log(response.data)
       alert('Event updated successfully! THIS ALERT IS TEMPORARY FOR TESTING PURPOSES')
       navigate('/')
     } catch (error) {
-      console.error(error.response)
+      console.error(error)
     }
   }
 

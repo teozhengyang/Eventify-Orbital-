@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import MonthContext from "../context/MonthContext";
-import "/static/css/calendar.css";
 import { ButtonGroup, Button } from "react-bootstrap";
 import { addMonths, subMonths, addWeeks, subWeeks, format } from "date-fns";
+import "/static/css/calendar.css";
 
 export default function CalendarHeader() {
   const { displayDate, setDisplayDate, displayType, setDisplayType } = useContext(MonthContext)

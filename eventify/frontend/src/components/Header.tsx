@@ -5,7 +5,7 @@ import { Nav, Navbar} from "react-bootstrap";
 
 export default function Headers() {
   const { user, logoutUser } = useContext(AuthContext)
-  console.log(user)
+
   return (
     <div className="header-display">
       <Navbar className="header">

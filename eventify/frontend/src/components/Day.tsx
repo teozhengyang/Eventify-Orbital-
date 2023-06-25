@@ -2,10 +2,11 @@ import { useContext } from "react";
 import NewEventModalContext from "../context/NewEventModalContext";
 import { format } from "date-fns";
 import AuthContext from "../context/AuthContext";
+import { Event } from "src/utils/Types";
 import "/static/css/calendar.css";
 
 // day is a Date() object, convert to string and split by spaces to get individual string components
-export default function Day({day, rowIndex, events}: {day: Date; rowIndex: number; events: Array<Object>;}) {
+export default function Day({day, rowIndex, events}: {day: Date; rowIndex: number; events: Array<Event>;}) {
   const { setShowModal, setSelectedDate, setSelectedEvent } = useContext(NewEventModalContext)
   const { user } = useContext(AuthContext)
 

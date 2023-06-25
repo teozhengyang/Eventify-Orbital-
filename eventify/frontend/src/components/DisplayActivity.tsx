@@ -6,25 +6,9 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { format } from "date-fns";
+import { Event, Activity } from "src/utils/Types";
 import "/static/css/display.css";
 import "/static/css/timetable.css";
-
-type Activity = {
-  id?: number;
-  name?: string;
-  description?: string;
-  start?: string;
-  end?: string;
-  location?: string;
-  budget?: number;
-}
-
-type Event = {
-  id?: number;
-  start?: string;
-  end?: string;
-  organizers?: Array<number>;
-}
 
 // Temporary activity display until we either figure out timetable display or use an external one
 export default function DisplayActivity({event}: {event: Event}) {

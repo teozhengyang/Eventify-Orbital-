@@ -7,7 +7,7 @@ const AuthContext = createContext()
 
 export default AuthContext;
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     const [user, setUser] = useState(() => (localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null))
     const [authTokens, setAuthTokens] = useState(() => (localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null))

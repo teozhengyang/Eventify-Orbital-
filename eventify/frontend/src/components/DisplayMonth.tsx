@@ -1,7 +1,9 @@
 import Day from "./Day";
+import { Event } from "src/utils/Types";
 import "/static/css/calendar.css";
 
-export default function MonthDisplay({data, eventlist,}: {data: Array<Array<Date>>; eventlist: Array<Object>;}) {
+
+export default function MonthDisplay({data, eventlist,}: {data: Array<Array<Date>>; eventlist: Array<Event>;}) {
   return (
     <div className="calendar-month" role="month view">
       {data.map((row: Array<Date>, i: number) => (

@@ -2,22 +2,12 @@ import { useState, useEffect, useContext} from 'react'
 import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { format } from 'date-fns';
-import { Button, ButtonGroup, Modal, ModalBody, ModalFooter } from 'react-bootstrap';
+import { Button, ButtonGroup, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../utils/Pagination';
+import { Event } from 'src/utils/Types';
 import "/static/css/display.css";
 
-type Event = {
-  id?: number;
-  name?: string;
-  description?: string;
-  start?: string;
-  end?: string;
-  location?: string;
-  budget?: number;
-  organizers?: Array<number>;
-  participants?: Array<number>;
-}
 
 export default function Profile() {
   const { authTokens, user, logoutUser } = useContext(AuthContext);
@@ -61,7 +51,8 @@ export default function Profile() {
     if (e == 0) {
       setDisplayList(eventList)
     } else {
-      const filteredEvents = eventList.filter((event:Event) => new Date(event.end) > new Date()).sort((event1:Event, event2:Event) => new Date(event2.start) - new Date(event1.start))
+      const filteredEvents = eventList.filter((event:Event) => new Date(event.end) > new Date())
+                                      .sort((event1:Event, event2:Event) => new Date(event2.start).valueOf() - new Date(event1.start).valueOf())
       setDisplayList(filteredEvents)
     }
   }
@@ -72,8 +63,8 @@ export default function Profile() {
     console.log(response)
   }
   const deleteUser = () => {
-    eventList.filter((event) => (event.organizers.length == 1) && (event.organizers[0] == user.user_id))
-             .map((event) => deleteEventUser(event))
+    eventList.filter((event:Event) => (event.organizers.length == 1) && (event.organizers[0] == user.user_id))
+             .map((event:Event) => deleteEventUser(event))
 
     const response = axios.delete(`/api/user/${user.user_id}/`, config)
     console.log(response)
@@ -199,11 +190,11 @@ export default function Profile() {
       <header className="display-header">
         <h4 id="display-title">Events</h4>
         <form>
-          <select style={{width:"7em"}} className="profile-display-selector" onChange={e => {setDisplay(e.target.value)}}>
+          <select style={{width:"7em"}} className="profile-display-selector" onChange={e => {setDisplay(parseInt(e.target.value))}}>
             <option value="0">All</option>
             <option value="1">Upcoming</option>
           </select>
-          <select style={{width:"3em"}} className="profile-display-selector" value={recordsPerPage} onChange={e => setRecordsPerPage(e.target.value)}>
+          <select style={{width:"3em"}} className="profile-display-selector" value={recordsPerPage} onChange={e => setRecordsPerPage(parseInt(e.target.value))}>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>

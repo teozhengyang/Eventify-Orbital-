@@ -5,12 +5,10 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
-import "/static/css/register.css";
-
-//idk why got red line here, it seems to import and work just fine
+import { User } from "src/utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import "/static/css/register.css";
 
 export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const [startDate, setStartDate] = useState(defaultdate)
@@ -66,8 +64,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         end: endDate.toJSON(),
         location: e.target.location.value,
         budget: e.target.budget.value,
-        organizers: selectedOrganisers.map(organiser => organiser.id),
-        participants: selectedParticipants.map(participant => participant.id)
+        organizers: selectedOrganisers.map((org:User) => org.id),
+        participants: selectedParticipants.map((par:User) => par.id)
       }, config);
       console.log(response.data)
       setShowModal(false)

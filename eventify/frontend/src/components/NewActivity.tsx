@@ -3,24 +3,12 @@ import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
-import "/static/css/register.css";
 import { subDays } from "date-fns";
-
-//idk why got red line here, it seems to import and work just fine
+import { Event } from "src/utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "/static/css/register.css";
 
-type Event = {
-  id?: number;
-  name?: string;
-  description?: string;
-  start?: string;
-  end?: string;
-  location?: string;
-  budget?: number;
-  organizers?: Array<number>;
-  participants?: Array<number>;
-}
 
 // Might be nice to change the form to a bootstrap one
 export default function NewActivity({event}: {event: Event}) {
@@ -29,7 +17,7 @@ export default function NewActivity({event}: {event: Event}) {
 
   const [startDate, setStartDate] = useState(eventStart)
   const [endDate, setEndDate] = useState(eventStart)
-  const { authTokens, user } = useContext(AuthContext)
+  const { authTokens } = useContext(AuthContext)
   const { setActivityModal } = useContext(NewEventModalContext)
 
   // Activity end date must be >= start date, activity start cannot precede event start

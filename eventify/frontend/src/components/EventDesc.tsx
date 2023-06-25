@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import NewEventModalContext from "../context/NewEventModalContext";
 import AuthContext from "../context/AuthContext";
+import { Event } from "src/utils/Types";
 import axios from "axios";
 
-export default function EventDesc({event}={event: Object}) {
+
+export default function EventDesc({event}: {event: Event}) {
   const { setShowModal, setSelectedEvent } = useContext(NewEventModalContext)
   const { authTokens, user } = useContext(AuthContext)
   const [showAlert, setShowAlert] = useState(false)

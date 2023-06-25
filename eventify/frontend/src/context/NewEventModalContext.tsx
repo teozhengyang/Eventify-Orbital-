@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react';
+import { Event } from 'src/utils/Types';
 
 const NewEventModalContext = createContext({
   showModal: false,
@@ -6,14 +7,14 @@ const NewEventModalContext = createContext({
   selectedDate: new Date(),
   setSelectedDate: (input: Date) => {},
   selectedEvent: null,
-  setSelectedEvent: (input: Object) => {},
+  setSelectedEvent: (input: Event) => {},
   activityModal: false,
   setActivityModal: (input: boolean) => {},
 })
 
 export default NewEventModalContext;
 
-export const ModalProvider = ({children}) => {
+export const ModalProvider = ({children}: {children: React.ReactNode}) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
