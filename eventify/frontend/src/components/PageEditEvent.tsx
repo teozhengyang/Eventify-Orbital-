@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import Select from 'react-select';
 import { User } from "src/utils/Types";
 import "/static/css/register.css";
+import { AuthToken } from "src/utils/Types";
 
 
 export default function EditEvent() {
@@ -21,7 +22,7 @@ export default function EditEvent() {
   const [selectedOrganisers, setSelectedOrganisers] = useState([])
   const [selectedParticipants, setSelectedParticipants] = useState([])
 
-  const { authTokens } = useContext(AuthContext)
+  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken }
 
   // Headers for authorization @ backend => Allows request to django
   const config = {
@@ -52,7 +53,7 @@ export default function EditEvent() {
     const response = await axios.get('/api/users/', config)
     const data = response.data
     
-    let hashmap = new Map<number, User>()
+    const hashmap = new Map<number, User>()
     // Map user.id to user object so they can be set to the organiser/participant field as default values
     data.forEach((user: User) => hashmap.set(user.id, user))
     setSelectedOrganisers(event.organizers.map((id: number) => hashmap.get(id)))

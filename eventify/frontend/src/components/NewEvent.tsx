@@ -5,7 +5,7 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
-import { User } from "src/utils/Types";
+import { User, AuthToken } from "src/utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
@@ -14,7 +14,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const [startDate, setStartDate] = useState(defaultdate)
   const [endDate, setEndDate] = useState(defaultdate)
   const { setShowModal } = useContext(NewEventModalContext)
-  const { authTokens } = useContext(AuthContext)
+  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken}
 
   const [users, setUsers] = useState([])
   const [selectedOrganisers, setSelectedOrganisers] = useState([])

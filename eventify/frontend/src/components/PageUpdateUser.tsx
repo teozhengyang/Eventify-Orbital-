@@ -4,11 +4,12 @@ import { Button, Form } from 'react-bootstrap';
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import "/static/css/register.css";
+import { AuthToken, User } from "src/utils/Types";
 
 export default function UpdateUser() {
 
   const [currUser, setCurrUser] = useState([])
-  const { user, authTokens } = useContext(AuthContext)
+  const { user, authTokens } = useContext(AuthContext) as { authTokens: AuthToken, user: User }
 
   useEffect(() => {
     getCurrUser()

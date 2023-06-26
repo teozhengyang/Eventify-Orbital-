@@ -3,10 +3,11 @@ import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { AuthToken, User, LogoutUser } from 'src/utils/Types';
 
 export default function ResetPassword() {
 
-  const { authTokens, user, logoutUser } = useContext(AuthContext)
+  const { authTokens, user, logoutUser } = useContext(AuthContext) as { authTokens: AuthToken, user: User, logoutUser: LogoutUser}
 
   const navigate = useNavigate()
 

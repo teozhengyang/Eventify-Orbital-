@@ -6,7 +6,7 @@ import { subDays } from "date-fns";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "/static/css/register.css";
-
+import { AuthToken } from "src/utils/Types";
 
 export default function EditActivity() {
   // Get event/activity data from DisplayActivity.tsx and saves it as a const, to be used for default values
@@ -20,7 +20,7 @@ export default function EditActivity() {
   const [startDate, setStartDate] = useState(new Date(activity.start));
   const [endDate, setEndDate] = useState(new Date(activity.end));
 
-  const { authTokens } = useContext(AuthContext)
+  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken}
   // Headers for authorization @ backend => Allows request to django
   const config = {
     headers:{
