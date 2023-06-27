@@ -48,4 +48,5 @@ ul {
   z-index: 5;
   color: white;
   font-size: 12px;
+  overflow: hidden;
 }

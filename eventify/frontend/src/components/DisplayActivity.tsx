@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, ButtonGroup } from "react-bootstrap";
-import { format } from "date-fns";
+import { format, addDays, subDays } from "date-fns";
 import { Event, Activity } from "src/utils/Types";
 import "/static/css/display.css";
 import "/static/css/timetable.css";
@@ -14,7 +14,9 @@ import "/static/css/timetable.css";
 export default function DisplayActivity({event}: {event: Event}) {
   const { activityModal, setActivityModal } = useContext(NewEventModalContext)
   const { authTokens, user } = useContext(AuthContext)
-  const [activities, setActivities] = useState([])
+  const [activities, setActivities] = useState<Array<Activity>>([])
+  const [currentDay, setCurrentDay] = useState<Date>(new Date(new Date(event.start).setHours(0, 0, 0, 0)))
+  const [filteredAct, setFilteredAct] = useState<Array<Activity>>([])
 
   // Headers for authorization @ backend => Allows request to django
   const config = {
@@ -26,6 +28,30 @@ export default function DisplayActivity({event}: {event: Event}) {
   useEffect(() => {
     fetchActivity();
   }, [activityModal]);
+
+  // Update displayed activities based on date
+  useEffect(() => {
+    const list = activities.filter((activity:Activity) => {
+      const curr = currentDay.valueOf()
+      const start = new Date(activity.start).setHours(0, 0, 0, 0).valueOf()
+      const end = new Date(activity.end).setHours(0, 0, 0, 0).valueOf()
+      return curr >= start && curr <= end
+    })
+    setFilteredAct(list)
+  }, [currentDay])
+
+  // setHours() mutate the Date object, so must create new Date object each time
+  const nextDay = () => {
+    if (currentDay.valueOf() < new Date(event.end).setHours(0, 0, 0, 0).valueOf()) {
+      setCurrentDay(addDays(currentDay, 1))
+    }
+  }
+  const prevDay = () => {
+    if (currentDay.valueOf() > new Date(event.start).setHours(0, 0, 0, 0).valueOf()) {
+      setCurrentDay(subDays(currentDay, 1))
+    }
+  }
+
 
   const fetchActivity = async () => {
     try {
@@ -44,9 +70,7 @@ export default function DisplayActivity({event}: {event: Event}) {
   const isOrganiser = event.organizers?.includes(user.user_id)
 
   function isOutOfBounds(activity:Activity) {
-    const eventStart = new Date(event.start).valueOf()
-    const eventEnd = new Date(event.end).valueOf()
-    if (new Date(activity.start).valueOf() < eventStart || new Date(activity.end).valueOf() > eventEnd) {
+    if (new Date(activity.start).valueOf() < new Date(event.start).valueOf() || new Date(activity.end).valueOf() > new Date(event.end).valueOf()) {
       return {color:"red"};
     }
   }
@@ -111,30 +135,39 @@ export default function DisplayActivity({event}: {event: Event}) {
       <br />
       <p>
         Everything from here on is a test
-        if i can figure out the timetable thing maybe i can put it here if not will just use the above table as a display (with sorting functions?)
-        Or we could try devexpress 
+        Major functions done, need to deal with edge cases (and maybe simplify code)
       </p>
-      <header>
 
+      <header>
+        <Button onClick={prevDay}>&lt;</Button>
+          {currentDay.toDateString()}
+        <Button onClick={nextDay}>&gt;</Button>
       </header>
       <div className="display-container">
           <ul className="timeslots">
             {Array.from(Array(24).keys()).map((hour) => {
               if (hour < 10) {
-                return <li>{"0" + hour + "00"}</li>
+                return <li key={hour}>{"0" + hour + "00"}</li>
               } else {
-                return <li>{hour + "00"}</li>
+                return <li key={hour}>{hour + "00"}</li>
               }
             })}
           </ul>
           <div className="activity-container">
-              {activities.map((activity:Activity, i) => {
+              {filteredAct.map((activity:Activity, i) => {
                 const columnNo = (time:Date) => {
-                  return time.getHours() * 4 + (time.getMinutes() / 15) + 1
+                  return time.getHours() * 4 + (time.getMinutes() / 15) + 1 
                 }
+                const leftBound = new Date(activity.start).valueOf() < currentDay.valueOf()
+                  ? 1
+                  : columnNo(new Date(activity.start))
+                const rightBound = new Date(activity.end).valueOf() >= addDays(currentDay, 1).valueOf()
+                  ? 97
+                  : columnNo(new Date(activity.end))
+
                 const columnInfo = {
-                  gridColumnStart: columnNo(new Date(activity.start)),
-                  gridColumnEnd: columnNo(new Date(activity.end)),
+                  gridColumnStart: leftBound,
+                  gridColumnEnd: rightBound,
                 }
                 return (
                   <div key={i} className="slot" style={columnInfo}>
