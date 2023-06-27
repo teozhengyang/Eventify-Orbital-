@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import NewEventModalContext from "../context/NewEventModalContext";
 import AuthContext from "../context/AuthContext";
-import { Event, User, AuthToken  } from "src/utils/Types";
+import { Event, AuthUser, AuthToken, emptyEvent } from "../utils/Types";
 import axios from "axios";
 
 
 export default function EventDesc({event}: {event: Event}) {
   const { setShowModal, setSelectedEvent } = useContext(NewEventModalContext)
-  const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: User }
+  const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser }
   const [showAlert, setShowAlert] = useState(false)
 
   // Headers for authorization @ backend => Allows Get/Post request for activity data
@@ -24,7 +24,7 @@ export default function EventDesc({event}: {event: Event}) {
     setShowModal(false)
     // Fixes visual where modal is seen to change display briefly due to modal closing animation time
     const time = setTimeout(() => {
-      setSelectedEvent(null)
+      setSelectedEvent(emptyEvent)
     }, 140)
     return () => {
       clearTimeout(time)

@@ -15,49 +15,16 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     const navigate = useNavigate()
 
-    const registerUser = async (e) => {
+    const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-
       try {
-        const response = await axios.post('/api/register/', {
-          username: e.target.username.value,
-          password: e.target.password.value,
-          password2: e.target.password2.value,
-          email: e.target.email.value,
-          first_name: e.target.first_name.value,
-          last_name: e.target.last_name.value,
-        });
-
-        const { data } = response;
-
-        if (data.success) {
-          // User registration successful
-          console.log(data.success);
-          // Additional logic or redirect to another page
-          alert(data.success)
-          navigate('/login')
-        } else if (data.error) {
-          // User registration unsuccessful
-          console.log(data.error)
-          alert(data.error)
-          navigate('/register')
+        const target = e.target as typeof e.target & {
+          username: {value: string}
+          password: {value: string}
         }
-
-      } catch (error) {
-        // Handle error in making the API request
-        console.error(error);
-        alert('Please try again!');
-        navigate('/register');
-      }
-    }
-
-    const loginUser = async (e) => {
-      e.preventDefault()
-
-      try {
         const response = await axios.post('/api/token/', {
-          username: e.target.username.value,
-          password: e.target.password.value,
+          username: target.username.value,
+          password: target.password.value,
         });
 
         const data = response.data;
@@ -121,7 +88,6 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
       authTokens:authTokens,
       loginUser:loginUser,
       logoutUser:logoutUser,
-      registerUser:registerUser,
     }
 
     useEffect(()=>{

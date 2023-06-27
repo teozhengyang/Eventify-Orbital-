@@ -47,17 +47,23 @@ export default function NewActivity({event}: {event: Event}) {
     }
   }
 
-  const AddActivityInfo = async(e) => {
+  const AddActivityInfo = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
+      const target = e.target as typeof e.target & {
+        title: {value: string}
+        description: {value: string}
+        location: {value: string}
+        budget: {value: number}
+      }
       const response = await axios.post('/api/activities/', {
-        name: e.target.title.value,
-        description: e.target.description.value,
+        name: target.title.value,
+        description: target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
         event: event.id,
-        location: e.target.location.value,
-        budget: e.target.budget.value,
+        location: target.location.value,
+        budget: target.budget.value,
       }, config);
       console.log(response.data)
       setActivityModal(false)

@@ -2,10 +2,10 @@ import{ useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import "/static/css/header.css";
 import { Nav, Navbar } from "react-bootstrap";
-import { User, LogoutUser } from "src/utils/Types";
+import { AuthUser, LogoutUser } from "src/utils/Types";
 
 export default function Headers() {
-  const { user, logoutUser } = useContext(AuthContext) as { user: User, logoutUser: LogoutUser}
+  const { user, logoutUser } = useContext(AuthContext) as { user: AuthUser, logoutUser: LogoutUser}
 
   return (
     <div className="header-display">

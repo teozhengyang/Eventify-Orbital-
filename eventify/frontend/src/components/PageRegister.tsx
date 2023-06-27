@@ -1,10 +1,53 @@
-import { useContext} from 'react';
-import AuthContext from '../context/AuthContext';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Button, Form } from 'react-bootstrap';
 import "/static/css/register.css";
 
 export default function Register() {
-  const { registerUser } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const registerUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const target = e.target as typeof e.target & {
+        username: {value: string}
+        password: {value: string}
+        password2: {value: string}
+        email: {value: string}
+        first_name: {value: string}
+        last_name: {value: string}
+      }
+      const response = await axios.post('/api/register/', {
+        username: target.username.value,
+        password: target.password.value,
+        password2: target.password2.value,
+        email: target.email.value,
+        first_name: target.first_name.value,
+        last_name: target.last_name.value,
+      });
+
+      const { data } = response;
+
+      if (data.success) {
+        // User registration successful
+        console.log(data.success);
+        // Additional logic or redirect to another page
+        alert(data.success)
+        navigate('/login')
+      } else if (data.error) {
+        // User registration unsuccessful
+        console.log(data.error)
+        alert(data.error)
+        navigate('/register')
+      }
+
+    } catch (error) {
+      // Handle error in making the API request
+      console.error(error);
+      alert('Please try again!');
+      navigate('/register');
+    }
+  }
 
   return (
     <div className="register-form">

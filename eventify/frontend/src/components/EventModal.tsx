@@ -3,6 +3,7 @@ import NewEvent from './NewEvent';
 import EventDesc from './EventDesc';
 import NewEventModalContext from '../context/NewEventModalContext';
 import { Modal }  from 'react-bootstrap';
+import { emptyEvent } from '../utils/Types';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "/static/css/modal.css";
 
@@ -13,15 +14,15 @@ export default function EventModal() {
     setShowModal(false)
     // Fixes visual where modal is seen to change display briefly due to modal closing animation time
     setTimeout(() => {
-      setSelectedEvent(null)
+      setSelectedEvent(emptyEvent)
     }, 140)
   }
   
-  const title = selectedEvent == null
+  const title = selectedEvent == emptyEvent
     ? <Modal.Title>New Event on {selectedDate.toString().slice(4, 10)}</Modal.Title>
     : <Modal.Title>{selectedEvent.name}</Modal.Title>
 
-  const body = selectedEvent == null
+  const body = selectedEvent == emptyEvent
     ? <NewEvent defaultdate={selectedDate}/>
     : <EventDesc event={selectedEvent}/>
 

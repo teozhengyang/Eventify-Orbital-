@@ -3,11 +3,11 @@ import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { AuthToken, User, LogoutUser } from 'src/utils/Types';
+import { AuthToken, AuthUser, LogoutUser } from 'src/utils/Types';
 
 export default function ResetPassword() {
 
-  const { authTokens, user, logoutUser } = useContext(AuthContext) as { authTokens: AuthToken, user: User, logoutUser: LogoutUser}
+  const { authTokens, user, logoutUser } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser, logoutUser: LogoutUser}
 
   const navigate = useNavigate()
 
@@ -17,15 +17,21 @@ export default function ResetPassword() {
     }
   }
 
-  const resetPassword = async(e) => {
-    if (e.target.password.value !== e.target.password2.value) {
+  const resetPassword = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      password: {value: string}
+      password2: {value: string}
+    }
+    if (target.password.value !== target.password2.value) {
       alert("Passwords do not match")
       navigate('/ResetPassword')
+      return
     }
-    e.preventDefault();
+
     try {
       const response = await axios.post(`/api/reset_password/${user.user_id}/`, {
-        password: e.target.password.value,
+        password: target.password.value,
       }, config);
       console.log(response.data)
       logoutUser();

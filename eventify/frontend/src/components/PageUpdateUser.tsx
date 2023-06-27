@@ -4,12 +4,12 @@ import { Button, Form } from 'react-bootstrap';
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import "/static/css/register.css";
-import { AuthToken, User } from "src/utils/Types";
+import { AuthToken, AuthUser, emptyUser } from "../utils/Types";
 
 export default function UpdateUser() {
 
-  const [currUser, setCurrUser] = useState([])
-  const { user, authTokens } = useContext(AuthContext) as { authTokens: AuthToken, user: User }
+  const [currUser, setCurrUser] = useState(emptyUser)
+  const { user, authTokens } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser }
 
   useEffect(() => {
     getCurrUser()
@@ -34,15 +34,22 @@ export default function UpdateUser() {
   const navigate = useNavigate()
 
   // Update user
-  const updateUserInfo = async(e) => {
+  const updateUserInfo = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const target = e.target as typeof e.target & {
+        username: {value: string}
+        email: {value: string}
+        first_name: {value: string}
+        last_name: {value: string}
+        budget: {value: number}
+      }
       const response = await axios.put(`/api/user/${currUser.id}/`, {
-        username: e.target.username.value,
-        email: e.target.email.value,
-        first_name: e.target.first_name.value,
-        last_name: e.target.last_name.value,
-        budget: e.target.budget.value,
+        username: target.username.value,
+        email: target.email.value,
+        first_name: target.first_name.value,
+        last_name: target.last_name.value,
+        budget: target.budget.value,
       }, config);
       console.log(response.data)
       alert('User information updated successfully!')

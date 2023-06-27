@@ -20,6 +20,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const [selectedOrganisers, setSelectedOrganisers] = useState([])
   const [selectedParticipants, setSelectedParticipants] = useState([])
 
+  // Get all users
   useEffect(() => {
     getUsers();
   }, [])
@@ -54,16 +55,22 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
 
   const navigate = useNavigate()
 
-  const AddEventInfo = async(e) => {
+  const AddEventInfo = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
+      const target = e.target as typeof e.target & {
+        title: {value: string}
+        description: {value: string}
+        location: {value: string}
+        budget: {value: number}
+      }
       const response = await axios.post('/api/events/', {
-        name: e.target.title.value,
-        description: e.target.description.value,
+        name: target.title.value,
+        description: target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
-        location: e.target.location.value,
-        budget: e.target.budget.value,
+        location: target.location.value,
+        budget: target.budget.value,
         organizers: selectedOrganisers.map((org:User) => org.id),
         participants: selectedParticipants.map((par:User) => par.id)
       }, config);

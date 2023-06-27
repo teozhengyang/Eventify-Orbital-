@@ -66,16 +66,22 @@ export default function EditEvent() {
   const navigate = useNavigate()
 
   // Update event
-  const UpdateEventInfo = async(e) => {
+  const UpdateEventInfo = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const target = e.target as typeof e.target & {
+        title: {value: string}
+        description: {value: string}
+        location: {value: string}
+        budget: {value: number}
+      }
       const response = await axios.put(`http://127.0.0.1:8000/events/${event.id}/`, {
-        name: e.target.title.value,
-        description: e.target.description.value,
+        name: target.title.value,
+        description: target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
-        location: e.target.location.value,
-        budget: e.target.budget.value,
+        location: target.location.value,
+        budget: target.budget.value,
         organizers: selectedOrganisers.map((organiser: User) => organiser.id),
         participants: selectedParticipants.map((participant: User) => participant.id)
       }, config);
