@@ -8,6 +8,7 @@ import MonthContext from "../context/MonthContext";
 import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
+import { AuthToken } from "src/utils/Types";
 
 export default function Home() {
   const [monthData, setMonthData] = useState(getMonthMatrix());
@@ -16,7 +17,7 @@ export default function Home() {
   const [events, setEvents] = useState([])
   const { showModal } = useContext(NewEventModalContext)
   const { displayDate, displayType } = useContext(MonthContext);
-  const { authTokens } = useContext(AuthContext);
+  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken };
 
   // Update Calendar display whenever prev/next buttons are pressed
   useEffect(() => {

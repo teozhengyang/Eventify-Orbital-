@@ -6,14 +6,14 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { format, addDays, subDays } from "date-fns";
-import { Event, Activity } from "src/utils/Types";
+import { Event, Activity, User, AuthToken } from "src/utils/Types";
 import "/static/css/display.css";
 import "/static/css/timetable.css";
 
 // Temporary activity display until we either figure out timetable display or use an external one
 export default function DisplayActivity({event}: {event: Event}) {
   const { activityModal, setActivityModal } = useContext(NewEventModalContext)
-  const { authTokens, user } = useContext(AuthContext)
+  const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: User }
   const [activities, setActivities] = useState<Array<Activity>>([])
   const [currentDay, setCurrentDay] = useState<Date>(new Date(new Date(event.start).setHours(0, 0, 0, 0)))
   const [filteredAct, setFilteredAct] = useState<Array<Activity>>([])

@@ -30,6 +30,14 @@ type User = {
   last_name: string;
   email: string;
   budget: number;
+  user_id: number;
 }
 
-export type { Activity, Event, User };
+type AuthToken = {
+  access: string;
+}
+
+type LogoutUser = () => void;
+
+
+export type { Activity, Event, User, AuthToken, LogoutUser };

@@ -7,10 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import Pagination from '../utils/Pagination';
 import { Event } from 'src/utils/Types';
 import "/static/css/display.css";
+import { AuthToken, User, LogoutUser } from 'src/utils/Types';
 
 
 export default function Profile() {
-  const { authTokens, user, logoutUser } = useContext(AuthContext);
+  const { authTokens, user, logoutUser } = useContext(AuthContext) as { authTokens: AuthToken, user: User, logoutUser: LogoutUser};
   const [currUser, setCurrUser] = useState([])
   const [eventList, setEventList] = useState([])      // The full list of user events
   const [displayList, setDisplayList] = useState([])  // A filtered list based on display preference to show the user
