@@ -51,3 +51,7 @@ ul {
   font-size: 12px;
   overflow: hidden;
 }
+
+.slot:hover {
+  filter: brightness(85%);
+}
