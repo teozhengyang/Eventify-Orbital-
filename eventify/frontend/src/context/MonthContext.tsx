@@ -2,9 +2,9 @@ import { createContext, useState } from 'react';
 
 const MonthContext = createContext({
   displayDate: new Date(),
-  setDisplayDate: (index: Date) => {},
+  setDisplayDate: (_index: Date) => {},
   displayType: "month",
-  setDisplayType: (index: string) => {}
+  setDisplayType: (_index: string) => {}
 })
 
 export default MonthContext;

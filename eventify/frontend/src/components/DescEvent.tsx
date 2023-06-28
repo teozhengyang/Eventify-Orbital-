@@ -8,7 +8,7 @@ import { Event, AuthUser, AuthToken, emptyEvent } from "../utils/Types";
 import axios from "axios";
 
 
-export default function EventDesc({event}: {event: Event}) {
+export default function DescEvent({event}: {event: Event}) {
   const { setShowModal, setSelectedEvent } = useContext(NewEventModalContext)
   const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser }
   const [showAlert, setShowAlert] = useState(false)

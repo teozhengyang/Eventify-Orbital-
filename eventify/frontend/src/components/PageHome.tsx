@@ -3,7 +3,7 @@ import { getMonthMatrix, getWeekArray } from "../utils/Calendar";
 import DisplayMonth from "./DisplayMonth";
 import DisplayWeek from "./DisplayWeek";
 import CalendarHeader from "./CalendarHeader";
-import EventModal from "./EventModal";
+import ModalEvent from "./ModalEvent";
 import MonthContext from "../context/MonthContext";
 import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <div className="flex-container" style={{marginTop:"5px"}}>
       <CalendarHeader />
-      <EventModal />
+      <ModalEvent />
       {calendar}
     </div>
   )

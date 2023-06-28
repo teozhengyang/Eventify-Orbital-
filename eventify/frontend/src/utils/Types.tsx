@@ -1,5 +1,4 @@
 // Object types for static typing
-
 type Activity = {
   id: number;
   name: string;
@@ -43,6 +42,8 @@ type AuthUser = {
 
 type LogoutUser = () => void;
 
+
+// Empty objects to be used as default placeholder
 const emptyEvent: Event = {
   id: -1,
   name: "",
@@ -53,6 +54,16 @@ const emptyEvent: Event = {
   budget: 0,
   organizers: [],
   participants: [],
+}
+
+const emptyActivity: Activity = {
+  id: -1,
+  name: "",
+  description: "",
+  start: "",
+  end: "",
+  location: "",
+  budget: 0,
 }
 
 const emptyUser: User = {
@@ -67,4 +78,4 @@ const emptyUser: User = {
 
 
 export type { Activity, Event, User, AuthToken, AuthUser, LogoutUser };
-export { emptyEvent, emptyUser };
+export { emptyEvent, emptyUser, emptyActivity };

@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ActivityModal from "./ActivityModal";
+import ModalActivity from "./ModalActivity";
 import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
@@ -12,8 +12,9 @@ import "/static/css/timetable.css";
 
 // Temporary activity display until we either figure out timetable display or use an external one
 export default function DisplayActivity({event}: {event: Event}) {
-  const { activityModal, setActivityModal } = useContext(NewEventModalContext)
+  const { activityModal, setActivityModal, setSelectedActivity } = useContext(NewEventModalContext)
   const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser }
+
   const [activities, setActivities] = useState<Array<Activity>>([])
   const [currentDay, setCurrentDay] = useState<Date>(new Date(new Date(event.start).setHours(0, 0, 0, 0)))
   const [filteredAct, setFilteredAct] = useState<Array<Activity>>([])
@@ -29,7 +30,7 @@ export default function DisplayActivity({event}: {event: Event}) {
     fetchActivity();
   }, [activityModal]);
 
-  // Update displayed activities based on date
+  // Update displayed activities based on current date of calendar
   useEffect(() => {
     const list = activities.filter((activity:Activity) => {
       const curr = currentDay.valueOf()
@@ -38,8 +39,9 @@ export default function DisplayActivity({event}: {event: Event}) {
       return curr >= start && curr <= end
     })
     setFilteredAct(list)
-  }, [currentDay])
+  }, [currentDay, activities])
 
+  
   // setHours() mutate the Date object, so must create new Date object each time
   const nextDay = () => {
     if (currentDay.valueOf() < new Date(event.end).setHours(0, 0, 0, 0).valueOf()) {
@@ -52,7 +54,6 @@ export default function DisplayActivity({event}: {event: Event}) {
     }
   }
 
-
   const fetchActivity = async () => {
     try {
       const response = await axios.get('/api/activities/', config);
@@ -62,19 +63,17 @@ export default function DisplayActivity({event}: {event: Event}) {
       console.error(error);
     }
   };
-  
-  // For edit button function
-  const navigate = useNavigate()
-
-  // Disable edit/delete options for activity if not an organiser
-  const isOrganiser = event.organizers?.includes(user.user_id)
 
   function isOutOfBounds(activity:Activity) {
     if (new Date(activity.start).valueOf() < new Date(event.start).valueOf() || new Date(activity.end).valueOf() > new Date(event.end).valueOf()) {
-      return {color:"red"};
+      return "red";
     }
+    return "green";
   }
 
+
+  // Leaving here temporarily if we still want table display somewhere for activities
+/*  
   const activityDisplay = (
     <div>
       <table>
@@ -91,7 +90,7 @@ export default function DisplayActivity({event}: {event: Event}) {
         </thead>
         <tbody>
         {activities.map((activity:Activity, i) => (
-            <tr key={i} className="table-row" style={isOutOfBounds(activity)}>
+            <tr key={i} className="table-row" style={{color:"green"}}>
               <td>{activity.name}</td>
               <td>{activity.description}</td>
               <td>{format(new Date(activity.start), "dd/MM/yyyy, p")}</td>
@@ -118,31 +117,25 @@ export default function DisplayActivity({event}: {event: Event}) {
       </table>
     </div>
   )
+*/
 
   return (
-    <div style={{overflow: 'scroll'}}>
+    <div style={{overflow: "scroll"}}>
+      <ModalActivity event={event}/>
+
+      <p style={{color:"red"}}>Minor visual bug when setting activity end time to  of a day and viewing timetable of that day</p>
 
       <header className="display-header">
-        <h4 id="display-title">Activities</h4>
-        <Button disabled={!isOrganiser} onClick={() => setActivityModal(true)}>Add Activity</Button>
+        <div id="display-title">
+          <Button onClick={prevDay}>&lt;</Button>
+          <h4 style={{width:"8em", textAlign:"center"}}>{currentDay.toDateString()}</h4>
+          <Button onClick={nextDay}>&gt;</Button>
+        </div>
+        <Button disabled={!event.organizers?.includes(user.user_id)} onClick={() => setActivityModal(true)}>
+          Add Activity
+        </Button>
       </header>
 
-      <hr />
-      {activities && activityDisplay}
-      <ActivityModal event={event}/>
-
-      <br />
-      <br />
-      <p>
-        Everything from here on is a test
-        Major functions done, need to deal with edge cases (and maybe simplify code)
-      </p>
-
-      <header>
-        <Button onClick={prevDay}>&lt;</Button>
-          {currentDay.toDateString()}
-        <Button onClick={nextDay}>&gt;</Button>
-      </header>
       <div className="display-container">
           <ul className="timeslots">
             {Array.from(Array(24).keys()).map((hour) => {
@@ -153,7 +146,7 @@ export default function DisplayActivity({event}: {event: Event}) {
               }
             })}
           </ul>
-          <div className="activity-container">
+          <div className="activity-container" onClick={() => setActivityModal(true)}>
               {filteredAct.map((activity:Activity, i) => {
                 const columnNo = (time:Date) => {
                   return time.getHours() * 4 + (time.getMinutes() / 15) + 1 
@@ -164,13 +157,14 @@ export default function DisplayActivity({event}: {event: Event}) {
                 const rightBound = new Date(activity.end).valueOf() >= addDays(currentDay, 1).valueOf()
                   ? 97
                   : columnNo(new Date(activity.end))
-
+                const colors = isOutOfBounds(activity)
                 const columnInfo = {
                   gridColumnStart: leftBound,
                   gridColumnEnd: rightBound,
+                  backgroundColor: colors,
                 }
                 return (
-                  <div key={i} className="slot" style={columnInfo}>
+                  <div key={i} className="slot" style={columnInfo} onClick={() => setSelectedActivity(activity)}>
                     <p>{activity.name}</p>
                   </div>
                 )

@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
-import Select from 'react-select';
+import Select, { Options } from 'react-select';
 import { useNavigate } from "react-router-dom";
 import { User, AuthToken } from "src/utils/Types";
 import DatePicker from "react-datepicker";
@@ -16,9 +16,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const { setShowModal } = useContext(NewEventModalContext)
   const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken}
 
-  const [users, setUsers] = useState([])
-  const [selectedOrganisers, setSelectedOrganisers] = useState([])
-  const [selectedParticipants, setSelectedParticipants] = useState([])
+  const [users, setUsers] = useState<Array<User>>([])
+  const [selectedOrganisers, setSelectedOrganisers] = useState<Array<User>>([])
+  const [selectedParticipants, setSelectedParticipants] = useState<Array<User>>([])
 
   // Get all users
   useEffect(() => {

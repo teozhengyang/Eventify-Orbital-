@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import NewEvent from './NewEvent';
-import EventDesc from './EventDesc';
+import DescEvent from './DescEvent';
 import NewEventModalContext from '../context/NewEventModalContext';
 import { Modal }  from 'react-bootstrap';
 import { emptyEvent } from '../utils/Types';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "/static/css/modal.css";
 
-export default function EventModal() {
+export default function ModalEvent() {
   const { showModal, setShowModal, selectedDate, selectedEvent, setSelectedEvent } = useContext(NewEventModalContext);
 
   const closeModal = () => {
@@ -24,7 +24,7 @@ export default function EventModal() {
 
   const body = selectedEvent == emptyEvent
     ? <NewEvent defaultdate={selectedDate}/>
-    : <EventDesc event={selectedEvent}/>
+    : <DescEvent event={selectedEvent}/>
 
   return (
     <Modal dialogClassName="createevent" show={showModal} onHide={closeModal} centered>

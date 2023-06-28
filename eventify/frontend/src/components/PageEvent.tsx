@@ -14,8 +14,8 @@ export default function Event() {
       <p>{format(new Date(event.start), "dd/MM/yyyy, p")} - {format(new Date(event.end), "dd/MM/yyyy, p")}</p>
       <hr />
       <p>Description:</p>
-      <p>{event.description}</p>
-      <br></br>
+      <p style={{minHeight:"8em"}}>{event.description}</p>
+      <hr />
       <DisplayActivity event={event}/>
     </div>
   );
