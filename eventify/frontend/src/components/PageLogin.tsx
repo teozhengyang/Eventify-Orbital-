@@ -4,6 +4,7 @@ import { Form, Button } from "react-bootstrap"
 import "/static/css/login.css";
 
 export default function Login() {
+  //@ts-ignore
   const { loginUser } = useContext(AuthContext)
   
   return (

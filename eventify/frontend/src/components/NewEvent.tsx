@@ -180,8 +180,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               options={users}
               placeholder="Search organisers"
               getOptionLabel={(option) => option.username}
-              getOptionValue={(option) => option.id}
-              onChange={(data) => setSelectedOrganisers(data)}
+              getOptionValue={(option) => option.id.toString()}
+              onChange={(data) => setSelectedOrganisers(Array.from(data))}
               isSearchable={true}
               isMulti
               required
@@ -193,8 +193,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               options={users}
               placeholder="Search participants"
               getOptionLabel={(option) => option.username}
-              getOptionValue={(option) => option.id}
-              onChange={(data) => setSelectedParticipants(data)}
+              getOptionValue={(option) => option.id.toString()}
+              onChange={(data) => setSelectedParticipants(Array.from(data))}
               isSearchable={true}
               isMulti
             />

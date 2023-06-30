@@ -1,11 +1,10 @@
 import { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import ModalActivity from "./ModalActivity";
 import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
-import { Button, ButtonGroup } from "react-bootstrap";
-import { format, addDays, subDays } from "date-fns";
+import { Button } from "react-bootstrap";
+import { addDays, subDays } from "date-fns";
 import { Event, Activity, AuthUser, AuthToken } from "src/utils/Types";
 import "/static/css/display.css";
 import "/static/css/timetable.css";

@@ -3,14 +3,22 @@ import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
-const AuthContext = createContext()
+const AuthContext = createContext({})
 
 export default AuthContext;
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
-    const [user, setUser] = useState(() => (localStorage.getItem('authTokens') ? jwtDecode(localStorage.getItem('authTokens')) : null))
-    const [authTokens, setAuthTokens] = useState(() => (localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null))
+    const [user, setUser] = useState(() => {
+      const storedTokens = localStorage.getItem('authTokens');
+      return storedTokens ? jwtDecode(storedTokens) : { username: '', id: '' };
+    });
+
+    const [authTokens, setAuthTokens] = useState(() => {
+      const storedTokens = localStorage.getItem('authTokens');
+      return storedTokens ? JSON.parse(storedTokens) : { access: '', refresh: '' };
+    });
+
     const [loading, setLoading] = useState(true)
 
     const navigate = useNavigate()

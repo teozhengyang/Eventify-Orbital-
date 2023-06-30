@@ -18,9 +18,9 @@ export default function EditEvent() {
   const [startDate, setStartDate] = useState(new Date(event.start));
   const [endDate, setEndDate] = useState(new Date(event.end));
 
-  const [users, setUsers] = useState([])
-  const [selectedOrganisers, setSelectedOrganisers] = useState([])
-  const [selectedParticipants, setSelectedParticipants] = useState([])
+  const [users, setUsers] = useState<Array<User>>([])
+  const [selectedOrganisers, setSelectedOrganisers] = useState<Array<User>>([])
+  const [selectedParticipants, setSelectedParticipants] = useState<Array<User>>([])
 
   const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken }
 
@@ -194,8 +194,8 @@ export default function EditEvent() {
               placeholder="Search organisers"
               value={selectedOrganisers}
               getOptionLabel={(option) => option.username}
-              getOptionValue={(option) => option.id}
-              onChange={(data) => setSelectedOrganisers(data)}
+              getOptionValue={(option) => option.id.toString()}
+              onChange={(data) => setSelectedOrganisers(Array.from(data))}
               isSearchable={true}
               isMulti
               required
@@ -208,8 +208,8 @@ export default function EditEvent() {
               value={selectedParticipants}
               placeholder="Search participants"
               getOptionLabel={(option) => option.username}
-              getOptionValue={(option) => option.id}
-              onChange={(data) => setSelectedParticipants(data)}
+              getOptionValue={(option) => option.id.toString()}
+              onChange={(data) => setSelectedParticipants(Array.from(data))}
               isSearchable={true}
               isMulti
             />
