@@ -12,6 +12,7 @@ export default function Event() {
       <h3 style={{marginTop:"20px"}}>{event.name}</h3>
       <hr />
       <p>{format(new Date(event.start), "dd/MM/yyyy, p")} - {format(new Date(event.end), "dd/MM/yyyy, p")}</p>
+      <p>Location: {event.location}</p>
       <hr />
       <p>Description:</p>
       <p style={{minHeight:"8em"}}>{event.description}</p>

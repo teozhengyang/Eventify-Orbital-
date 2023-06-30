@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
-import Select, { Options } from 'react-select';
+import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
 import { User, AuthToken } from "src/utils/Types";
 import DatePicker from "react-datepicker";

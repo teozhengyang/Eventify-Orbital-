@@ -4,11 +4,10 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import { subDays } from "date-fns";
-import { Event } from "src/utils/Types";
+import { Event, AuthToken } from "src/utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
-import { AuthToken } from "src/utils/Types";
 
 // Might be nice to change the form to a bootstrap one
 export default function NewActivity({event}: {event: Event}) {

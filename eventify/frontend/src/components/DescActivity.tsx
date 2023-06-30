@@ -42,8 +42,9 @@ export default function DescActivity({activity, event}: {activity:Activity; even
   return (
     <>
       <p>{format(new Date(activity.start), "dd/MM/yyyy, p")} - {format(new Date(activity.end), "dd/MM/yyyy, p")}</p>
+      <p>Location: {activity.location}</p>
       <p>{activity.description}</p>
       {event.organizers?.includes(user.user_id) && organiserButtons}
-  </>
+    </>
   )
 }

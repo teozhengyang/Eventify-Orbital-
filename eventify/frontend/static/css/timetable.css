@@ -8,6 +8,10 @@ ul {
   padding: 0;
 }
 
+.timetable {
+  min-width: 980px;
+}
+
 .display-container {
   margin-top: 5px;
   display: grid;
@@ -17,8 +21,7 @@ ul {
   grid-template-areas: 
     "slots"
     "main";
-  border: 1px solid;
-  width: auto;
+  border: 2px solid;
 }
 
 .timeslots {
@@ -31,15 +34,26 @@ ul {
   min-width: 40px;
 }
 
+.timeslots li:before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  margin-left: -1px;
+  opacity: 50%;
+  height: 450px;
+  background-color: white;
+  z-index: 0;
+}
+
 .activity-container {
   display: grid;
   grid-template-columns: repeat(96, 1fr);
   grid-auto-flow: row dense;
   grid-area: main;
   position: relative;
-  height: auto;
-  row-gap: 2px;
-  column-gap: 2px;
+  height: 400px;
+  row-gap: 3px;
+  column-gap: 3px;
 }
 
 .slot {
@@ -49,6 +63,7 @@ ul {
   z-index: 5;
   color: white;
   font-size: 12px;
+  padding-left: 0.5em;
   overflow: hidden;
 }
 

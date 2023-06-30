@@ -16,6 +16,7 @@ export default function DisplayActivity({event}: {event: Event}) {
   const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser }
 
   const [activities, setActivities] = useState<Array<Activity>>([])
+  // Current displayed date of timetable, 12AM
   const [currentDay, setCurrentDay] = useState<Date>(new Date(new Date(event.start).setHours(0, 0, 0, 0)))
   const [filteredAct, setFilteredAct] = useState<Array<Activity>>([])
 
@@ -71,6 +72,9 @@ export default function DisplayActivity({event}: {event: Event}) {
     return "green";
   }
 
+  function isOrganiser() {
+    return event.organizers?.includes(user.user_id)
+  }
 
   // Leaving here temporarily if we still want table display somewhere for activities
 /*  
@@ -120,10 +124,10 @@ export default function DisplayActivity({event}: {event: Event}) {
 */
 
   return (
-    <div style={{overflow: "scroll"}}>
+    <div className="timetable">
       <ModalActivity event={event}/>
 
-      <p style={{color:"red"}}>Minor visual bug when setting activity end time to  of a day and viewing timetable of that day</p>
+      <p style={{color:"red"}}>Minor visual bug when setting activity end time to 12AM of a day and viewing timetable of that day</p>
 
       <header className="display-header">
         <div id="display-title">
@@ -131,7 +135,7 @@ export default function DisplayActivity({event}: {event: Event}) {
           <h4 style={{width:"8em", textAlign:"center"}}>{currentDay.toDateString()}</h4>
           <Button onClick={nextDay}>&gt;</Button>
         </div>
-        <Button disabled={!event.organizers?.includes(user.user_id)} onClick={() => setActivityModal(true)}>
+        <Button disabled={!isOrganiser()} onClick={() => setActivityModal(true)}>
           Add Activity
         </Button>
       </header>
@@ -146,17 +150,19 @@ export default function DisplayActivity({event}: {event: Event}) {
               }
             })}
           </ul>
-          <div className="activity-container" onClick={() => setActivityModal(true)}>
+          <div className="activity-container" onClick={() => isOrganiser() && setActivityModal(true)}>
               {filteredAct.map((activity:Activity, i) => {
                 const columnNo = (time:Date) => {
                   return time.getHours() * 4 + (time.getMinutes() / 15) + 1 
                 }
-                const leftBound = new Date(activity.start).valueOf() < currentDay.valueOf()
+                const start = new Date(activity.start)
+                const end = new Date(activity.end)
+                const leftBound = start.valueOf() < currentDay.valueOf()
                   ? 1
-                  : columnNo(new Date(activity.start))
-                const rightBound = new Date(activity.end).valueOf() >= addDays(currentDay, 1).valueOf()
+                  : columnNo(start)
+                const rightBound = end.valueOf() >= addDays(currentDay, 1).valueOf()
                   ? 97
-                  : columnNo(new Date(activity.end))
+                  : columnNo(end)
                 const colors = isOutOfBounds(activity)
                 const columnInfo = {
                   gridColumnStart: leftBound,
