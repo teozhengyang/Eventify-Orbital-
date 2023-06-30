@@ -2,10 +2,10 @@ import { useContext } from "react"
 import AuthContext from "../context/AuthContext"
 import { Form, Button } from "react-bootstrap"
 import "/static/css/login.css";
+import { LoginUser } from "src/utils/Types";
 
 export default function Login() {
-  //@ts-ignore
-  const { loginUser } = useContext(AuthContext)
+  const { loginUser } = useContext(AuthContext) as { loginUser: LoginUser }
   
   return (
     <div className="login-form">

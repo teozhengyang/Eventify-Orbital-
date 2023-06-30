@@ -7,7 +7,6 @@ import Profile from "./PageProfile";
 import Register from "./PageRegister";
 import NewEventPage from "./PageNewEvent";
 import EditEvent from "./PageEditEvent";
-import PrivateRoute from "../utils/PrivateRoute";
 import { AuthProvider } from "../context/AuthContext";
 import { MonthProvider } from "../context/MonthContext";
 import { ModalProvider } from "../context/NewEventModalContext";
@@ -28,7 +27,7 @@ export default function App() {
           <MonthProvider>
             <Header />
               <Routes>
-                <Route path="" element={<PrivateRoute><Home /></PrivateRoute>} />
+                <Route path="" element={<Home />}/>
                 <Route path="login" element={<Login />} />
                 <Route path="Profile" element={<Profile />} />
                 <Route path="register" element={<Register />} />

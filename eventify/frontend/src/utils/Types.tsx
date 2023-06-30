@@ -42,6 +42,8 @@ type AuthUser = {
 
 type LogoutUser = () => void;
 
+type LoginUser = (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+
 
 // Empty objects to be used as default placeholder
 const emptyEvent: Event = {
@@ -77,5 +79,5 @@ const emptyUser: User = {
 }
 
 
-export type { Activity, Event, User, AuthToken, AuthUser, LogoutUser };
+export type { Activity, Event, User, AuthToken, AuthUser, LogoutUser, LoginUser };
 export { emptyEvent, emptyUser, emptyActivity };
