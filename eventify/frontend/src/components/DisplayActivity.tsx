@@ -17,7 +17,6 @@ export default function DisplayActivity({event}: {event: Event}) {
   const [activities, setActivities] = useState<Array<Activity>>([])
   // Current displayed date of timetable, 12AM
   const [currentDay, setCurrentDay] = useState<Date>(new Date(new Date(event.start).setHours(0, 0, 0, 0)))
-  const [filteredAct, setFilteredAct] = useState<Array<Activity>>([])
 
   // Headers for authorization @ backend => Allows request to django
   const config = {
@@ -30,18 +29,6 @@ export default function DisplayActivity({event}: {event: Event}) {
     fetchActivity();
   }, [activityModal]);
 
-  // Update displayed activities based on current date of calendar
-  useEffect(() => {
-    const list = activities.filter((activity:Activity) => {
-      const curr = currentDay.valueOf()
-      const start = new Date(activity.start).setHours(0, 0, 0, 0).valueOf()
-      const end = new Date(activity.end).setHours(0, 0, 0, 0).valueOf()
-      return curr >= start && curr <= end
-    })
-    setFilteredAct(list)
-  }, [currentDay, activities])
-
-  
   // setHours() mutate the Date object, so must create new Date object each time
   const nextDay = () => {
     if (currentDay.valueOf() < new Date(event.end).setHours(0, 0, 0, 0).valueOf()) {
@@ -63,13 +50,6 @@ export default function DisplayActivity({event}: {event: Event}) {
       console.error(error);
     }
   };
-
-  function isOutOfBounds(activity:Activity) {
-    if (new Date(activity.start).valueOf() < new Date(event.start).valueOf() || new Date(activity.end).valueOf() > new Date(event.end).valueOf()) {
-      return "red";
-    }
-    return "green";
-  }
 
   function isOrganiser() {
     return event.organizers?.includes(user.user_id)
@@ -126,8 +106,6 @@ export default function DisplayActivity({event}: {event: Event}) {
     <div className="timetable">
       <ModalActivity event={event}/>
 
-      <p style={{color:"red"}}>Minor visual bug when setting activity end time to 12AM of a day and viewing timetable of that day</p>
-
       <header className="display-header">
         <div id="display-title">
           <Button onClick={prevDay}>&lt;</Button>
@@ -140,41 +118,54 @@ export default function DisplayActivity({event}: {event: Event}) {
       </header>
 
       <div className="display-container">
-          <ul className="timeslots">
-            {Array.from(Array(24).keys()).map((hour) => {
-              if (hour < 10) {
-                return <li key={hour}>{"0" + hour + "00"}</li>
-              } else {
-                return <li key={hour}>{hour + "00"}</li>
-              }
-            })}
-          </ul>
-          <div className="activity-container" onClick={() => isOrganiser() && setActivityModal(true)}>
-              {filteredAct.map((activity:Activity, i) => {
+        <ul className="timeslots">
+          {Array.from(Array(24).keys()).map((hour) => {
+            if (hour < 10) {
+              return <li key={hour}>{"0" + hour + "00"}</li>
+            } else {
+              return <li key={hour}>{hour + "00"}</li>
+            }
+          })}
+        </ul>
+
+        <div className="activity-container" onClick={() => isOrganiser() && setActivityModal(true)}>
+            {activities.filter((activity:Activity) => {
+                const curr = currentDay.valueOf()
+                const start = new Date(activity.start).setHours(0, 0, 0, 0).valueOf()
+                const end = new Date(activity.end).valueOf()
+                return curr >= start && curr < end
+
+              }).map((activity:Activity, i) => {
                 const columnNo = (time:Date) => {
                   return time.getHours() * 4 + (time.getMinutes() / 15) + 1 
                 }
+
                 const start = new Date(activity.start)
                 const end = new Date(activity.end)
+
                 const leftBound = start.valueOf() < currentDay.valueOf()
                   ? 1
                   : columnNo(start)
                 const rightBound = end.valueOf() >= addDays(currentDay, 1).valueOf()
                   ? 97
                   : columnNo(end)
-                const colors = isOutOfBounds(activity)
+                const colors = (new Date(activity.start) < new Date(event.start) || new Date(activity.end) > new Date(event.end)) 
+                  ? "red"
+                  : "green"
+
                 const columnInfo = {
                   gridColumnStart: leftBound,
                   gridColumnEnd: rightBound,
                   backgroundColor: colors,
                 }
                 return (
-                  <div key={i} className="slot" style={columnInfo} onClick={() => setSelectedActivity(activity)}>
+                  <div key={i} className="activity-slot" style={columnInfo} onClick={() => setSelectedActivity(activity)}>
                     <p>{activity.name}</p>
                   </div>
                 )
-              })}
-          </div>
+              })
+            }
+        </div>
       </div>
     </div>
   )

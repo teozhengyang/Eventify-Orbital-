@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { getMonthMatrix, getWeekArray } from "../utils/Calendar";
 import DisplayMonth from "./DisplayMonth";
 import DisplayWeek from "./DisplayWeek";
+import DisplayDay from "./DisplayDay";
 import CalendarHeader from "./CalendarHeader";
 import ModalEvent from "./ModalEvent";
 import MonthContext from "../context/MonthContext";
@@ -46,7 +47,9 @@ export default function Home() {
 
   const calendar = displayType === "month"
     ? <DisplayMonth data={monthData} eventlist={events}/> 
-    : <DisplayWeek data={weekData} eventlist={events}/>
+    : displayType === "week" 
+      ? <DisplayWeek data={weekData} eventlist={events}/>
+      : <DisplayDay eventlist={events}/>
 
   return (
     <div className="flex-container" style={{marginTop:"5px"}}>
