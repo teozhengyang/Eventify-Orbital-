@@ -17,7 +17,7 @@ export default function Register() {
         first_name: {value: string}
         last_name: {value: string}
       }
-      const response = await axios.post('/api/register/', {
+      const response = await axios.post('https://eventify-n2c5.onrender.com/register/', {
         username: target.username.value,
         password: target.password.value,
         password2: target.password2.value,
