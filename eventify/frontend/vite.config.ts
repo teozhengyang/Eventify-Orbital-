@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://eventify-n2c5.onrender.com/',
+        target: 'https://eventify-n2c5.onrender.com',
         changeOrigin: true,
         secure: false,
         rewrite: path => path.replace('/api', ''),
