@@ -33,7 +33,7 @@ export default function DescEvent({event}: {event: Event}) {
 
   // Delete event
   const remove = async() => {
-    const response = await axios.delete(`/api/events/${event.id}/`, config)
+    const response = await axios.delete(`https://eventify-n2c5.onrender.com/events/${event.id}/`, config)
     console.log(response)
     closeModal()
   }
@@ -54,7 +54,7 @@ export default function DescEvent({event}: {event: Event}) {
   // Leave event if participant (removes user from participant array)
   const leave = async() => {
     try {
-      const response = await axios.put(`/api/events/${event.id}/`, {
+      const response = await axios.put(`https://eventify-n2c5.onrender.com/events/${event.id}/`, {
         organizers: event.organizers.filter(organiser => organiser != user.user_id),
         participants: event.participants.filter(participant => participant != user.user_id)
       }, config);

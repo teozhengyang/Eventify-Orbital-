@@ -23,7 +23,7 @@ export default function Marketplace() {
   }
 
   const getEvents = async () => {
-    const eventsResponse = await axios.get('/api/events/', config)
+    const eventsResponse = await axios.get('https://eventify-n2c5.onrender.com/events/', config)
     const events = eventsResponse.data
     const filteredEvents = events.filter((event:Event) => event.shared === true)
     setEventList(filteredEvents)

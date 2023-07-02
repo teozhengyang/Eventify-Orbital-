@@ -145,7 +145,7 @@ export default function EditEvent() {
         location: {value: string}
         budget: {value: number}
       }
-      const response = await axios.put(`/api/events/${event.id}/`, {
+      const response = await axios.put(`https://eventify-n2c5.onrender.com/events/${event.id}/`, {
         name: target.title.value,
         description: target.description.value,
         start: startDate.toJSON(),
@@ -158,7 +158,6 @@ export default function EditEvent() {
         shared: isChecked
       }, config);
       console.log(response.data)
-      alert('Event updated successfully! THIS ALERT IS TEMPORARY FOR TESTING PURPOSES')
       navigate('/')
     } catch (error) {
       console.error(error)

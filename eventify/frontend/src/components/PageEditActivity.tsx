@@ -60,7 +60,7 @@ export default function EditActivity() {
         location: {value: string}
         budget: {value: number}
       }
-      const response = await axios.put(`/api/activities/${activity.id}/`, {
+      const response = await axios.put(`https://eventify-n2c5.onrender.com/activities/${activity.id}/`, {
         name: target.title.value,
         description: target.description.value,
         start: startDate.toJSON(),
@@ -69,7 +69,6 @@ export default function EditActivity() {
         budget: target.budget.value,
       }, config);
       console.log(response.data)
-      alert('Activity updated successfully! THIS ALERT IS TEMPORARY FOR TESTING PURPOSES')
       navigate(`/Event/${event.id}`, {state:{evt:event}})
     } catch (error) {
       console.error(error)

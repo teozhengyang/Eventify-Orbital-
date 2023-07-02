@@ -27,7 +27,7 @@ export default function DescActivity({activity, event}: {activity:Activity; even
   }
 
   const deleteActivity = async() => {
-    const response = await axios.delete(`/api/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
+    const response = await axios.delete(`https://eventify-n2c5.onrender.com/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
     console.log(response)
     closeModal()
   }
