@@ -31,7 +31,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
           username: {value: string}
           password: {value: string}
         }
-        const response = await axios.post('/api/token/', {
+        const response = await axios.post('https://eventify-n2c5.onrender.com/token/', {
           username: target.username.value,
           password: target.password.value,
         });
@@ -64,7 +64,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
     const updateToken = async () => {
       try {
-        const response = await axios.post('/api/token/refresh/', {
+        const response = await axios.post('https://eventify-n2c5.onrender.com/token/refresh/', {
         refresh: authTokens?.refresh,
         }, {
           headers: {
