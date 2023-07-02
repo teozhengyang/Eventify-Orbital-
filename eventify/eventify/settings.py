@@ -14,6 +14,8 @@ from pathlib import Path
 
 from datetime import timedelta
 
+from django.core.management.utils import get_random_secret_key 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,13 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+u17^vazew*aa7312ve$%gue56bzb!8&ws3qs!h%yzaz$bjq0@'
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS =  []
-
 
 # Application definition
 
@@ -133,10 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # changes due to jwt
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5173", #For React Project
-    "http://127.0.0.1:8000"  #For Django Project
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
