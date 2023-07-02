@@ -75,7 +75,7 @@ export default function EditEvent() {
         location: {value: string}
         budget: {value: number}
       }
-      const response = await axios.put(`http://127.0.0.1:8000/events/${event.id}/`, {
+      const response = await axios.put(`https://eventify-n2c5.onrender.com/events/${event.id}/`, {
         name: target.title.value,
         description: target.description.value,
         start: startDate.toJSON(),
