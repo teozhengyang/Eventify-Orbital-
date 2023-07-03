@@ -30,7 +30,7 @@ export default function ResetPassword() {
     }
 
     try {
-      const response = await axios.post(`/api/reset_password/${user.user_id}/`, {
+      const response = await axios.post(`https://eventify-n2c5.onrender.com/reset_password/${user.user_id}/`, {
         password: target.password.value,
       }, config);
       console.log(response.data)

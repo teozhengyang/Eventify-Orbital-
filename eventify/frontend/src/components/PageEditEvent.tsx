@@ -50,7 +50,7 @@ export default function EditEvent() {
   }, [endDate])
 
   const getUsers = async () => {
-    const response = await axios.get('/api/users/', config)
+    const response = await axios.get('https://eventify-n2c5.onrender.com/users/', config)
     const data = response.data
     
     const hashmap = new Map<number, User>()

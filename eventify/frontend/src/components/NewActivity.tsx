@@ -55,7 +55,7 @@ export default function NewActivity({event}: {event: Event}) {
         location: {value: string}
         budget: {value: number}
       }
-      const response = await axios.post('/api/activities/', {
+      const response = await axios.post('https://eventify-n2c5.onrender.com/activities/', {
         name: target.title.value,
         description: target.description.value,
         start: startDate.toJSON(),

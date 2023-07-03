@@ -60,7 +60,7 @@ export default function EditActivity() {
         location: {value: string}
         budget: {value: number}
       }
-      const response = await axios.put(`/api/activities/${activity.id}/`, {
+      const response = await axios.put(`https://eventify-n2c5.onrender.com/activities/${activity.id}/`, {
         name: target.title.value,
         description: target.description.value,
         start: startDate.toJSON(),
