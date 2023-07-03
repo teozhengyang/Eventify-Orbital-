@@ -42,7 +42,7 @@ export default function Profile() {
     console.log(userData)
     setCurrUser(userData)
     
-    const eventsResponse = await axios.get('/api/events/', config)
+    const eventsResponse = await axios.get('https://eventify-n2c5.onrender.com/events/', config)
     setEventList(eventsResponse.data)
     setDisplayList(eventsResponse.data)
   };

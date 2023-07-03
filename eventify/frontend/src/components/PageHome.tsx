@@ -9,13 +9,13 @@ import MonthContext from "../context/MonthContext";
 import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
-import { AuthToken } from "src/utils/Types";
+import { AuthToken, Event } from "src/utils/Types";
 
 export default function Home() {
   const [monthData, setMonthData] = useState(getMonthMatrix());
   const [weekData, setWeekData] = useState(getWeekArray());
 
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState<Array<Event>>([])
   const { showModal } = useContext(NewEventModalContext)
   const { displayDate, displayType } = useContext(MonthContext);
   const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken };
@@ -39,8 +39,8 @@ export default function Home() {
   }
 
   const getdata = async () => {
-    const eventsResponse = await axios.get('/api/events/', config)
-    const eventsData = eventsResponse.data
+    const eventsResponse = await axios.get('https://eventify-n2c5.onrender.com/events/', config)
+    const eventsData : Array<Event> = eventsResponse.data
     console.log(eventsData)
     setEvents(eventsData)
   };
