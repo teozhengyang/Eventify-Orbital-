@@ -39,7 +39,7 @@ export default function Home() {
   }
 
   const getdata = async () => {
-    const eventsResponse = await axios.get('/api/events/', config)
+    const eventsResponse = await axios.get('https://eventify-nq7b.onrender.com/events/', config)
     const eventsData : Array<Event> = eventsResponse.data
     console.log(eventsData)
     setEvents(eventsData)

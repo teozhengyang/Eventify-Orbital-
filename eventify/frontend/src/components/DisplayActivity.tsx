@@ -43,7 +43,7 @@ export default function DisplayActivity({event}: {event: Event}) {
 
   const fetchActivity = async () => {
     try {
-      const response = await axios.get('/api/activities/', config);
+      const response = await axios.get('https://eventify-n2c5.onrender.com/activities/', config);
       console.log(response.data)
       setActivities(response.data)
     } catch (error) {
