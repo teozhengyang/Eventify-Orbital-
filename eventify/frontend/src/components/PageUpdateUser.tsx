@@ -44,7 +44,7 @@ export default function UpdateUser() {
         last_name: {value: string}
         budget: {value: number}
       }
-      const response = await axios.put(`/api/user/${currUser.id}/`, {
+      const response = await axios.put(`https://eventify-n2c5.onrender.com/user/${currUser.id}/`, {
         username: target.username.value,
         email: target.email.value,
         first_name: target.first_name.value,
