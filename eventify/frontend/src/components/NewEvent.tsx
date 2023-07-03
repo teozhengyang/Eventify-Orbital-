@@ -47,7 +47,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   }
 
   const getUsers = async () => {
-    const response = await axios.get('/api/users/', config)
+    const response = await axios.get('https://eventify-n2c5.onrender.com/users/', config)
     const data = response.data
     setUsers(data)
     console.log(data)
@@ -64,7 +64,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         location: {value: string}
         budget: {value: number}
       }
-      const response = await axios.post('/api/events/', {
+      const response = await axios.post('https://eventify-n2c5.onrender.com/events/', {
         name: target.title.value,
         description: target.description.value,
         start: startDate.toJSON(),
