@@ -78,6 +78,10 @@ const emptyUser: User = {
   budget: 0,
 }
 
+const emptyAuthUser: AuthUser = {
+  user_id: -1,
+  username: "",
+}
 
 export type { Activity, Event, User, AuthToken, AuthUser, LogoutUser, LoginUser };
-export { emptyEvent, emptyUser, emptyActivity };
+export { emptyEvent, emptyUser, emptyActivity, emptyAuthUser };

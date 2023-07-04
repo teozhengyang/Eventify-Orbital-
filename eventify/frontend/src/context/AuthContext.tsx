@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from 'react'
 import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import { AuthUser, emptyAuthUser } from '../utils/Types';
 
 const AuthContext = createContext({})
 
@@ -9,9 +10,9 @@ export default AuthContext;
 
 export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
-    const [user, setUser] = useState(() => {
+    const [user, setUser] = useState<AuthUser>(() => {
       const storedTokens = localStorage.getItem('authTokens');
-      return storedTokens ? jwtDecode(storedTokens) : { username: '', id: '' };
+      return storedTokens ? jwtDecode(storedTokens) : emptyAuthUser;
     });
 
     const [authTokens, setAuthTokens] = useState(() => {
@@ -57,7 +58,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const logoutUser = () => {
         localStorage.removeItem('authTokens')
         setAuthTokens(null)
-        setUser(null)
+        setUser(emptyAuthUser)
         navigate('/login')
     }
 

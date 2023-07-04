@@ -14,6 +14,7 @@ import Event from "./PageEvent";
 import ResetPassword from "./PageResetPassword";
 import EditActivity from "./PageEditActivity";
 import UpdateUser from "./PageUpdateUser";
+import PrivateRoute from "../utils/PrivateRoute";
 
 /**
  * Main page, route to different pages
@@ -27,17 +28,22 @@ export default function App() {
           <MonthProvider>
             <Header />
               <Routes>
-                <Route path="" element={<Home />}/>
-                <Route path="login" element={<Login />} />
-                <Route path="Profile" element={<Profile />} />
-                <Route path="register" element={<Register />} />
+
+                <Route path="/" element={<PrivateRoute />}>
+                  <Route path="/" element={<Home />}/>
+                  <Route path="/Profile" element={<Profile />} />
+                  <Route path="/NewEvent" element={<NewEventPage />} />
+                  <Route path="/EditEvent" element={<EditEvent />}/>
+                  <Route path="/Event/:id" element={<Event />} />
+                  <Route path="/EditActivity" element={<EditActivity />} />
+                  <Route path="/ResetPassword" element={<ResetPassword />} />
+                  <Route path="/UpdateUser" element={<UpdateUser />} />
+                </Route>
+                
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="*" element={<NoPage />} />
-                <Route path="NewEvent" element={<NewEventPage />} />
-                <Route path="EditEvent" element={<EditEvent />}/>
-                <Route path="Event/:id" element={<Event />} />
-                <Route path="EditActivity" element={<EditActivity />} />
-                <Route path="ResetPassword" element={<ResetPassword />} />
-                <Route path="UpdateUser" element={<UpdateUser />} />
+
               </Routes>
           </MonthProvider>
         </ModalProvider>
