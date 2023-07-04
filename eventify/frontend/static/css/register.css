@@ -33,10 +33,10 @@
     border-radius: 5px;
 }
 
-.form-floating > label {
-    z-index: 0;
-}
-
 .react-datepicker-wrapper {
     display: block;
+}
+
+.react-datepicker-popper {
+    z-index: 5;
 }
