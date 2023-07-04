@@ -133,7 +133,8 @@ export default function DisplayActivity({event}: {event: Event}) {
                 const curr = currentDay.valueOf()
                 const start = new Date(activity.start).setHours(0, 0, 0, 0).valueOf()
                 const end = new Date(activity.end).valueOf()
-                return curr >= start && curr < end
+                // Filter events taking place in currentDay, includes events where start == end == 12AM
+                return (curr >= start && curr < end) || (curr == start && curr == end)
 
               }).map((activity:Activity, i) => {
                 const columnNo = (time:Date) => {

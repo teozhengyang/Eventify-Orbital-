@@ -35,7 +35,7 @@ export default function DisplayDay({eventlist}: {eventlist: Array<Event>}) {
             const curr = startOfDay.valueOf()
             const start = new Date(event.start).setHours(0, 0, 0, 0).valueOf()
             const end = new Date(event.end).valueOf()
-            return curr >= start && curr < end
+            return (curr >= start && curr < end) || (curr == start && curr == end)
 
           }).map((event: Event, i) => {
             const rowNo = (time:Date) => {
