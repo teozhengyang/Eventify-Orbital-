@@ -9,7 +9,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.Event._meta.fields]    
     
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.Event._meta.fields]
+    list_display = [f.name for f in models.Activity._meta.fields]
 
 # Register your models here.
 admin.site.register(models.User, UserAdmin)

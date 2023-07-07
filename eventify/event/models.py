@@ -19,6 +19,8 @@ class Event(models.Model):
     budget = models.FloatField(default=0)
     organizers = models.ManyToManyField(User, related_name='organized_events')
     participants = models.ManyToManyField(User, related_name='participated_events', blank=True)
+    category = models.TextField(default="Nil")
+    shared = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.name}"

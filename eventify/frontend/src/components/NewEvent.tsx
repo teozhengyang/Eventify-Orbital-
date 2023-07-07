@@ -19,6 +19,25 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const [users, setUsers] = useState<Array<User>>([])
   const [selectedOrganisers, setSelectedOrganisers] = useState<Array<User>>([])
   const [selectedParticipants, setSelectedParticipants] = useState<Array<User>>([])
+  const [category, setCategory] = useState()
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    console.log(isChecked)
+  };
+
+  const categoryOptions = [
+    { value: 'Social', label: 'Social' },
+    { value: 'Corporate', label: 'Corporate' },
+    { value: 'Educational', label: 'Educational' },
+    { value: 'Cultural', label: 'Cultural' },
+    { value: 'Charity', label: 'Charity' },
+    { value: 'Religious', label: 'Religious' },
+    { value: 'Political', label: 'Political' },
+    { value: 'Entertainment', label: 'Entertainment' },
+    { value: 'Technology', label: 'Technology' },
+  ];
 
   // Get all users
   useEffect(() => {
@@ -56,6 +75,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
   const navigate = useNavigate()
 
   const AddEventInfo = async(e: React.FormEvent<HTMLFormElement>) => {
+    console.log(isChecked)
+    console.log(category)
     e.preventDefault()
     try {
       const target = e.target as typeof e.target & {
@@ -63,6 +84,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         description: {value: string}
         location: {value: string}
         budget: {value: number}
+        category: {value: string}
+        shared: {value: boolean}
       }
       const response = await axios.post('/api/events/', {
         name: target.title.value,
@@ -72,7 +95,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         location: target.location.value,
         budget: target.budget.value,
         organizers: selectedOrganisers.map((org:User) => org.id),
-        participants: selectedParticipants.map((par:User) => par.id)
+        participants: selectedParticipants.map((par:User) => par.id),
+        category: category.value,
+        shared: isChecked
       }, config);
       console.log(response.data)
       setShowModal(false)
@@ -198,6 +223,22 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               isSearchable={true}
               isMulti
             />
+          </Form.Group>
+        </Row>
+        <Row>
+        <Form.Group as={Col}>
+            <Form.Label>Select Category:</Form.Label>
+            <Select
+              options={categoryOptions}
+              placeholder="Search category"
+              onChange={(data) => setCategory(data)}
+              isSearchable={true}
+              required
+            />
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label>Add to marketplace:</Form.Label>
+            <Form.Check type="checkbox" label="Share on marketplace" onChange={handleCheckboxChange} />
           </Form.Group>
         </Row>
         <hr />
