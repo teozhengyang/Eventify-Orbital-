@@ -29,14 +29,9 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
 
   const categoryOptions = [
     { value: 'Social', label: 'Social' },
-    { value: 'Corporate', label: 'Corporate' },
     { value: 'Educational', label: 'Educational' },
-    { value: 'Cultural', label: 'Cultural' },
-    { value: 'Charity', label: 'Charity' },
-    { value: 'Religious', label: 'Religious' },
-    { value: 'Political', label: 'Political' },
-    { value: 'Entertainment', label: 'Entertainment' },
-    { value: 'Technology', label: 'Technology' },
+    { value: 'Community', label: 'Community' },
+    { value: 'Others', label: 'Others' },
   ];
 
   // Get all users
@@ -84,7 +79,6 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         description: {value: string}
         location: {value: string}
         budget: {value: number}
-        category: {value: string}
         shared: {value: boolean}
       }
       const response = await axios.post('/api/events/', {

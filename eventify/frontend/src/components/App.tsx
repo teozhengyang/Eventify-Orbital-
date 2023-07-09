@@ -15,6 +15,7 @@ import ResetPassword from "./PageResetPassword";
 import EditActivity from "./PageEditActivity";
 import UpdateUser from "./PageUpdateUser";
 import PrivateRoute from "../utils/PrivateRoute";
+import Marketplace from "./PageMarketplace";
 
 /**
  * Main page, route to different pages
@@ -38,6 +39,7 @@ export default function App() {
                   <Route path="/EditActivity" element={<EditActivity />} />
                   <Route path="/ResetPassword" element={<ResetPassword />} />
                   <Route path="/UpdateUser" element={<UpdateUser />} />
+                  <Route path="/Marketplace" element={<Marketplace />} />
                 </Route>
                 
                 <Route path="/login" element={<Login />} />

@@ -19,6 +19,8 @@ type Event = {
   budget: number;
   organizers: Array<number>;
   participants: Array<number>;
+  category: string
+  shared: boolean
 }
 
 type User = {
