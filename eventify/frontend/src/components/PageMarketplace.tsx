@@ -3,10 +3,13 @@ import AuthContext from '../context/AuthContext';
 import axios from "axios";
 import { AuthToken, Event } from "../utils/Types";
 import "/static/css/marketplace.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Marketplace() {
   const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken };
   const [eventList, setEventList] = useState([])      // The full list of user events
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     getEvents()
@@ -33,13 +36,12 @@ export default function Marketplace() {
         <h6>Community</h6>
         <div className="grid">
           {eventList.filter((event:Event) => event.category === 'Community').map((event:Event) => (
-            <a href="/">
-              <div className="item">
+              <div className="item" onClick={() => {
+                navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
                 <p><b>Name: {event.name}</b></p>
                 <p>Location: {event.location}</p>
                 <p>Budget: ${event.budget}</p>
               </div>
-            </a>
           ))}
         </div>
       </div>
@@ -48,13 +50,12 @@ export default function Marketplace() {
         <h6>Educational</h6>
         <div className="grid">
           {eventList.filter((event:Event) => event.category === 'Educational').map((event:Event) => (
-            <a href="/">
-              <div className="item">
+              <div className="item" onClick={() => {
+                navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
                 <p><b>Name: {event.name}</b></p>
                 <p>Location: {event.location}</p>
                 <p>Budget: ${event.budget}</p>
               </div>
-            </a>
           ))}
         </div>
       </div>
@@ -63,13 +64,12 @@ export default function Marketplace() {
         <h6>Social</h6>
         <div className="grid">
           {eventList.filter((event:Event) => event.category === 'Social').map((event:Event) => (
-            <a href="/">
-              <div className="item">
-                <p><b>Name: {event.name}</b></p>
-                <p>Location: {event.location}</p>
-                <p>Budget: ${event.budget}</p>
-              </div>
-            </a>
+            <div className="item" onClick={() => {
+              navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
+              <p><b>Name: {event.name}</b></p>
+              <p>Location: {event.location}</p>
+              <p>Budget: ${event.budget}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -78,13 +78,12 @@ export default function Marketplace() {
         <h6>Others</h6>
         <div className="grid">
           {eventList.filter((event:Event) => event.category === 'Others').map((event:Event) => (
-            <a href="/">
-              <div className="item">
-                <p><b>Name: {event.name}</b></p>
-                <p>Location: {event.location}</p>
-                <p>Budget: ${event.budget}</p>
-              </div>
-            </a>
+            <div className="item" onClick={() => {
+              navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
+              <p><b>Name: {event.name}</b></p>
+              <p>Location: {event.location}</p>
+              <p>Budget: ${event.budget}</p>
+            </div>
           ))}
         </div>
       </div>
