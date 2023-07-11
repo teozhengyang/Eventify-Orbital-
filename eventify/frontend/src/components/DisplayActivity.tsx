@@ -55,53 +55,6 @@ export default function DisplayActivity({event}: {event: Event}) {
     return event.organizers?.includes(user.user_id)
   }
 
-  // Leaving here temporarily if we still want table display somewhere for activities
-/*  
-  const activityDisplay = (
-    <div>
-      <table>
-        <thead>
-          <tr className="table-head">
-            <th>Name</th>
-            <th>Description</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Location</th>
-            <th>Budget</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-        {activities.map((activity:Activity, i) => (
-            <tr key={i} className="table-row" style={{color:"green"}}>
-              <td>{activity.name}</td>
-              <td>{activity.description}</td>
-              <td>{format(new Date(activity.start), "dd/MM/yyyy, p")}</td>
-              <td>{format(new Date(activity.end), "dd/MM/yyyy, p")}</td>
-              <td>{activity.location}</td>
-              <td>${activity.budget}</td>
-              <td>
-                <ButtonGroup>
-                  <Button disabled={!isOrganiser} onClick={() => navigate('/EditActivity', {state:{act:activity, evt:event}})}>
-                    Edit
-                  </Button>
-                  <Button disabled={!isOrganiser} onClick={async() => {
-                    const response = await axios.delete(`http://127.0.0.1:8000/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
-                    fetchActivity()
-                    console.log(response)
-                  }}>
-                    Delete
-                  </Button>
-                </ButtonGroup>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-*/
-
   return (
     <div className="timetable">
       <ModalActivity event={event}/>

@@ -29,74 +29,57 @@ export default function Marketplace() {
     setEventList(filteredEvents)
   };
 
+  function filterCategory(category : String) {
+    return eventList.filter((event:Event) => event.category === category).map((event:Event) => (
+      <div className="item" onClick={() => {
+        navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
+        <p><b>Name: {event.name}</b></p>
+        <p>Location: {event.location}</p>
+        <p>Budget: ${event.budget}</p>
+      </div>
+    ))
+  }
+
   const eventDiv = (
-    <div>
+    <>
 
       <div>
         <h6>Community</h6>
         <div className="grid">
-          {eventList.filter((event:Event) => event.category === 'Community').map((event:Event) => (
-              <div className="item" onClick={() => {
-                navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
-                <p><b>Name: {event.name}</b></p>
-                <p>Location: {event.location}</p>
-                <p>Budget: ${event.budget}</p>
-              </div>
-          ))}
+          {filterCategory("Community")}
         </div>
       </div>
 
       <div>
         <h6>Educational</h6>
         <div className="grid">
-          {eventList.filter((event:Event) => event.category === 'Educational').map((event:Event) => (
-              <div className="item" onClick={() => {
-                navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
-                <p><b>Name: {event.name}</b></p>
-                <p>Location: {event.location}</p>
-                <p>Budget: ${event.budget}</p>
-              </div>
-          ))}
+          {filterCategory("Educational")}
         </div>
       </div>
 
       <div>
         <h6>Social</h6>
         <div className="grid">
-          {eventList.filter((event:Event) => event.category === 'Social').map((event:Event) => (
-            <div className="item" onClick={() => {
-              navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
-              <p><b>Name: {event.name}</b></p>
-              <p>Location: {event.location}</p>
-              <p>Budget: ${event.budget}</p>
-            </div>
-          ))}
+          {filterCategory("Social")}
         </div>
       </div>
 
       <div>
         <h6>Others</h6>
         <div className="grid">
-          {eventList.filter((event:Event) => event.category === 'Others').map((event:Event) => (
-            <div className="item" onClick={() => {
-              navigate(`/Event/${event.id}`, {state:{evt:event}})}}>
-              <p><b>Name: {event.name}</b></p>
-              <p>Location: {event.location}</p>
-              <p>Budget: ${event.budget}</p>
-            </div>
-          ))}
+          {filterCategory("Others")}
         </div>
       </div>
       
-    </div>
+    </>
   )
 
   return (
-    <div>
+    <>
       <br />
-      <h4>Marketplace</h4>
+      <h4>Templates</h4>
       <br />
       {eventList && eventDiv}
-    </div>
+    </>
   )
 }

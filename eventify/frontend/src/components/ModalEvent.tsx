@@ -23,7 +23,7 @@ export default function ModalEvent() {
     : <Modal.Title>{selectedEvent.name}</Modal.Title>
 
   const body = selectedEvent == emptyEvent
-    ? <NewEvent defaultdate={selectedDate}/>
+    ? <NewEvent defaultStart={selectedDate} defaultEnd={selectedDate} template={emptyEvent}/>
     : <DescEvent event={selectedEvent}/>
 
   return (

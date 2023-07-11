@@ -5,21 +5,22 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
-import { User, AuthToken } from "src/utils/Types";
+import { User, AuthToken, Event } from "../utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
 
-export default function NewEvent({defaultdate}: {defaultdate: Date}) {
-  const [startDate, setStartDate] = useState(defaultdate)
-  const [endDate, setEndDate] = useState(defaultdate)
+export default function NewEvent({defaultStart, defaultEnd, template}: {defaultStart: Date; defaultEnd: Date; template: Event}) {
+  const [startDate, setStartDate] = useState(defaultStart)
+  const [endDate, setEndDate] = useState(defaultEnd)
   const { setShowModal } = useContext(NewEventModalContext)
-  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken}
+  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken }
 
   const [users, setUsers] = useState<Array<User>>([])
   const [selectedOrganisers, setSelectedOrganisers] = useState<Array<User>>([])
   const [selectedParticipants, setSelectedParticipants] = useState<Array<User>>([])
-  const [category, setCategory] = useState()
+
+  const [category, setCategory] = useState({value: "", label: ""})
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = () => {
@@ -79,7 +80,6 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
         description: {value: string}
         location: {value: string}
         budget: {value: number}
-        shared: {value: boolean}
       }
       const response = await axios.post('/api/events/', {
         name: target.title.value,
@@ -110,6 +110,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             type="text" 
             name="title" 
             placeholder="Enter title"
+            defaultValue={template.name}
             required
           />
         </FloatingLabel>
@@ -157,7 +158,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             className="event-form-field" 
             as="textarea" 
             style={{ height: '120px' }} 
-            name="description" 
+            name="description"
+            defaultValue={template.description}
             placeholder="Description"
           />
         </FloatingLabel>
@@ -168,7 +170,8 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
               <Form.Control 
                 className="event-form-field" 
                 type="text" 
-                name="location" 
+                name="location"
+                defaultValue={template.location}
                 placeholder="Location"
               />
             </FloatingLabel>
@@ -177,7 +180,7 @@ export default function NewEvent({defaultdate}: {defaultdate: Date}) {
             <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
               <Form.Control 
                 className="event-form-field"
-                defaultValue={0} 
+                defaultValue={template.budget} 
                 type="number" 
                 name="budget" 
                 min="0" 

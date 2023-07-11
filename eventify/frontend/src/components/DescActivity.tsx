@@ -27,7 +27,7 @@ export default function DescActivity({activity, event}: {activity:Activity; even
   }
 
   const deleteActivity = async() => {
-    const response = await axios.delete(`http://127.0.0.1:8000/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
+    const response = await axios.delete(`/api/activities/${activity.id}/`, {headers:{'Authorization': 'Bearer ' + String(authTokens.access)}})
     console.log(response)
     closeModal()
   }

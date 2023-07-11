@@ -58,6 +58,8 @@ const emptyEvent: Event = {
   budget: 0,
   organizers: [],
   participants: [],
+  category: "",
+  shared: false,
 }
 
 const emptyActivity: Activity = {

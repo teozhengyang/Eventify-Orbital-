@@ -11,9 +11,16 @@ export default function Event() {
 
   const navigate = useNavigate()
 
+  const templateButton = (
+    <Button onClick={() => {navigate('/NewEvent', {state:{evt:event}})}} disabled={!event.shared}>
+      Use Template
+    </Button>
+  )
+
   return (
-    <div>
+    <>
       <h3 style={{marginTop:"20px"}}>{event.name}</h3>
+      {event.shared && templateButton}
       <hr />
       <p>{format(new Date(event.start), "dd/MM/yyyy, p")} - {format(new Date(event.end), "dd/MM/yyyy, p")}</p>
       <p>Location: {event.location}</p>
@@ -22,10 +29,9 @@ export default function Event() {
       <p style={{minHeight:"8em"}}>
         {event.description} 
         <br /> <br /> 
-        <Button onClick={() => {navigate('/CreateEventTemplate', {state:{evt:event}})}}>Use Template</Button>
       </p>
       <hr />
       <DisplayActivity event={event}/>
-    </div>
+    </>
   );
 }
