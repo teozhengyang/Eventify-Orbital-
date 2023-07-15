@@ -1,10 +1,11 @@
 import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ModalActivity from "./ModalActivity";
 import AuthContext from "../context/AuthContext";
 import NewEventModalContext from "../context/NewEventModalContext";
 import axios from "axios";
 import { Button } from "react-bootstrap";
-import { addDays, subDays } from "date-fns";
+import { addDays, subDays, format } from "date-fns";
 import { Event, Activity, AuthUser, AuthToken } from "src/utils/Types";
 import "/static/css/display.css";
 import "/static/css/timetable.css";
@@ -15,7 +16,7 @@ export default function DisplayActivity({event}: {event: Event}) {
   const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser }
 
   const [activities, setActivities] = useState<Array<Activity>>([])
-  // Current displayed date of timetable, 12AM
+  // Current displayed date of timetable, set to 12AM
   const [currentDay, setCurrentDay] = useState<Date>(new Date(new Date(event.start).setHours(0, 0, 0, 0)))
 
   // Headers for authorization @ backend => Allows request to django
@@ -30,6 +31,8 @@ export default function DisplayActivity({event}: {event: Event}) {
   }, [activityModal]);
 
   // setHours() mutate the Date object, so must create new Date object each time
+  
+  // NEED additional check for activities outside of the current event duration so that user can change the activity dates
   const nextDay = () => {
     if (currentDay.valueOf() < new Date(event.end).setHours(0, 0, 0, 0).valueOf()) {
       setCurrentDay(addDays(currentDay, 1))
@@ -51,21 +54,60 @@ export default function DisplayActivity({event}: {event: Event}) {
     }
   };
 
-  function isOrganiser() {
-    return event.organizers?.includes(user.user_id)
-  }
+  const isOrganiser = event.organizers?.includes(user.user_id)
+
+  const navigate = useNavigate()
+
+  // Displays list for out of bounds activities for user to edit
+  const outOfBoundsActivity = activities.filter((activity:Activity) => (new Date(activity.end) > new Date(event.end)) || (new Date(activity.start) < new Date(event.start)))
+  const outOfBoundsTable = (
+    <>
+      <h4 style={{textAlign:"center"}}>The following Activities are outside the Event period</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {outOfBoundsActivity.map((activity:Activity, i) => (
+            <tr>
+              <td>{activity.name}</td>
+              <td>{activity.description}</td>
+              <td>{format(new Date(activity.start), "dd/MM/yyyy, p")}</td>
+              <td>{format(new Date(activity.end), "dd/MM/yyyy, p")}</td>
+              <td>
+                <Button onClick={() => navigate('/EditActivity', {state:{act:activity, evt:event}})}>
+                  Edit Activity
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )
 
   return (
     <div className="timetable">
       <ModalActivity event={event}/>
 
       <header className="display-header">
+        <Button disabled={!isOrganiser} onClick={() => {navigate('/EditEvent', {state:{evt:event}})}}>
+          Edit Event
+        </Button>
+
         <div id="display-title">
           <Button onClick={prevDay}>&lt;</Button>
           <h4 style={{width:"8em", textAlign:"center"}}>{currentDay.toDateString()}</h4>
           <Button onClick={nextDay}>&gt;</Button>
         </div>
-        <Button disabled={!isOrganiser()} onClick={() => setActivityModal(true)}>
+        
+        <Button disabled={!isOrganiser} onClick={() => setActivityModal(true)}>
           Add Activity
         </Button>
       </header>
@@ -80,8 +122,7 @@ export default function DisplayActivity({event}: {event: Event}) {
             }
           })}
         </ul>
-
-        <div className="activity-container" onClick={() => isOrganiser() && setActivityModal(true)}>
+        <div className="activity-container" onClick={() => isOrganiser && setActivityModal(true)}>
             {activities.filter((activity:Activity) => {
                 const curr = currentDay.valueOf()
                 const start = new Date(activity.start).setHours(0, 0, 0, 0).valueOf()
@@ -121,6 +162,10 @@ export default function DisplayActivity({event}: {event: Event}) {
             }
         </div>
       </div>
+
+      <hr/>
+      {((outOfBoundsActivity.length != 0) && isOrganiser) && outOfBoundsTable}
+
     </div>
   )
 }

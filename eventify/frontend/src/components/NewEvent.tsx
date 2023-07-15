@@ -10,6 +10,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
 
+// JSON imports for location search, might switch to search bar instead
+import cityData from "../utils/city.json";
+import countryData from "../utils/country.json";
+
 export default function NewEvent({defaultStart, defaultEnd, template}: {defaultStart: Date; defaultEnd: Date; template: Event}) {
   const [startDate, setStartDate] = useState(defaultStart)
   const [endDate, setEndDate] = useState(defaultEnd)
@@ -28,6 +32,63 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
     console.log(isChecked)
   };
 
+/*
+  TEST LOGIC FOR LOCATION
+
+  type Coord = {
+    lon: number,
+    lat: number,
+  }
+
+  type City = {
+    id: number,
+    name: string,
+    state: string,
+    country: string,
+    coord: Coord,
+  }
+
+  const countries : Array<String> = Array.from(new Set(cityData.cities.map((city: City) => city.country)))
+  console.log(countries)
+
+  const countryName = countryData
+
+  const [country, setCountry] = useState({value: "", label: "Country"})
+
+  let cityList : Array<City> = cityData.cities.filter((city : City) => city.country == country.value)
+  useEffect(() => {
+    cityList = cityData.cities.filter((city : City) => city.country == country.value)
+    console.log(cityList)
+  }, [country])
+*/
+
+/*
+  TEST COMPONENT FOR LOCATION
+
+  <Select options={countries.map((item : String) => {
+    return {value: item, label: countryName[item]}
+  })}
+  onChange={e => setCountry(e)}/>
+  <Select options={cityList.map((city : City) => {
+    return {value: city.name, label: city.name}
+  })} />
+
+ */ 
+
+/* 
+  LOCATION FIELD CURRENT
+
+  <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
+    <Form.Control 
+      className="event-form-field" 
+      type="text" 
+      name="location"
+      defaultValue={template.location}
+      placeholder="Location"
+    />
+  </FloatingLabel>
+
+*/
   const categoryOptions = [
     { value: 'Social', label: 'Social' },
     { value: 'Educational', label: 'Educational' },
@@ -166,15 +227,15 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
 
         <Row>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
-              <Form.Control 
-                className="event-form-field" 
-                type="text" 
-                name="location"
-                defaultValue={template.location}
-                placeholder="Location"
-              />
-            </FloatingLabel>
+          <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
+            <Form.Control 
+              className="event-form-field" 
+              type="text" 
+              name="location"
+              defaultValue={template.location}
+              placeholder="Location"
+            />
+          </FloatingLabel>
           </Col>
           <Col>
             <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>

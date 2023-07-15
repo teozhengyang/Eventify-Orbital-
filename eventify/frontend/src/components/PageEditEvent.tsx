@@ -11,7 +11,7 @@ import { AuthToken } from "src/utils/Types";
 
 
 export default function EditEvent() {
-  // Get event data from EventDesc.tsx/PageProfile.tsx and saves it as a const, to be used for default values
+  // Get event data from EventDesc.tsx/PageProfile.tsx/DisplayActivity.tsx and saves it as a const, to be used for default values
   const location = useLocation()
   const event = location.state.evt
 

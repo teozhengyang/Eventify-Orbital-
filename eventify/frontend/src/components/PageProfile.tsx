@@ -128,9 +128,7 @@ export default function Profile() {
                   </Button>
                   {event.organizers?.includes(user.user_id) && (
                     <>
-                      <Button onClick={() => {
-                        navigate('/EditEvent', {state:{evt:event}})
-                      }}>
+                      <Button onClick={() => {navigate('/EditEvent', {state:{evt:event}})}}>
                         Edit
                       </Button>
 
