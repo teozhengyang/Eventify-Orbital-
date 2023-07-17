@@ -26,6 +26,9 @@ export default function Headers() {
         <Nav.Link className="own-nav-link" href="/Marketplace">Marketplace</Nav.Link>
       </Nav.Item>
       <Nav.Item>
+        <Nav.Link className="own-nav-link" href="/WeatherApp">Weather</Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
         <Nav.Link className="own-nav-link" href="/Profile">My Profile</Nav.Link>
       </Nav.Item>
     </Navbar>)

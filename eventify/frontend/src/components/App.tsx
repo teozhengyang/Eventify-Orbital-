@@ -16,6 +16,7 @@ import EditActivity from "./PageEditActivity";
 import UpdateUser from "./PageUpdateUser";
 import PrivateRoute from "../utils/PrivateRoute";
 import Marketplace from "./PageMarketplace";
+import WeatherApp from "./Weather";
 
 /**
  * Main page, route to different pages
@@ -40,6 +41,7 @@ export default function App() {
                   <Route path="/ResetPassword" element={<ResetPassword />} />
                   <Route path="/UpdateUser" element={<UpdateUser />} />
                   <Route path="/Marketplace" element={<Marketplace />} />
+                  <Route path="/WeatherApp" element={<WeatherApp />} />
                 </Route>
                 
                 <Route path="/login" element={<Login />} />
