@@ -1,16 +1,28 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  column-gap: 20px;
-  row-gap: 20px;
+.template-grid {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 0%;
+}
+
+.template-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 25%;
+  height: 700px;
+  text-align: center;
+  border: 1px solid;
+  overflow-y: scroll;
 }
 
 .item {
   background-color: darkgrey;
   color: black;
   padding: 5px;
+  margin: 2px;
+  text-align: left;
+  border-radius: 10px;
 }
 
-.grid :hover {
-  background-color: grey;
+.item:hover {
+  filter: brightness(85%);
 }

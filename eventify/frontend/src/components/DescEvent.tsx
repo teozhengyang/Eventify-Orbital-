@@ -72,8 +72,8 @@ export default function DescEvent({event}: {event: Event}) {
 
   const organiserButtons = (
     <>
-      <Button variant="secondary" onClick={remove}>Delete</Button>
       <Button variant="secondary" onClick={edit}>Edit</Button>
+      <Button variant="secondary" onClick={remove}>Delete</Button>
     </>
   )
 
@@ -83,8 +83,8 @@ export default function DescEvent({event}: {event: Event}) {
       <p>{event.description}</p>
       <ButtonGroup>
         <Button variant="secondary" onClick={view}>View</Button>
-        <Button variant="secondary" onClick={leave}>Leave</Button>
         {event.organizers.includes(user.user_id) && organiserButtons}
+        <Button variant="secondary" onClick={leave}>Leave</Button>
       </ButtonGroup>
       <Alert style={{marginTop:"10px"}} variant="warning" show={showAlert} onClose={() => setShowAlert(false)} dismissible>
         <p>Cannot leave event as User is the only Organiser</p>

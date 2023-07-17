@@ -33,15 +33,8 @@ export default function DisplayActivity({event}: {event: Event}) {
   // setHours() mutate the Date object, so must create new Date object each time
   
   // NEED additional check for activities outside of the current event duration so that user can change the activity dates
-  const nextDay = () => {
-    if (currentDay.valueOf() < new Date(event.end).setHours(0, 0, 0, 0).valueOf()) {
-      setCurrentDay(addDays(currentDay, 1))
-    }
-  }
-  const prevDay = () => {
-    if (currentDay.valueOf() > new Date(event.start).setHours(0, 0, 0, 0).valueOf()) {
-      setCurrentDay(subDays(currentDay, 1))
-    }
+  const isEqualDay = (date: string|number|Date) => {
+    return currentDay.valueOf() == new Date(date).setHours(0, 0, 0, 0).valueOf()
   }
 
   const fetchActivity = async () => {
@@ -75,7 +68,7 @@ export default function DisplayActivity({event}: {event: Event}) {
         </thead>
         <tbody>
           {outOfBoundsActivity.map((activity:Activity, i) => (
-            <tr>
+            <tr key={i}>
               <td>{activity.name}</td>
               <td>{activity.description}</td>
               <td>{format(new Date(activity.start), "dd/MM/yyyy, p")}</td>
@@ -102,9 +95,9 @@ export default function DisplayActivity({event}: {event: Event}) {
         </Button>
 
         <div id="display-title">
-          <Button onClick={prevDay}>&lt;</Button>
-          <h4 style={{width:"8em", textAlign:"center"}}>{currentDay.toDateString()}</h4>
-          <Button onClick={nextDay}>&gt;</Button>
+          <Button onClick={() => setCurrentDay(subDays(currentDay, 1))} disabled={isEqualDay(event.start)}>&lt;</Button>
+          <h4 className="prevent-select" style={{width:"8em", textAlign:"center"}}>{currentDay.toDateString()}</h4>
+          <Button onClick={() => setCurrentDay(addDays(currentDay, 1))} disabled={isEqualDay(event.end)}>&gt;</Button>
         </div>
         
         <Button disabled={!isOrganiser} onClick={() => setActivityModal(true)}>

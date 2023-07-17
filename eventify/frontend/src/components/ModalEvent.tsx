@@ -2,13 +2,15 @@ import { useContext } from 'react';
 import NewEvent from './NewEvent';
 import DescEvent from './DescEvent';
 import NewEventModalContext from '../context/NewEventModalContext';
+import AuthContext from '../context/AuthContext';
 import { Modal }  from 'react-bootstrap';
-import { emptyEvent } from '../utils/Types';
+import { emptyEvent, AuthUser } from '../utils/Types';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "/static/css/modal.css";
 
 export default function ModalEvent() {
   const { showModal, setShowModal, selectedDate, selectedEvent, setSelectedEvent } = useContext(NewEventModalContext);
+  const { user } = useContext(AuthContext) as { user: AuthUser }
 
   const closeModal = () => {
     setShowModal(false)
@@ -26,6 +28,10 @@ export default function ModalEvent() {
     ? <NewEvent defaultStart={selectedDate} defaultEnd={selectedDate} template={emptyEvent}/>
     : <DescEvent event={selectedEvent}/>
 
+  const role = selectedEvent.organizers?.includes(user.user_id)
+    ? "Organiser"
+    : "Participant"
+
   return (
     <Modal dialogClassName="createevent" show={showModal} onHide={closeModal} centered>
         <Modal.Header closeButton>
@@ -34,7 +40,8 @@ export default function ModalEvent() {
         <Modal.Body>
           {body}
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer style={{textAlign:"left"}}>
+          {(selectedEvent != emptyEvent) && role}
         </Modal.Footer>
     </Modal>  
   );

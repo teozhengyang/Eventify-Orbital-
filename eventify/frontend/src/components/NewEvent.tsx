@@ -283,8 +283,9 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
             />
           </Form.Group>
         </Row>
+
         <Row>
-        <Form.Group as={Col}>
+          <Form.Group as={Col}>
             <Form.Label>Select Category:</Form.Label>
             <Select
               options={categoryOptions}
@@ -296,9 +297,13 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
           </Form.Group>
           <Form.Group as={Col}>
             <Form.Label>Add to marketplace:</Form.Label>
-            <Form.Check type="checkbox" label="Share on marketplace" onChange={handleCheckboxChange} />
+            <Form.Check 
+              type="checkbox" 
+              label="Share on marketplace" 
+              onChange={handleCheckboxChange} />
           </Form.Group>
         </Row>
+        
         <hr />
         <Button variant="primary" type="submit">Create Event</Button>
       </Form>
