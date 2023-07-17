@@ -24,6 +24,21 @@ export default function EditEvent() {
 
   const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken }
 
+  const [category, setCategory] = useState({value: event.category, label: event.category})
+  const [isChecked, setIsChecked] = useState(event.shared);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    console.log(isChecked)
+  };
+
+  const categoryOptions = [
+    { value: 'Social', label: 'Social' },
+    { value: 'Educational', label: 'Educational' },
+    { value: 'Community', label: 'Community' },
+    { value: 'Others', label: 'Others' },
+  ];
+
   // Headers for authorization @ backend => Allows request to django
   const config = {
     headers:{
@@ -75,7 +90,7 @@ export default function EditEvent() {
         location: {value: string}
         budget: {value: number}
       }
-      const response = await axios.put(`http://127.0.0.1:8000/events/${event.id}/`, {
+      const response = await axios.put(`/api/events/${event.id}/`, {
         name: target.title.value,
         description: target.description.value,
         start: startDate.toJSON(),
@@ -83,7 +98,9 @@ export default function EditEvent() {
         location: target.location.value,
         budget: target.budget.value,
         organizers: selectedOrganisers.map((organiser: User) => organiser.id),
-        participants: selectedParticipants.map((participant: User) => participant.id)
+        participants: selectedParticipants.map((participant: User) => participant.id),
+        category: category.value,
+        shared: isChecked
       }, config);
       console.log(response.data)
       alert('Event updated successfully! THIS ALERT IS TEMPORARY FOR TESTING PURPOSES')
@@ -215,6 +232,29 @@ export default function EditEvent() {
             />
           </Form.Group>
         </Row>
+
+        <Row>
+          <Form.Group as={Col}>
+            <Form.Label>Select Category:</Form.Label>
+            <Select
+              options={categoryOptions}
+              value={category}
+              placeholder="Search category"
+              onChange={(data) => setCategory(data)}
+              isSearchable={true}
+              required
+            />
+          </Form.Group>
+          <Form.Group as={Col}>
+            <Form.Label>Add to marketplace:</Form.Label>
+            <Form.Check 
+              type="checkbox" 
+              label="Share on marketplace" 
+              defaultChecked={isChecked}
+              onChange={handleCheckboxChange} />
+          </Form.Group>
+        </Row>
+
         <hr />
         <Button variant="primary" type="submit">Update Event</Button>
       </Form>

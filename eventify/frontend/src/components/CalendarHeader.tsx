@@ -48,7 +48,7 @@ export default function CalendarHeader() {
       <Button variant="secondary" onClick={present}>Today</Button>
       <Button variant="secondary" onClick={prev}>&lt;</Button>
       <Button variant="secondary" onClick={next}>&gt;</Button>
-      <p id="calendar-header-month">{format(displayDate, headingFormat)}</p>
+      <p className="prevent-select" id="calendar-header-month">{format(displayDate, headingFormat)}</p>
       <ButtonGroup>
         <Button variant="secondary" onClick={() => setDisplayType("day")}>Day</Button>
         <Button variant="secondary" onClick={() => setDisplayType("week")}>Week</Button>

@@ -17,7 +17,7 @@ export default function Headers() {
         <Nav.Link className="own-nav-link" href="/">Home</Nav.Link>
       </Nav.Item>
       <Nav.Item>
-        <Nav.Link className="own-nav-link" onClick={logoutUser}>Log out</Nav.Link>
+        <Nav.Link className="own-nav-link" href="/Profile">My Profile</Nav.Link>
       </Nav.Item>
       <Nav.Item>
         <Nav.Link className="own-nav-link" href="/NewEvent">Create New Event</Nav.Link>
@@ -26,10 +26,14 @@ export default function Headers() {
         <Nav.Link className="own-nav-link" href="/Marketplace">Marketplace</Nav.Link>
       </Nav.Item>
       <Nav.Item>
+<<<<<<< HEAD
         <Nav.Link className="own-nav-link" href="/WeatherApp">Weather</Nav.Link>
       </Nav.Item>
       <Nav.Item>
         <Nav.Link className="own-nav-link" href="/Profile">My Profile</Nav.Link>
+=======
+        <Nav.Link className="own-nav-link" onClick={logoutUser}>Log out</Nav.Link>
+>>>>>>> 67b2f18ae09a6c88f3bc23eec9253634ae27e2e9
       </Nav.Item>
     </Navbar>)
 

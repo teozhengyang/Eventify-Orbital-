@@ -41,44 +41,34 @@ export default function Marketplace() {
   }
 
   const eventDiv = (
-    <>
-
-      <div>
+    <div className="template-grid">
+      <div className="template-col">
         <h6>Community</h6>
-        <div className="grid">
-          {filterCategory("Community")}
-        </div>
+        {filterCategory("Community")}
       </div>
 
-      <div>
+      <div className="template-col">
         <h6>Educational</h6>
-        <div className="grid">
-          {filterCategory("Educational")}
-        </div>
+        {filterCategory("Educational")}
       </div>
 
-      <div>
+      <div className="template-col">
         <h6>Social</h6>
-        <div className="grid">
           {filterCategory("Social")}
-        </div>
       </div>
 
-      <div>
+      <div className="template-col">
         <h6>Others</h6>
-        <div className="grid">
           {filterCategory("Others")}
-        </div>
       </div>
-      
-    </>
+    </div>
   )
 
   return (
     <>
       <br />
-      <h4>Templates</h4>
-      <br />
+      <h4>Event Templates</h4>
+      <hr />
       {eventList && eventDiv}
     </>
   )
