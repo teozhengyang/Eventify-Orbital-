@@ -9,6 +9,7 @@ import { User, AuthToken, Event } from "../utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
+import AsyncSelect from 'react-select/async';
 
 // JSON imports for location search, might switch to search bar instead
 import cityData from "../utils/city.json";
@@ -147,7 +148,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
         description: target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
-        location: target.location.value,
+        location: selectedLocation.name + ", " + selectedLocation.country,
         budget: target.budget.value,
         organizers: selectedOrganisers.map((org:User) => org.id),
         participants: selectedParticipants.map((par:User) => par.id),
@@ -160,6 +161,54 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const API_KEY = '0c36bc53fdfe4278b3584452231107';
+  const API_BASE_URL = 'https://api.weatherapi.com/v1';
+
+  type Location = {
+    id: number,
+    name: string,
+    region: string,
+    country: string,
+    lat: number,
+    lon: number,
+    url: string
+  }
+
+  const emptyLocation:Location = {
+    id: -1,
+    name: "Enter",
+    region: "a",
+    country: "Location",
+    lat: -1,
+    lon: -1,
+    url: ""
+  }
+
+  const [inputLocation, setInputLocation] = useState("")
+  const [selectedLocation, setSelectedLocation] = useState(emptyLocation)
+
+  const searchLocation = (inputValue: string) => {
+    return axios.get(`${API_BASE_URL}/search.json`, {
+      params: {
+        key: API_KEY,
+        q: inputValue,
+      },
+    }).then((response) => {
+      return response.data
+    }).catch((error) => {
+      console.error('Error fetching possible locations:', error);
+    });
+  };
+
+  const handleInputChange = (value:string) => {
+    setInputLocation(value);
+  };
+
+  // handle selection
+  const handleChange = (value) => {
+    setSelectedLocation(value);
   }
 
   return (
@@ -227,14 +276,17 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
 
         <Row>
           <Col>
-          <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
-            <Form.Control 
-              className="event-form-field" 
-              type="text" 
-              name="location"
-              defaultValue={template.location}
-              placeholder="Location"
-            />
+          <FloatingLabel controlId="floatingInput" label="" style={{paddingTop: "5px"}}>
+          <AsyncSelect 
+            cacheOptions 
+            defaultOptions 
+            value={selectedLocation}
+            getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
+            getOptionValue={(option) => option.name}
+            loadOptions={searchLocation}
+            onInputChange={handleInputChange}
+            onChange={handleChange}
+          />
           </FloatingLabel>
           </Col>
           <Col>
