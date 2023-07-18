@@ -19,9 +19,9 @@ const WeatherApp = () => {
 
   const emptyLocation:Location = {
     id: -1,
-    name: "",
-    region: "",
-    country: "",
+    name: "Enter",
+    region: "a",
+    country: "Location",
     lat: -1,
     lon: -1,
     url: ""
