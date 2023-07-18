@@ -1,43 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 
 const API_KEY = '0c36bc53fdfe4278b3584452231107';
 const API_BASE_URL = 'https://api.weatherapi.com/v1';
 
 const WeatherApp = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [possibleLocations, setPossibleLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [weatherData, setWeatherData] = useState(null);
 
-  const handleSearchChange = (e) => {
-    const { value } = e.target;
-    setSearchQuery(value);
-    searchLocation(value);
+  type Location = {
+    id: number,
+    name: string,
+    region: string,
+    country: string,
+    lat: number,
+    lon: number,
+    url: string
+  }
+
+  const emptyLocation:Location = {
+    id: -1,
+    name: "",
+    region: "",
+    country: "",
+    lat: -1,
+    lon: -1,
+    url: ""
+  }
+
+
+  const [inputLocation, setInputLocation] = useState("")
+  const [selectedLocation, setSelectedLocation] = useState(emptyLocation)
+
+
+  const searchLocation = (inputValue: string) => {
+    return axios.get(`${API_BASE_URL}/search.json`, {
+      params: {
+        key: API_KEY,
+        q: inputValue,
+      },
+    }).then((response) => {
+      return response.data
+    }).catch((error) => {
+      console.error('Error fetching possible locations:', error);
+    });
   };
 
-  const searchLocation = (query) => {
-    axios
-      .get(`${API_BASE_URL}/search.json`, {
-        params: {
-          key: API_KEY,
-          q: query,
-        },
-      })
-      .then((response) => {
-        setPossibleLocations(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching possible locations:', error);
-      });
-  };
-
-  const handleLocationClick = (location) => {
-    setSelectedLocation(location);
-    getWeatherData(location.id);
-  };
-
+ 
+/*
   const getWeatherData = (locationId) => {
     axios
       .get(`${API_BASE_URL}/current.json`, {
@@ -53,24 +62,38 @@ const WeatherApp = () => {
         console.error('Error fetching weather data:', error);
       });
   };
+*/
+
+  // handle input change event
+  const handleInputChange = (value:string) => {
+    setInputLocation(value);
+  };
+
+  // handle selection
+  const handleChange = (value) => {
+    setSelectedLocation(value);
+  }
 
   return (
-    <div>
-      <input type="text" value={searchQuery} onChange={handleSearchChange} placeholder="Enter a location" />
-      <Select
-              options={possibleLocations}
-              placeholder="Search location"
-              getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
-              getOptionValue={(option) => option.name}
-              onChange={location => setPossibleLocations(location)}
-              isSearchable={true}
-            />
-      <div>
-        {possibleLocations.map((location) => (
-          <div key={location.id} onClick={() => handleLocationClick(location)}>
-            {location.name}, {location.region}, {location.country}
-          </div>
-        ))}
+    <div style={{color:"black"}}>
+      <AsyncSelect 
+        cacheOptions 
+        defaultOptions 
+        value={selectedLocation}
+        getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
+        getOptionValue={(option) => option.name}
+        loadOptions={searchLocation}
+        onInputChange={handleInputChange}
+        onChange={handleChange}
+      />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <div style={{color:"white"}}>
+        <h1>Typed Input: {inputLocation}</h1>
+        <h1>Selected Option: {selectedLocation && (selectedLocation.name + ", " + selectedLocation.country)}</h1>
       </div>
     </div>
   );
