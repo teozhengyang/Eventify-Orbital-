@@ -33,6 +33,16 @@ type User = {
   budget: number;
 }
 
+type Location = {
+  id: number,
+  name: string,
+  region: string,
+  country: string,
+  lat: number,
+  lon: number,
+  url: string
+}
+
 type AuthToken = {
   access: string;
 }
@@ -87,5 +97,15 @@ const emptyAuthUser: AuthUser = {
   username: "",
 }
 
-export type { Activity, Event, User, AuthToken, AuthUser, LogoutUser, LoginUser };
-export { emptyEvent, emptyUser, emptyActivity, emptyAuthUser };
+const emptyLocation:Location = {
+  id: -1,
+  name: "Enter",
+  region: "a",
+  country: "Location",
+  lat: -1,
+  lon: -1,
+  url: ""
+}
+
+export type { Activity, Event, User, Location, AuthToken, AuthUser, LogoutUser, LoginUser };
+export { emptyEvent, emptyUser, emptyActivity, emptyAuthUser, emptyLocation };

@@ -1,36 +1,22 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import AsyncSelect from 'react-select/async';
+import { Button, Form } from 'react-bootstrap';
+import { emptyLocation, Location } from '../utils/Types';
 
 const API_KEY = '0c36bc53fdfe4278b3584452231107';
 const API_BASE_URL = 'https://api.weatherapi.com/v1';
 
 const WeatherApp = () => {
 
-  type Location = {
-    id: number,
-    name: string,
-    region: string,
-    country: string,
-    lat: number,
-    lon: number,
-    url: string
-  }
-
-  const emptyLocation:Location = {
-    id: -1,
-    name: "Enter",
-    region: "a",
-    country: "Location",
-    lat: -1,
-    lon: -1,
-    url: ""
-  }
-
 
   const [inputLocation, setInputLocation] = useState("")
   const [selectedLocation, setSelectedLocation] = useState(emptyLocation)
+  const [currentWeather, setCurrentWeather] = useState(null)
 
+  const weatherInfo = currentWeather == null
+    ? <p>No Location selected</p> 
+    : (<p>Current Weather: {currentWeather.current.condition.text}</p>)
 
   const searchLocation = (inputValue: string) => {
     return axios.get(`${API_BASE_URL}/search.json`, {
@@ -45,56 +31,63 @@ const WeatherApp = () => {
     });
   };
 
- 
-/*
-  const getWeatherData = (locationId) => {
-    axios
-      .get(`${API_BASE_URL}/current.json`, {
+  
+
+  const getWeatherData = async(e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const response = await axios.get(`${API_BASE_URL}/current.json`, {
         params: {
           key: API_KEY,
-          q: locationId,
+          q: selectedLocation.name,
         },
       })
-      .then((response) => {
-        setWeatherData(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching weather data:', error);
-      });
+      setCurrentWeather(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    };
   };
-*/
+
 
   // handle input change event
   const handleInputChange = (value:string) => {
     setInputLocation(value);
   };
 
-  // handle selection
-  const handleChange = (value) => {
-    setSelectedLocation(value);
+  const handleChange = (option: Location | null) => {
+    if (option) {
+      setSelectedLocation(option)
+    }
   }
 
   return (
     <div style={{color:"black"}}>
-      <AsyncSelect 
-        cacheOptions 
-        defaultOptions 
-        value={selectedLocation}
-        getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
-        getOptionValue={(option) => option.name}
-        loadOptions={searchLocation}
-        onInputChange={handleInputChange}
-        onChange={handleChange}
-      />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <div style={{color:"white"}}>
-        <h1>Typed Input: {inputLocation}</h1>
-        <h1>Selected Option: {selectedLocation && (selectedLocation.name + ", " + selectedLocation.country)}</h1>
-      </div>
+      <Form onSubmit={getWeatherData}>
+        <AsyncSelect 
+          cacheOptions 
+          defaultOptions 
+          value={selectedLocation}
+          getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
+          getOptionValue={(option) => option.name}
+          loadOptions={searchLocation}
+          onInputChange={handleInputChange}
+          onChange={handleChange}
+        />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <div style={{color:"white"}}>
+          <h1>Typed Input: {inputLocation}</h1>
+          <h1>Selected Option: {selectedLocation && (selectedLocation.name + ", " + selectedLocation.country)}</h1>
+        </div>
+        <Button variant="primary" type="submit">Get weather</Button>
+      </Form>
+
+      {weatherInfo}
+      
     </div>
   );
 };

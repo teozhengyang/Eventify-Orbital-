@@ -5,15 +5,11 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
-import { User, AuthToken, Event } from "../utils/Types";
+import { User, AuthToken, Event, Location, emptyLocation } from "../utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
 import AsyncSelect from 'react-select/async';
-
-// JSON imports for location search, might switch to search bar instead
-import cityData from "../utils/city.json";
-import countryData from "../utils/country.json";
 
 export default function NewEvent({defaultStart, defaultEnd, template}: {defaultStart: Date; defaultEnd: Date; template: Event}) {
   const [startDate, setStartDate] = useState(defaultStart)
@@ -21,75 +17,25 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
   const { setShowModal } = useContext(NewEventModalContext)
   const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken }
 
+  // User fields
   const [users, setUsers] = useState<Array<User>>([])
   const [selectedOrganisers, setSelectedOrganisers] = useState<Array<User>>([])
   const [selectedParticipants, setSelectedParticipants] = useState<Array<User>>([])
 
+  // Category, Marketplace
   const [category, setCategory] = useState({value: "", label: ""})
   const [isChecked, setIsChecked] = useState(false);
+
+  // Location
+  const [inputLocation, setInputLocation] = useState("")
+  const [selectedLocation, setSelectedLocation] = useState<Location>(emptyLocation)
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
     console.log(isChecked)
   };
 
-/*
-  TEST LOGIC FOR LOCATION
 
-  type Coord = {
-    lon: number,
-    lat: number,
-  }
-
-  type City = {
-    id: number,
-    name: string,
-    state: string,
-    country: string,
-    coord: Coord,
-  }
-
-  const countries : Array<String> = Array.from(new Set(cityData.cities.map((city: City) => city.country)))
-  console.log(countries)
-
-  const countryName = countryData
-
-  const [country, setCountry] = useState({value: "", label: "Country"})
-
-  let cityList : Array<City> = cityData.cities.filter((city : City) => city.country == country.value)
-  useEffect(() => {
-    cityList = cityData.cities.filter((city : City) => city.country == country.value)
-    console.log(cityList)
-  }, [country])
-*/
-
-/*
-  TEST COMPONENT FOR LOCATION
-
-  <Select options={countries.map((item : String) => {
-    return {value: item, label: countryName[item]}
-  })}
-  onChange={e => setCountry(e)}/>
-  <Select options={cityList.map((city : City) => {
-    return {value: city.name, label: city.name}
-  })} />
-
- */ 
-
-/* 
-  LOCATION FIELD CURRENT
-
-  <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
-    <Form.Control 
-      className="event-form-field" 
-      type="text" 
-      name="location"
-      defaultValue={template.location}
-      placeholder="Location"
-    />
-  </FloatingLabel>
-
-*/
   const categoryOptions = [
     { value: 'Social', label: 'Social' },
     { value: 'Educational', label: 'Educational' },
@@ -163,31 +109,10 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
     }
   }
 
+
+
   const API_KEY = '0c36bc53fdfe4278b3584452231107';
   const API_BASE_URL = 'https://api.weatherapi.com/v1';
-
-  type Location = {
-    id: number,
-    name: string,
-    region: string,
-    country: string,
-    lat: number,
-    lon: number,
-    url: string
-  }
-
-  const emptyLocation:Location = {
-    id: -1,
-    name: "Enter",
-    region: "a",
-    country: "Location",
-    lat: -1,
-    lon: -1,
-    url: ""
-  }
-
-  const [inputLocation, setInputLocation] = useState("")
-  const [selectedLocation, setSelectedLocation] = useState(emptyLocation)
 
   const searchLocation = (inputValue: string) => {
     return axios.get(`${API_BASE_URL}/search.json`, {
@@ -207,8 +132,10 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
   };
 
   // handle selection
-  const handleChange = (value) => {
-    setSelectedLocation(value);
+  const handleLocationChange = (option: Location | null) => {
+    if (option) {
+      setSelectedLocation(option)
+    }
   }
 
   return (
@@ -276,18 +203,18 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
 
         <Row>
           <Col>
-          <FloatingLabel controlId="floatingInput" label="" style={{paddingTop: "5px"}}>
-          <AsyncSelect 
-            cacheOptions 
-            defaultOptions 
-            value={selectedLocation}
-            getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
-            getOptionValue={(option) => option.name}
-            loadOptions={searchLocation}
-            onInputChange={handleInputChange}
-            onChange={handleChange}
-          />
-          </FloatingLabel>
+            <FloatingLabel controlId="floatingInput" label="" style={{paddingTop: "5px"}}>
+              <AsyncSelect 
+                cacheOptions 
+                defaultOptions 
+                value={selectedLocation}
+                getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
+                getOptionValue={(option) => option.name}
+                loadOptions={searchLocation}
+                onInputChange={handleInputChange}
+                onChange={handleLocationChange}
+              />
+            </FloatingLabel>
           </Col>
           <Col>
             <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
@@ -307,6 +234,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
             </FloatingLabel>
           </Col>
         </Row>
+
         <hr />
         <Row>
           <Form.Group as={Col}>
