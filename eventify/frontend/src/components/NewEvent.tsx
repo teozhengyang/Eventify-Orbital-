@@ -27,7 +27,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
   const [isChecked, setIsChecked] = useState(false);
 
   // Location
-  const [inputLocation, setInputLocation] = useState("")
+  const [, setInputLocation] = useState("")
   const [selectedLocation, setSelectedLocation] = useState<Location>(emptyLocation)
 
   const handleCheckboxChange = () => {

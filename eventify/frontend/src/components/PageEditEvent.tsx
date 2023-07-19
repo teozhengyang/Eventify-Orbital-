@@ -5,27 +5,32 @@ import AuthContext from "../context/AuthContext";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import Select from 'react-select';
-import { User } from "src/utils/Types";
+import AsyncSelect from 'react-select/async';
+import { User, AuthToken, Location, emptyLocation } from "../utils/Types";
 import "/static/css/register.css";
-import { AuthToken } from "src/utils/Types";
 
 
 export default function EditEvent() {
   // Get event data from EventDesc.tsx/PageProfile.tsx/DisplayActivity.tsx and saves it as a const, to be used for default values
   const location = useLocation()
   const event = location.state.evt
+  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken }
 
   const [startDate, setStartDate] = useState(new Date(event.start));
   const [endDate, setEndDate] = useState(new Date(event.end));
 
+  // User fields
   const [users, setUsers] = useState<Array<User>>([])
   const [selectedOrganisers, setSelectedOrganisers] = useState<Array<User>>([])
   const [selectedParticipants, setSelectedParticipants] = useState<Array<User>>([])
 
-  const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken }
-
+  // Category, Marketplace
   const [category, setCategory] = useState({value: event.category, label: event.category})
-  const [isChecked, setIsChecked] = useState(event.shared);
+  const [isChecked, setIsChecked] = useState(event.shared)
+
+  // Location
+  const [, setInputLocation] = useState(event.location)
+  const [selectedLocation, setSelectedLocation] = useState<Location>(emptyLocation)
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -48,6 +53,7 @@ export default function EditEvent() {
 
   useEffect(() => {
     getUsers();
+    getLocation();
   }, [])
 
   // End time/date for event >= start
@@ -77,6 +83,49 @@ export default function EditEvent() {
     console.log(data)
   }
 
+
+
+  const API_KEY = '0c36bc53fdfe4278b3584452231107';
+  const API_BASE_URL = 'https://api.weatherapi.com/v1';
+
+  // Sets default value for event location
+  const getLocation = async () => {
+    const response = await axios.get(`${API_BASE_URL}/search.json`, {
+      params: {
+        key: API_KEY,
+        q: event.location,
+      },
+    })
+    setSelectedLocation(response.data)
+  }
+
+  // Handles search for during change to event location
+  const searchLocation = (inputValue: string) => {
+    return axios.get(`${API_BASE_URL}/search.json`, {
+      params: {
+        key: API_KEY,
+        q: inputValue,
+      },
+    }).then((response) => {
+      return response.data
+    }).catch((error) => {
+      console.error('Error fetching possible locations:', error);
+    });
+  };
+
+  const handleInputChange = (value:string) => {
+    setInputLocation(value);
+  };
+
+  // Handle selection
+  const handleLocationChange = (option: Location | null) => {
+    if (option) {
+      setSelectedLocation(option)
+    }
+  }
+
+
+
   // For redirect after form submit
   const navigate = useNavigate()
 
@@ -95,7 +144,7 @@ export default function EditEvent() {
         description: target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
-        location: target.location.value,
+        location: selectedLocation.name + ", " + selectedLocation.country,
         budget: target.budget.value,
         organizers: selectedOrganisers.map((organiser: User) => organiser.id),
         participants: selectedParticipants.map((participant: User) => participant.id),
@@ -177,13 +226,16 @@ export default function EditEvent() {
 
         <Row>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Location" style={{paddingTop: "5px"}}>
-              <Form.Control 
-                className="event-form-field" 
-                type="text" 
-                name="location" 
-                placeholder="Location" 
-                defaultValue={event.location}
+            <FloatingLabel controlId="floatingInput" label="" style={{paddingTop: "5px"}}>
+              <AsyncSelect 
+                cacheOptions 
+                defaultOptions 
+                value={selectedLocation}
+                getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
+                getOptionValue={(option) => option.name}
+                loadOptions={searchLocation}
+                onInputChange={handleInputChange}
+                onChange={handleLocationChange}
               />
             </FloatingLabel>
           </Col>
