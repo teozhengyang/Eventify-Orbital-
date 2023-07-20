@@ -108,9 +108,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
       console.error(error)
     }
   }
-
-
-
+  
   const API_KEY = '0c36bc53fdfe4278b3584452231107';
   const API_BASE_URL = 'https://api.weatherapi.com/v1';
 

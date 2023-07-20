@@ -1,8 +1,9 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import DisplayActivity from "./DisplayActivity";
 import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Event() {
   // Get event data from EventDesc.tsx/PageProfile.tsx
@@ -17,6 +18,24 @@ export default function Event() {
     </Button>
   )
 
+  useEffect(() => {
+    getWeatherData()
+  },[])
+
+  const [weatherData, setWeatherData] = useState(null);
+  const apiKey = '0c36bc53fdfe4278b3584452231107'; 
+
+  const getWeatherData = async () => {
+    const url = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${event.location}&days=3`;
+    await axios.get(url)
+      .then((response) => {
+        setWeatherData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching weather data:', error);
+      });
+  };
+
   return (
     <>
       <h3 style={{marginTop:"20px"}}>{event.name}</h3>
@@ -30,6 +49,14 @@ export default function Event() {
         {event.description} 
         <br /> <br /> 
       </p>
+      <hr />
+      {weatherData && (
+        <div>
+          <h5>Weather in {weatherData.location.name}, {weatherData.location.country}</h5>
+          <p>Temperature: {weatherData.current.temp_c}°C</p>
+          <p>Description: {weatherData.current.condition.text}</p>
+        </div>
+      )}
       <hr />
       <DisplayActivity event={event}/>
     </>
