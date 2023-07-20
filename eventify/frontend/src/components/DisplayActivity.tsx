@@ -87,7 +87,7 @@ export default function DisplayActivity({event}: {event: Event}) {
 
   return (
     <div className="timetable">
-      <ModalActivity event={event}/>
+      <ModalActivity event={event} defaultDate={currentDay}/>
 
       <header className="display-header">
         <Button disabled={!isOrganiser} onClick={() => {navigate('/EditEvent', {state:{evt:event}})}}>
