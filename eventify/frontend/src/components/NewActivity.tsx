@@ -10,12 +10,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
 
 // Might be nice to change the form to a bootstrap one
-export default function NewActivity({event}: {event: Event}) {
+export default function NewActivity({event, defaultDate}: {event: Event, defaultDate:Date}) {
   const eventStart = new Date(event.start)
   const eventEnd = new Date(event.end)
 
-  const [startDate, setStartDate] = useState(eventStart)
-  const [endDate, setEndDate] = useState(eventStart)
+  const [startDate, setStartDate] = useState(defaultDate)
+  const [endDate, setEndDate] = useState(defaultDate)
   const { authTokens } = useContext(AuthContext) as { authTokens: AuthToken}
   const { setActivityModal } = useContext(NewEventModalContext)
 

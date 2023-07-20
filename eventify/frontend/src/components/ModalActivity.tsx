@@ -7,7 +7,7 @@ import { Event, emptyActivity } from '../utils/Types';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
-export default function ModalActivity({event}:{event:Event}) {
+export default function ModalActivity({event, defaultDate}:{event:Event, defaultDate:Date}) {
   const { activityModal, setActivityModal, selectedActivity, setSelectedActivity } = useContext(NewEventModalContext)
   
   const closeModal = () => {
@@ -23,7 +23,7 @@ export default function ModalActivity({event}:{event:Event}) {
   : <Modal.Title>{selectedActivity.name}</Modal.Title>
 
   const body = selectedActivity == emptyActivity
-    ? <NewActivity event={event}/>
+    ? <NewActivity event={event} defaultDate={defaultDate}/>
     : <DescActivity activity={selectedActivity} event={event}/>
 
   return (
