@@ -16,6 +16,11 @@ class ActivitySerializer(ModelSerializer):
     class Meta:
         model = models.Activity
         fields = '__all__'
+        
+class CommentSerializer(ModelSerializer):
+    class Meta:
+        model = models.Comment
+        fields = '__all__'       
 
 class NewTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
