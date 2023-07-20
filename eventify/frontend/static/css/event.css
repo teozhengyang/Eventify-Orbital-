@@ -1,0 +1,12 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); 
+  column-gap: 5px; 
+}
+
+.grid-item {
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  background-color: grey;
+}

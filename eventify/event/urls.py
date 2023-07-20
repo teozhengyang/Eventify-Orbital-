@@ -15,4 +15,6 @@ urlpatterns = [
   path("reset_password/<int:pk>/", views.reset_password, name="reset_password"),
   path("user/<int:pk>/", views.user_detail),
   path('users/', views.user_list),
+  path("comment/<int:pk>/", views.comment_detail),
+  path('comments/<int:pk>', views.comment_list),
 ]

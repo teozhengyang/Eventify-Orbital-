@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .serializers import EventSerializer, UserSerializer, ActivitySerializer
-from .models import Event, User, Activity
+from .serializers import EventSerializer, UserSerializer, ActivitySerializer, CommentSerializer
+from .models import Event, User, Activity, Comment
 from django.db.models import Q
 
 # jwt imports
@@ -57,7 +57,38 @@ def event_detail(request, pk, format=None):
         serializer = EventSerializer(event)
         return Response(serializer.data)
 
+# handles GET & POST requests for event data based on current user
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def comment_list(request, pk, format=None):
+    if request.method == 'GET':
+        comments = Comment.objects.filter(Q(event=Event.objects.get(pk=pk))).distinct()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = CommentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True) 
+        serializer.save()
+        return Response(serializer.data)
 
+# handles GET, PUT & DELETE requests using primary key
+@api_view(['PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def comment_detail(request, pk, format=None):
+    if request.method == 'PUT':
+        comment = Comment.objects.get(pk=pk)
+        serializer = CommentSerializer(comment, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    elif request.method == 'DELETE':
+        comment = Comment.objects.get(pk=pk)
+        if comment:
+            comment.delete()
+            return Response('Deleted comment')
+        else:
+            return Response('Failed to delete')
 
 # handles GET & POST requests for activity data based on associated event
 @api_view(['GET', 'POST'])
