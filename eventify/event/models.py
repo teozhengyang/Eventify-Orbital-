@@ -37,3 +37,12 @@ class Activity(models.Model):
     
     def __str__(self):
         return f"{self.start} to {self.end}: {self.name}"
+    
+class Comment(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.text
