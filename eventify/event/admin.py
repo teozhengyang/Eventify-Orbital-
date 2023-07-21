@@ -11,11 +11,11 @@ class EventAdmin(admin.ModelAdmin):
 class ActivityAdmin(admin.ModelAdmin):
     list_display = [f.name for f in models.Activity._meta.fields]
     
-class CommentAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in models.Comment._meta.fields]
+class MessageAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.Message._meta.fields]
 
 # Register your models here.
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Activity, ActivityAdmin)
-admin.site.register(models.Comment, CommentAdmin)
+admin.site.register(models.Message, MessageAdmin)

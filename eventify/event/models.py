@@ -38,7 +38,7 @@ class Activity(models.Model):
     def __str__(self):
         return f"{self.start} to {self.end}: {self.name}"
     
-class Comment(models.Model):
+class Message(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='comments')
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField()

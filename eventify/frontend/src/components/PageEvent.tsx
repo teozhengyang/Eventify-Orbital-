@@ -121,13 +121,13 @@ export default function Event() {
         <div key={i} className="grid-item">
           <p className="comment-timestamp">Date created: {format(new Date(comment.created_at), "dd/MM/yyyy, p")}</p>
           <p>{comment.text}</p>
-          {comment.creator === currUser && (<Button onClick={async() => {
-                        const response = await axios.delete(`http://127.0.0.1:8000/comment/${comment.id}`, config)
-                        console.log(response)
-                        window.location.reload()
-                      }}>
-                        Delete
-                      </Button>
+          {comment.creator === currUser.id && (<Button onClick={async() => {
+            const response = await axios.delete(`http://127.0.0.1:8000/comment/${comment.id}`, config)
+            console.log(response)
+            window.location.reload()
+            }}>
+            Delete
+            </Button>
           )} 
         </div>
       ))}

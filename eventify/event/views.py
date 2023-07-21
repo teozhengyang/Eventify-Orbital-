@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .serializers import EventSerializer, UserSerializer, ActivitySerializer, CommentSerializer
-from .models import Event, User, Activity, Comment
+from .serializers import EventSerializer, UserSerializer, ActivitySerializer, MessageSerializer
+from .models import Event, User, Activity, Message
 from django.db.models import Q
 
 # jwt imports
@@ -62,11 +62,11 @@ def event_detail(request, pk, format=None):
 @permission_classes([IsAuthenticated])
 def comment_list(request, pk, format=None):
     if request.method == 'GET':
-        comments = Comment.objects.filter(Q(event=Event.objects.get(pk=pk))).distinct()
-        serializer = CommentSerializer(comments, many=True)
+        comments = Message.objects.filter(Q(event=Event.objects.get(pk=pk))).distinct()
+        serializer = MessageSerializer(comments, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        serializer = CommentSerializer(data=request.data)
+        serializer = MessageSerializer(data=request.data)
         serializer.is_valid(raise_exception=True) 
         serializer.save()
         return Response(serializer.data)
@@ -76,14 +76,14 @@ def comment_list(request, pk, format=None):
 @permission_classes([IsAuthenticated])
 def comment_detail(request, pk, format=None):
     if request.method == 'PUT':
-        comment = Comment.objects.get(pk=pk)
-        serializer = CommentSerializer(comment, data=request.data, partial=True)
+        comment = Message.objects.get(pk=pk)
+        serializer = MessageSerializer(comment, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
     elif request.method == 'DELETE':
-        comment = Comment.objects.get(pk=pk)
+        comment = Message.objects.get(pk=pk)
         if comment:
             comment.delete()
             return Response('Deleted comment')
