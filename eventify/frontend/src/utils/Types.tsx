@@ -43,6 +43,11 @@ type Location = {
   url: string
 }
 
+type Option = {
+  label: string,
+  value: string,
+}
+
 type AuthToken = {
   access: string;
 }
@@ -99,13 +104,15 @@ const emptyAuthUser: AuthUser = {
 
 const emptyLocation:Location = {
   id: -1,
-  name: "Enter",
-  region: "a",
-  country: "Location",
+  name: "",
+  region: "",
+  country: "",
   lat: -1,
   lon: -1,
   url: ""
 }
 
-export type { Activity, Event, User, Location, AuthToken, AuthUser, LogoutUser, LoginUser };
-export { emptyEvent, emptyUser, emptyActivity, emptyAuthUser, emptyLocation };
+
+
+export type { Activity, Event, User, Location, Option, AuthToken, AuthUser, LogoutUser, LoginUser };
+export { emptyEvent, emptyUser, emptyActivity, emptyAuthUser };

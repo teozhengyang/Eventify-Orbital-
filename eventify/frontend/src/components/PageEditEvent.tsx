@@ -6,9 +6,8 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
-import { User, AuthToken, Location, emptyLocation } from "../utils/Types";
+import { User, AuthToken, Location, Option } from "../utils/Types";
 import "/static/css/register.css";
-
 
 export default function EditEvent() {
   // Get event data from EventDesc.tsx/PageProfile.tsx/DisplayActivity.tsx and saves it as a const, to be used for default values
@@ -30,7 +29,7 @@ export default function EditEvent() {
 
   // Location
   const [, setInputLocation] = useState(event.location)
-  const [selectedLocation, setSelectedLocation] = useState<Location>(emptyLocation)
+  const [selectedLocation, setSelectedLocation] = useState({value: "", label: "Search Location"})
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -88,6 +87,13 @@ export default function EditEvent() {
   const API_KEY = '0c36bc53fdfe4278b3584452231107';
   const API_BASE_URL = 'https://api.weatherapi.com/v1';
 
+  const formatLocationOption = (location: Location) => {
+    const city = location.name ? location.name + ", " : ""
+    const region = location.region ? location.region + ", " : ""
+    const string = city + region + location.country
+    return {value: string, label: string}
+  }
+
   // Sets default value for event location
   const getLocation = async () => {
     const response = await axios.get(`${API_BASE_URL}/search.json`, {
@@ -96,7 +102,7 @@ export default function EditEvent() {
         q: event.location,
       },
     })
-    setSelectedLocation(response.data)
+    setSelectedLocation(response.data.map(formatLocationOption))
   }
 
   // Handles search for during change to event location
@@ -107,7 +113,7 @@ export default function EditEvent() {
         q: inputValue,
       },
     }).then((response) => {
-      return response.data
+      return response.data.map(formatLocationOption)
     }).catch((error) => {
       console.error('Error fetching possible locations:', error);
     });
@@ -118,7 +124,7 @@ export default function EditEvent() {
   };
 
   // Handle selection
-  const handleLocationChange = (option: Location | null) => {
+  const handleLocationChange = (option:Option | null) => {
     if (option) {
       setSelectedLocation(option)
     }
@@ -144,7 +150,7 @@ export default function EditEvent() {
         description: target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
-        location: selectedLocation.name + ", " + selectedLocation.country,
+        location: selectedLocation.value,
         budget: target.budget.value,
         organizers: selectedOrganisers.map((organiser: User) => organiser.id),
         participants: selectedParticipants.map((participant: User) => participant.id),
@@ -226,32 +232,29 @@ export default function EditEvent() {
 
         <Row>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="" style={{paddingTop: "5px"}}>
-              <AsyncSelect 
-                cacheOptions 
-                defaultOptions 
-                value={selectedLocation}
-                getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
-                getOptionValue={(option) => option.name}
-                loadOptions={searchLocation}
-                onInputChange={handleInputChange}
-                onChange={handleLocationChange}
-              />
-            </FloatingLabel>
+          <Form.Label>Location:</Form.Label>
+            <AsyncSelect 
+              cacheOptions 
+              defaultOptions 
+              placeholder="Search Location"
+              value={selectedLocation}
+              loadOptions={searchLocation}
+              onInputChange={handleInputChange}
+              onChange={handleLocationChange}
+            />
           </Col>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
-              <Form.Control 
-                className="event-form-field" 
-                type="number" 
-                name="budget" 
-                min="0" 
-                step="0.01" 
-                placeholder="Budget"
-                defaultValue={event.budget}
-                required
-              />
-            </FloatingLabel>
+          <Form.Label>Budget:</Form.Label>
+            <Form.Control 
+              className="event-form-field" 
+              type="number" 
+              name="budget" 
+              min="0" 
+              step="0.01" 
+              placeholder="Budget"
+              defaultValue={event.budget}
+              required
+            />
           </Col>
         </Row>
         <hr />

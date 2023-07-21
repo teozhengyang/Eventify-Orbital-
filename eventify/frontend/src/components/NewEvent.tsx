@@ -5,7 +5,7 @@ import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import { useNavigate } from "react-router-dom";
-import { User, AuthToken, Event, Location, emptyLocation } from "../utils/Types";
+import { User, AuthToken, Event, Location, Option } from "../utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
@@ -28,7 +28,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
 
   // Location
   const [, setInputLocation] = useState("")
-  const [selectedLocation, setSelectedLocation] = useState<Location>(emptyLocation)
+  const [selectedLocation, setSelectedLocation] = useState<Option>({value: "", label: "Search Location"})
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -45,7 +45,12 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
 
   // Get all users
   useEffect(() => {
-    getUsers();
+    getUsers()
+
+    // Set location field if there is marketplace template
+    if (template.location != "") {
+      getLocation()
+    }
   }, [])
 
   // End time/date for event >= start
@@ -94,7 +99,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
         description: target.description.value,
         start: startDate.toJSON(),
         end: endDate.toJSON(),
-        location: selectedLocation.name + ", " + selectedLocation.country,
+        location: selectedLocation.value,
         budget: target.budget.value,
         organizers: selectedOrganisers.map((org:User) => org.id),
         participants: selectedParticipants.map((par:User) => par.id),
@@ -109,9 +114,30 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
     }
   }
   
+
+
   const API_KEY = '0c36bc53fdfe4278b3584452231107';
   const API_BASE_URL = 'https://api.weatherapi.com/v1';
 
+  const formatLocationOption = (location: Location) => {
+    const city = location.name ? location.name + ", " : ""
+    const region = location.region ? location.region + ", " : ""
+    const string = city + region + location.country
+    return {value: string, label: string}
+  }
+
+  // Sets event location if there is marketplace template
+  const getLocation = async () => {
+    const response = await axios.get(`${API_BASE_URL}/search.json`, {
+      params: {
+        key: API_KEY,
+        q: template.location,
+      },
+    })
+    setSelectedLocation(response.data.map(formatLocationOption))
+  }
+
+  // Handles search for during change to event location
   const searchLocation = (inputValue: string) => {
     return axios.get(`${API_BASE_URL}/search.json`, {
       params: {
@@ -119,7 +145,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
         q: inputValue,
       },
     }).then((response) => {
-      return response.data
+      return response.data.map(formatLocationOption)
     }).catch((error) => {
       console.error('Error fetching possible locations:', error);
     });
@@ -130,7 +156,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
   };
 
   // handle selection
-  const handleLocationChange = (option: Location | null) => {
+  const handleLocationChange = (option: Option | null) => {
     if (option) {
       setSelectedLocation(option)
     }
@@ -201,21 +227,18 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
 
         <Row>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="" style={{paddingTop: "5px"}}>
-              <AsyncSelect 
-                cacheOptions 
-                defaultOptions 
-                value={selectedLocation}
-                getOptionLabel={(option) => option.name.concat(", ", option.region, ", ", option.country)}
-                getOptionValue={(option) => option.name}
-                loadOptions={searchLocation}
-                onInputChange={handleInputChange}
-                onChange={handleLocationChange}
-              />
-            </FloatingLabel>
+            <Form.Label>Location:</Form.Label>
+            <AsyncSelect 
+              cacheOptions 
+              defaultOptions 
+              value={selectedLocation}
+              loadOptions={searchLocation}
+              onInputChange={handleInputChange}
+              onChange={handleLocationChange}
+            />
           </Col>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Budget" style={{paddingTop: "5px"}}>
+            <Form.Label>Budget:</Form.Label>
               <Form.Control 
                 className="event-form-field"
                 defaultValue={template.budget} 
@@ -226,10 +249,6 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
                 placeholder="Budget"
                 required
               />
-              <Form.Control.Feedback type="invalid">
-                Please input a budget.
-              </Form.Control.Feedback>
-            </FloatingLabel>
           </Col>
         </Row>
 
