@@ -83,28 +83,33 @@ export default function Event() {
       <p>{format(new Date(event.start), "dd/MM/yyyy, p")} - {format(new Date(event.end), "dd/MM/yyyy, p")}</p>
       <p>Location: {event.location}</p>
       <hr />
-      <p>Description:</p>
-      <p style={{minHeight:"8em"}}>
-        {event.description} 
-        <br /> <br /> 
-      </p>
-      <hr />
-      {weatherData && (
-        <div>
-          <p>Weather in {weatherData.location.name}, {weatherData.location.country}</p>
-          <p>Temperature: {weatherData.current.temp_c}°C</p>
-          <p>Description: {weatherData.current.condition.text}</p>
+
+      <div style={{display:"flex", flexDirection:"row"}}>
+        <div style={{width:"50%", wordWrap:"break-word", paddingRight:"1em"}}>
+          <p>Description:</p>
+          <p style={{minHeight:"8em"}}>
+            {event.description} 
+          </p>
         </div>
-      )}
+
+        {weatherData && (
+          <div>
+            <p>3-Day forecast for {weatherData.location.name}, {weatherData.location.country}</p>
+            {weatherData.current.condition.text}
+            <p style={{fontSize:"50px"}}>{weatherData.current.temp_c}°C</p>
+          </div>
+        )}
+      </div>
+
       <hr />
       <DisplayActivity event={event}/>
-      <hr />
-      <h5>Comments</h5>
+
+      <h5 style={{paddingTop:"3em"}}>Comments</h5>
       <div className="grid-container">
       {comments.map((comment, i) => (
         <div key={i} className="grid-item">
-          <p>Comment: {comment.text}</p>
-          <p>Date created: {format(new Date(comment.created_at), "dd/MM/yyyy, p")}</p>
+          <p className="comment-timestamp">Date created: {format(new Date(comment.created_at), "dd/MM/yyyy, p")}</p>
+          <p>{comment.text}</p>
         </div>
       ))}
       </div>

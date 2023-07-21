@@ -5,8 +5,15 @@
 }
 
 .grid-item {
-  text-align: center;
-  color: white;
+  position: relative;
+  text-align: left;
+  padding-left: 1em;
   font-size: 14px;
-  background-color: grey;
+  border: 1px solid;
+  min-width: 30em;
+  min-height: 10em;
+}
+
+.comment-timestamp {
+  text-align: right;
 }
