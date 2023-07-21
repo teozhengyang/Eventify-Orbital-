@@ -40,6 +40,7 @@ class Activity(models.Model):
     
 class Comment(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='comments')
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField()
     created_at = models.DateTimeField(default=now)
 

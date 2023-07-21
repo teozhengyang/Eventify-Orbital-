@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AuthContext from "../context/AuthContext";
-import { AuthToken, AuthUser } from "../utils/Types";
+import { AuthToken, AuthUser, emptyUser } from "../utils/Types";
 import { useContext } from "react";
 import "/static/css/event.css";
 
@@ -14,6 +14,7 @@ export default function Event() {
   const location = useLocation();
   const event = location.state.evt;
   const { authTokens, user } = useContext(AuthContext) as { authTokens: AuthToken, user: AuthUser, }
+  const [currUser, setCurrUser] = useState(emptyUser)
 
   const navigate = useNavigate()
 
@@ -26,6 +27,7 @@ export default function Event() {
   useEffect(() => {
     getWeatherData()
     getComments()
+    getCurrUser()
   },[])
 
   const [weatherData, setWeatherData] = useState(null);
@@ -56,6 +58,14 @@ export default function Event() {
     }
   }
 
+  const getCurrUser = async () => {
+    // Somehow changing this to /api (proxy set in vite.config.ts) instead of the full address breaks the profile page
+    const userResponse = await axios.get(`http://127.0.0.1:8000/user/${user.user_id}`, config);
+    const userData = userResponse.data
+    console.log(userData)
+    setCurrUser(userData)
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -65,6 +75,7 @@ export default function Event() {
       }
       const response = await axios.post(`http://127.0.0.1:8000/comments/${event.id}`, {
         event: event.id,
+        creator: currUser.id,
         text: target.text.value,
         created_at: new Date(),
       }, config);
@@ -110,6 +121,14 @@ export default function Event() {
         <div key={i} className="grid-item">
           <p className="comment-timestamp">Date created: {format(new Date(comment.created_at), "dd/MM/yyyy, p")}</p>
           <p>{comment.text}</p>
+          {comment.creator === currUser && (<Button onClick={async() => {
+                        const response = await axios.delete(`http://127.0.0.1:8000/comment/${comment.id}`, config)
+                        console.log(response)
+                        window.location.reload()
+                      }}>
+                        Delete
+                      </Button>
+          )} 
         </div>
       ))}
       </div>
