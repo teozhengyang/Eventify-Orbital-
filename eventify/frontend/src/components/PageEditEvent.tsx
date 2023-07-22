@@ -295,7 +295,7 @@ export default function EditEvent() {
               options={categoryOptions}
               value={category}
               placeholder="Search category"
-              onChange={(data) => setCategory(data)}
+              onChange={(data) => {if (data) {setCategory(data)}}}
               isSearchable={true}
               required
             />

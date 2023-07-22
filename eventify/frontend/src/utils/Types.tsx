@@ -59,12 +59,12 @@ type Comment = {
 
 
 // Used for weatherapi
-type WeatherDate = {  // response.data.forecast.forecastday
+type WeatherDate = {  // response.data.forecast.forecastday[arrayIndex]
   date: string;
   day: WeatherDay;
 }
 
-  type WeatherDay = {   // response.data.forecast.forecastday.[object].day
+  type WeatherDay = { // WeatherDate.day
     avgtemp_c: number;
     maxtemp_c: number;
     mintemp_c: number;

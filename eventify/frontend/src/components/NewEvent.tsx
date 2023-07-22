@@ -4,12 +4,12 @@ import axios from "axios";
 import NewEventModalContext from "../context/NewEventModalContext";
 import { Button, Form, FloatingLabel, Col, Row } from 'react-bootstrap';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { useNavigate } from "react-router-dom";
 import { User, AuthToken, Event, Location, Option } from "../utils/Types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "/static/css/register.css";
-import AsyncSelect from 'react-select/async';
 
 export default function NewEvent({defaultStart, defaultEnd, template}: {defaultStart: Date; defaultEnd: Date; template: Event}) {
   const [startDate, setStartDate] = useState(defaultStart)
@@ -23,7 +23,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
   const [selectedParticipants, setSelectedParticipants] = useState<Array<User>>([])
 
   // Category, Marketplace
-  const [category, setCategory] = useState({value: "", label: ""})
+  const [category, setCategory] = useState<Option>({value: "", label: ""})
   const [isChecked, setIsChecked] = useState(false);
 
   // Location
@@ -155,7 +155,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
     setInputLocation(value);
   };
 
-  // handle selection
+  // handle location selection
   const handleLocationChange = (option: Option | null) => {
     if (option) {
       setSelectedLocation(option)
@@ -287,7 +287,7 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
             <Select
               options={categoryOptions}
               placeholder="Search category"
-              onChange={(data) => setCategory(data)}
+              onChange={(data) => {if (data) {setCategory(data)}}}
               isSearchable={true}
               required
             />
