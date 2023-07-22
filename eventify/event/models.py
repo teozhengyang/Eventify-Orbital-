@@ -15,7 +15,6 @@ class Event(models.Model):
     start = models.DateTimeField(default=now)
     end = models.DateTimeField(default=now)
     location = models.TextField(blank=True)
-    weather = models.TextField(blank=True)
     budget = models.FloatField(default=0)
     organizers = models.ManyToManyField(User, related_name='organized_events')
     participants = models.ManyToManyField(User, related_name='participated_events', blank=True)
@@ -32,7 +31,6 @@ class Activity(models.Model):
     end = models.DateTimeField(default=now)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     location = models.TextField(blank=True)
-    weather = models.TextField(blank=True)
     budget = models.FloatField(default=0)
     
     def __str__(self):
