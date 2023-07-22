@@ -35,7 +35,7 @@ export default function Event() {
   const apiKey = '0c36bc53fdfe4278b3584452231107'; 
 
   const getWeatherData = async () => {
-    const url = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${event.location}&days=3`;
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${event.location}&days=3`;
     await axios.get(url)
       .then((response) => {
         setWeatherData(response.data.forecast.forecastday);
