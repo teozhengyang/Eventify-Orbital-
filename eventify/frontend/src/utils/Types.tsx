@@ -34,20 +34,51 @@ type User = {
 }
 
 type Location = {
-  id: number,
-  name: string,
-  region: string,
-  country: string,
-  lat: number,
-  lon: number,
-  url: string
+  id: number;
+  name: string;
+  region: string;
+  country: string;
+  lat: number;
+  lon: number;
+  url: string;
 }
 
+// Used for location field in event create/edit
 type Option = {
-  label: string,
-  value: string,
+  label: string;
+  value: string;
 }
 
+type Comment = {
+  id: number;
+  text: string;
+  created_at: string;
+  event: number;
+  creator: number;
+}
+
+
+// Used for weatherapi
+type WeatherDate = {  // response.data.forecast.forecastday
+  date: string;
+  day: WeatherDay;
+}
+
+  type WeatherDay = {   // response.data.forecast.forecastday.[object].day
+    avgtemp_c: number;
+    maxtemp_c: number;
+    mintemp_c: number;
+    condition: Condition;
+  }
+
+  type Condition = {
+    text: string;
+    icon: string;
+  }
+
+
+
+// Used for context
 type AuthToken = {
   access: string;
 }
@@ -102,17 +133,7 @@ const emptyAuthUser: AuthUser = {
   username: "",
 }
 
-const emptyLocation:Location = {
-  id: -1,
-  name: "",
-  region: "",
-  country: "",
-  lat: -1,
-  lon: -1,
-  url: ""
-}
 
 
-
-export type { Activity, Event, User, Location, Option, AuthToken, AuthUser, LogoutUser, LoginUser };
+export type { Activity, Event, User, Location, WeatherDate, Option, Comment, AuthToken, AuthUser, LogoutUser, LoginUser };
 export { emptyEvent, emptyUser, emptyActivity, emptyAuthUser };

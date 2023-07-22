@@ -7,13 +7,25 @@
 .grid-item {
   position: relative;
   text-align: left;
-  padding-left: 1em;
   font-size: 14px;
+}
+
+.comment-box {
+  width: 30em;
+  height: 8em;
   border: 1px solid;
-  min-width: 30em;
-  min-height: 10em;
+  padding-left: 0.5em;
+  margin-bottom: 2px;
+  overflow-wrap: break-word;
+  overflow-y: scroll;
 }
 
 .comment-timestamp {
   text-align: right;
+}
+
+.comment-form {
+  min-width: 30em;
+  min-height: 8em;
+  font-size: 12px;
 }
