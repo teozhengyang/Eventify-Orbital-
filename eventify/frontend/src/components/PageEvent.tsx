@@ -39,7 +39,6 @@ export default function Event() {
     await axios.get(url)
       .then((response) => {
         setWeatherData(response.data.forecast.forecastday);
-        console.log(response.data.forecast.forecastday)
       })
       .catch((error) => {
         console.error('Error fetching weather data:', error);
@@ -61,7 +60,6 @@ export default function Event() {
   const getCurrUser = async () => {
     const userResponse = await axios.get(`https://eventify-n2c5.onrender.com/user/${user.user_id}`, config);
     const userData = userResponse.data
-    console.log(userData)
     setCurrUser(userData)
   };
 

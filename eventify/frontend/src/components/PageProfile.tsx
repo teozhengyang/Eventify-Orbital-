@@ -36,10 +36,8 @@ export default function Profile() {
   }
 
   const getCurrUser = async () => {
-    // Somehow changing this to /api (proxy set in vite.config.ts) instead of the full address breaks the profile page
     const userResponse = await axios.get(`https://eventify-n2c5.onrender.com/user/${user.user_id}`, config);
     const userData = userResponse.data
-    console.log(userData)
     setCurrUser(userData)
     
     const eventsResponse = await axios.get('https://eventify-n2c5.onrender.com/events/', config)

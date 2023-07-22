@@ -78,7 +78,6 @@ export default function NewEvent({defaultStart, defaultEnd, template}: {defaultS
     const response = await axios.get('https://eventify-n2c5.onrender.com/users/', config)
     const data = response.data
     setUsers(data)
-    console.log(data)
   }
 
   const navigate = useNavigate()

@@ -14,8 +14,8 @@ export default function DisplayWeek({data, eventlist}: {data: Array<Date>; event
           rowIndex={0}
           events={eventlist.filter((evt) => {
             const curr = day.valueOf();
-            const start = new Date(evt.start).valueOf();
-            const end = new Date(evt.end).valueOf();
+            const start = new Date(evt.start).setHours(0, 0, 0, 0).valueOf();
+            const end = new Date(evt.end).setHours(0, 0, 0, 0).valueOf();
             return curr >= start && curr <= end;
           })}
         />

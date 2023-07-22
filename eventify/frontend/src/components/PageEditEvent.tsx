@@ -79,7 +79,6 @@ export default function EditEvent() {
     setSelectedOrganisers(event.organizers.map((id: number) => hashmap.get(id)))
     setSelectedParticipants(event.participants.map((id: number) => hashmap.get(id)))
     setUsers(data)
-    console.log(data)
   }
 
 
