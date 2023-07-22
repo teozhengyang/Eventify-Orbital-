@@ -35,7 +35,7 @@ export default function Event() {
   const apiKey = '0c36bc53fdfe4278b3584452231107'; 
 
   const getWeatherData = async () => {
-    const url = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${event.location}&days=3`;
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${event.location}&days=3`;
     await axios.get(url)
       .then((response) => {
         setWeatherData(response.data.forecast.forecastday);
@@ -47,7 +47,7 @@ export default function Event() {
   };
 
   const getComments = async () => {
-    const eventsResponse = await axios.get(`http://127.0.0.1:8000/comments/${event.id}`, config)
+    const eventsResponse = await axios.get(`/api/comments/${event.id}`, config)
     setComments(eventsResponse.data)
   }
 
@@ -60,7 +60,7 @@ export default function Event() {
 
   const getCurrUser = async () => {
     // Somehow changing this to /api (proxy set in vite.config.ts) instead of the full address breaks the profile page
-    const userResponse = await axios.get(`http://127.0.0.1:8000/user/${user.user_id}`, config);
+    const userResponse = await axios.get(`/api/user/${user.user_id}`, config);
     const userData = userResponse.data
     console.log(userData)
     setCurrUser(userData)
@@ -73,7 +73,7 @@ export default function Event() {
         event: {value: number}
         text: {value: string}
       }
-      const response = await axios.post(`http://127.0.0.1:8000/comments/${event.id}`, {
+      const response = await axios.post(`/api/comments/${event.id}`, {
         event: event.id,
         creator: currUser.id,
         text: target.text.value,
@@ -138,7 +138,7 @@ export default function Event() {
             </div>
             {comment.creator === currUser.id && (
               <Button size="sm" onClick={async() => {
-                const response = await axios.delete(`http://127.0.0.1:8000/comment/${comment.id}`, config)
+                const response = await axios.delete(`/api/comment/${comment.id}`, config)
                 console.log(response)
                 getComments()
                 }}>
