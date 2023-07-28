@@ -57,7 +57,7 @@ def event_detail(request, pk, format=None):
         serializer = EventSerializer(event)
         return Response(serializer.data)
 
-# handles GET & POST requests for event data based on current user
+# handles GET & POST requests for comment data based on event primary key
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def comment_list(request, pk, format=None):
@@ -71,7 +71,7 @@ def comment_list(request, pk, format=None):
         serializer.save()
         return Response(serializer.data)
 
-# handles GET, PUT & DELETE requests using primary key
+# handles PUT & DELETE requests using primary key
 @api_view(['PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def comment_detail(request, pk, format=None):
